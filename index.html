@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>日本音楽 — Nihon Music (Scroll Fix)</title>
+<title>日本音楽 — Nihon Music (Smart UI)</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -28,7 +28,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx); disp
 .tbtn { background: var(--s2); border: 1px solid var(--bs); color: var(--mu); padding: 5px 10px; border-radius: 12px; font-size: 11px; cursor: pointer; }
 .tbtn.on { border-color: var(--pk); color: var(--pk); background: var(--pkd); }
 
-/* MAIN & SCROLL FIX */
+/* MAIN SCROLL FIX */
 .main{display:flex;flex:1;overflow:hidden; min-height: 0;}
 .sb{width:180px;flex-shrink:0;border-right:1px solid var(--bs);display:flex;flex-direction:column;overflow:hidden}
 @media (max-width: 600px) { .sb { width: 135px; } }
@@ -45,30 +45,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx); disp
 
 .ct{flex:1;display:flex;flex-direction:column;overflow:hidden; min-width: 0; background: var(--bg);}
 .ct-top{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bs); flex-shrink: 0;}
-.ct-name{font-family:'Noto Serif JP',serif;font-size:14px;}
-
-/* SONG LIST SCROLL CORE FIX */
-.sw{
-    flex:1; 
-    overflow-y: scroll; /* Scroll her zaman aktif */
-    padding:8px; 
-    -webkit-overflow-scrolling: touch; 
-    scroll-behavior: smooth;
-    display: block; /* Flex bazen scrollu bozar */
-}
-.sr{
-    display:flex; 
-    align-items:center; 
-    gap:10px; 
-    padding:10px; 
-    border-radius:10px; 
-    cursor:pointer; 
-    position:relative; 
-    margin-bottom: 5px;
-    background: transparent;
-    user-select: none;
-    touch-action: pan-y; /* Sadece dikey kaydırmaya izin ver, sürükleme ile çakışmasın */
-}
+.sw{flex:1; overflow-y: scroll; padding:8px; -webkit-overflow-scrolling: touch; scroll-behavior: smooth;}
+.sr{display:flex; align-items:center; gap:10px; padding:10px; border-radius:10px; cursor:pointer; position:relative; margin-bottom: 5px; user-select: none; touch-action: pan-y;}
 .sr:hover{background:var(--s2)}
 .sr.now{background:var(--pkd);border:1px solid var(--br)}
 .sr.drag-target { border-top: 2px solid var(--pk); }
@@ -77,7 +55,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx); disp
 .st{font-size:13px;font-weight:500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 .sr-more{color: var(--dm); font-size: 16px; padding: 5px; opacity: 0.6;}
 
-/* VIDEO */
+/* VIDEO & OVERLAY */
 .vp{background:#000;max-height:0;transition:max-height .3s;overflow:hidden;position:relative; flex-shrink: 0;}
 .vp.open{max-height:250px;}
 #media-container { width:100%; height:100%; position: relative; }
@@ -85,6 +63,10 @@ video, iframe { width:100%; height:100%; display:block; object-fit: contain; bor
 .v-overlay-ctrl{position:absolute; inset: 0; display:flex; align-items:center; justify-content: center; gap:25px; background:rgba(0,0,0,0.4); opacity:0; visibility: hidden; transition: 0.3s; z-index: 10;}
 .vp.show-ctrl .v-overlay-ctrl { opacity:1; visibility: visible; }
 .v-btn{background:none;border:none;color:#fff;cursor:pointer;font-size:32px;}
+
+/* SMART YT BUTTON */
+.yt-external-btn { display: none; width: 100%; padding: 8px; background: var(--s3); color: var(--pkl); text-align: center; font-size: 11px; text-decoration: none; border-top: 1px solid var(--bs); font-weight: bold;}
+.yt-external-btn.show { display: block; }
 
 /* PLAYER */
 .player{background:var(--sur);border-top:1px solid var(--bs);padding:10px 15px 15px; flex-shrink: 0;}
@@ -156,6 +138,7 @@ video, iframe { width:100%; height:100%; display:block; object-fit: contain; bor
             <button class="v-btn" onclick="event.stopPropagation(); next()">⏭</button>
         </div>
     </div>
+    <!-- AKILLI YOUTUBE BUTONU -->
     <a href="#" id="ytExternalLink" class="yt-external-btn" target="_blank">⚠️ YouTube'da İzle</a>
 
     <div class="player">
@@ -169,13 +152,6 @@ video, iframe { width:100%; height:100%; display:block; object-fit: contain; bor
       </div>
     </div>
 </div>
-
-<!-- Modals -->
-<div class="ov hid" id="plEditMo"><div class="mo"><h3>Liste Düzenle</h3><input id="plEditIn"><button class="btn btn-p" onclick="savePlEdit()">Kaydet</button><button class="btn" style="color:var(--pk);" onclick="deletePl()">Sil ✕</button><button class="btn" onclick="closeMo('plEditMo')">İptal</button></div></div>
-<div class="ov hid" id="plMo"><div class="mo"><h3>Yeni Liste</h3><input id="plIn" placeholder="Liste adı..."><button class="btn btn-p" onclick="makePl()">Oluştur</button><button class="btn" onclick="closeMo('plMo')">İptal</button></div></div>
-<div class="ov hid" id="sMo"><div class="mo"><h3>Ekle</h3><button class="btn btn-p" onclick="document.getElementById('fIn').click()">Dosya Seç</button><input id="ytUrl" placeholder="Link..."><input id="ytTitle" placeholder="Başlık"><select id="pSel" style="width:100%; padding:10px; margin:10px 0; border-radius:10px; background:var(--s3); color:white; border:none;"></select><button class="btn btn-p" onclick="addAnyLink()">Ekle</button><button class="btn" onclick="closeMo('sMo')">Kapat</button></div></div>
-<div class="ov hid" id="editMo"><div class="mo"><h3>Düzenle</h3><input id="editTitle"><select id="editListSel" style="width:100%; padding:10px; margin:10px 0; border-radius:10px; background:var(--s3); color:white; border:none;"></select><button class="btn btn-p" onclick="saveEdit()">Kaydet</button><button class="btn" style="color:var(--pk);" onclick="confirmDelete()">Sil ✕</button><button class="btn" onclick="closeMo('editMo')">Kapat</button></div></div>
-<div class="ov hid" id="sleepMo"><div class="mo"><h3>Uyku</h3><button class="btn" onclick="setSleep(30)">30 Dakika</button><button class="btn" onclick="setSleep(60)">1 Saat</button><button class="btn" style="background:var(--pk);" onclick="setSleep(0)">İptal</button><button class="btn" onclick="closeMo('sleepMo')">Kapat</button></div></div>
 
 <script>
 const AUTH_CONFIG = { user: "Hattie", pass: "1234" };
@@ -211,7 +187,7 @@ function renderSB(){
 function renderSongs(){
     let lst = lists.find(l => l.id === curL); document.getElementById('ctName').textContent = lst?.name || '';
     let h = ''; lst?.songs.forEach((s, i) => h += `<div class="sr ${i===curI?'now':''}" id="song-${i}" draggable="true" ondragstart="handleSongDragStart(${i})" ondragover="handleSongDragOver(event, ${i})" ondragleave="handleSongDragLeave(${i})" ondrop="handleSongDrop(event, ${i})" onclick="playSong(${i})"><div style="font-size:18px">${s.isLink?'🌐':(s.isYt?'📺':(s.isVid?'🎬':'🎵'))}</div><div class="si"><div class="st">${s.title}</div></div><div class="sr-more" onclick="event.stopPropagation(); openEdit(${i})">⋮</div></div>`);
-    document.getElementById('sw').innerHTML = h || '<div style="padding:20px; opacity:0.5">Henüz içerik yok.</div>';
+    document.getElementById('sw').innerHTML = h || '<div style="padding:20px; opacity:0.5">Boş.</div>';
     if(curI !== -1) setTimeout(() => { const el = document.getElementById(`song-${curI}`); if(el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 150);
 }
 
@@ -231,14 +207,17 @@ async function playSong(i){
     let lst = lists.find(l => l.id === curL); let s = lst.songs[i]; if(!s) return;
     curI = i; document.getElementById('npT').textContent = s.title;
     AUDIO.pause(); if(VIDEO) VIDEO.pause(); if(ytPlayer) ytPlayer.stopVideo();
-    document.getElementById('ytExternalLink').classList.remove('show');
+    
+    // YOUTUBE BUTONUNU SADECE YT VARSA GÖSTER
+    const ytBtn = document.getElementById('ytExternalLink');
+    ytBtn.classList.remove('show');
+    
     let container = document.getElementById('media-container');
-
     if(s.isLink) { window.open(s.url, '_blank'); return; }
     if(s.isYt) {
         if(!vidPanelOpen) toggleVidPanel();
-        document.getElementById('ytExternalLink').classList.add('show');
-        document.getElementById('ytExternalLink').href = `https://www.youtube.com/watch?v=${s.ytId}`;
+        ytBtn.classList.add('show');
+        ytBtn.href = `https://www.youtube.com/watch?v=${s.ytId}`;
         container.innerHTML = '<div id="yt-player"></div>';
         ytPlayer = new YT.Player('yt-player', { height:'100%', width:'100%', videoId:s.ytId, playerVars:{'autoplay':1, 'playsinline':1}, events:{'onReady':e=>e.target.setVolume(currentVolume*100), 'onStateChange':e=>e.data===0&&next()} });
     } else {
@@ -316,5 +295,12 @@ function openSleepMo() { document.getElementById('sleepMo').classList.remove('hi
 let sleepInterval;
 function setSleep(min) { clearInterval(sleepInterval); if(min===0) return document.getElementById('timerBadge').classList.add('hid'); let s = min*60; document.getElementById('timerBadge').classList.remove('hid'); sleepInterval = setInterval(() => { s--; let m = Math.floor(s/60); document.getElementById('timerBadge').textContent = `${m}:${s%60<10?'0':''}${s%60}`; if(s<=0) { clearInterval(sleepInterval); AUDIO.pause(); if(VIDEO)VIDEO.pause(); ytPlayer?.stopVideo(); isPlay=false; syncB(); } }, 1000); closeMo('sleepMo'); }
 </script>
+
+<!-- Modals -->
+<div class="ov hid" id="plEditMo"><div class="mo"><h3>Düzenle</h3><input id="plEditIn"><button class="btn btn-p" onclick="savePlEdit()">Kaydet</button><button class="btn" onclick="deletePl()">Sil</button><button class="btn" onclick="closeMo('plEditMo')">İptal</button></div></div>
+<div class="ov hid" id="plMo"><div class="mo"><h3>Yeni Liste</h3><input id="plIn"><button class="btn btn-p" onclick="makePl()">Tamam</button><button class="btn" onclick="closeMo('plMo')">Vazgeç</button></div></div>
+<div class="ov hid" id="sMo"><div class="mo"><h3>Ekle</h3><button class="btn btn-p" onclick="document.getElementById('fIn').click()">Dosya</button><input id="ytUrl" placeholder="Link..."><input id="ytTitle" placeholder="Başlık"><select id="pSel"></select><button class="btn btn-p" onclick="addAnyLink()">Ekle</button><button class="btn" onclick="closeMo('sMo')">Kapat</button></div></div>
+<div class="ov hid" id="editMo"><div class="mo"><h3>Düzenle</h3><input id="editTitle"><select id="editListSel"></select><button class="btn btn-p" onclick="saveEdit()">Kaydet</button><button class="btn" onclick="confirmDelete()">Sil</button><button class="btn" onclick="closeMo('editMo')">Kapat</button></div></div>
+<div class="ov hid" id="sleepMo"><div class="mo"><h3>Uyku</h3><button class="btn" onclick="setSleep(30)">30 Dk</button><button class="btn" onclick="setSleep(60)">1 Saat</button><button class="btn" onclick="setSleep(0)">Kapat</button><button class="btn" onclick="closeMo('sleepMo')">İptal</button></div></div>
 </body>
 </html>
