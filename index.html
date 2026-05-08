@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>日本音楽 — Nihon Music (Smart UI)</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0d0d14; --sur:#15151f; --s2:#1c1c2a; --s3:#232333;
+  --pk:#e8739a; --pkl:#f0a0be; --pkd:rgba(232,115,154,0.13);
+  --tx:#f0eaf4; --mu:#8a859c; --dm:#5a5570;
+  --br:rgba(232,115,154,0.2); --bs:rgba(255,255,255,0.07);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html, body { height: 100%; width: 100%; overflow: hidden; position: fixed; } 
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx); display:flex; flex-direction:column; }
+
+/* AUTH */
+#auth-screen { position: fixed; inset: 0; z-index: 9999; background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 20px; }
+.auth-card { background: var(--sur); border: 1px solid var(--br); padding: 30px; border-radius: 24px; width: 100%; max-width: 360px; text-align: center; }
+.auth-btn { width: 100%; padding: 14px; background: var(--pk); border: none; border-radius: 12px; color: #fff; font-weight: bold; cursor: pointer; margin-top:10px; }
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--bs);flex-shrink:0}
+.app-title{font-family:'Noto Serif JP',serif;font-size:16px;color:var(--pkl)}
+.topbar-r{margin-left:auto;display:flex;gap:6px;align-items:center}
+.tbtn { background: var(--s2); border: 1px solid var(--bs); color: var(--mu); padding: 5px 10px; border-radius: 12px; font-size: 11px; cursor: pointer; }
+.tbtn.on { border-color: var(--pk); color: var(--pk); background: var(--pkd); }
+
+/* MAIN SCROLL FIX */
+.main{display:flex;flex:1;overflow:hidden; min-height: 0;}
+.sb{width:180px;flex-shrink:0;border-right:1px solid var(--bs);display:flex;flex-direction:column;overflow:hidden}
+@media (max-width: 600px) { .sb { width: 135px; } }
+.sb-top{padding:10px 12px;display:flex;align-items:center;justify-content:space-between}
+.sb-lbl{font-size:9px;color:var(--dm);text-transform:uppercase;}
+.sb-add{background:none;border:none;color:var(--pk);font-size:20px;cursor:pointer}
+.sb-list{flex:1;overflow-y:auto;padding:8px; -webkit-overflow-scrolling: touch;}
+
+.li{display:flex;align-items:center;gap:6px;padding:10px;border-radius:8px;cursor:pointer;margin-bottom:4px; transition: 0.2s; font-size: 12px; color: var(--mu); position: relative;}
+.li.act{background:var(--pkd);color:var(--pkl)}
+.li.drag-over-list { border-top: 2px solid var(--pk); }
+.li.drag-over-song { background: var(--pk) !important; color: #fff !important; }
+.li-edit { position: absolute; right: 5px; opacity: 0.6; padding: 5px; }
+
+.ct{flex:1;display:flex;flex-direction:column;overflow:hidden; min-width: 0; background: var(--bg);}
+.ct-top{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bs); flex-shrink: 0;}
+.sw{flex:1; overflow-y: scroll; padding:8px; -webkit-overflow-scrolling: touch; scroll-behavior: smooth;}
+.sr{display:flex; align-items:center; gap:10px; padding:10px; border-radius:10px; cursor:pointer; position:relative; margin-bottom: 5px; user-select: none; touch-action: pan-y;}
+.sr:hover{background:var(--s2)}
+.sr.now{background:var(--pkd);border:1px solid var(--br)}
+.sr.drag-target { border-top: 2px solid var(--pk); }
+.sr.dragging { opacity: 0.3; }
+.si{flex:1; min-width:0;}
+.st{font-size:13px;font-weight:500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.sr-more{color: var(--dm); font-size: 16px; padding: 5px; opacity: 0.6;}
+
+/* VIDEO & OVERLAY */
+.vp{background:#000;max-height:0;transition:max-height .3s;overflow:hidden;position:relative; flex-shrink: 0;}
+.vp.open{max-height:250px;}
+#media-container { width:100%; height:100%; position: relative; }
+video, iframe { width:100%; height:100%; display:block; object-fit: contain; border:none; }
+.v-overlay-ctrl{position:absolute; inset: 0; display:flex; align-items:center; justify-content: center; gap:25px; background:rgba(0,0,0,0.4); opacity:0; visibility: hidden; transition: 0.3s; z-index: 10;}
+.vp.show-ctrl .v-overlay-ctrl { opacity:1; visibility: visible; }
+.v-btn{background:none;border:none;color:#fff;cursor:pointer;font-size:32px;}
+
+/* SMART YT BUTTON */
+.yt-external-btn { display: none; width: 100%; padding: 8px; background: var(--s3); color: var(--pkl); text-align: center; font-size: 11px; text-decoration: none; border-top: 1px solid var(--bs); font-weight: bold;}
+.yt-external-btn.show { display: block; }
+
+/* PLAYER */
+.player{background:var(--sur);border-top:1px solid var(--bs);padding:10px 15px 15px; flex-shrink: 0;}
+.vol-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.vol-slider{flex:1;accent-color:var(--pk);height:4px;cursor:pointer}
+.prog{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.pbar{flex:1;height:5px;background:var(--s3);border-radius:3px;cursor:pointer;position:relative; overflow:hidden;}
+.pfill{height:100%;background:var(--pk);width:0%; transition: width 0.1s linear;}
+.ctr{display:flex;align-items:center;justify-content:center;gap:20px}
+.cb{background:none;border:none;color:var(--mu);font-size:24px;cursor:pointer}
+.cb.big{font-size:32px;color:var(--pk)}
+
+/* MODALS */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:999; padding: 20px;}
+.mo{background:var(--s2);padding:22px;border-radius:20px;width:100%;max-width:340px; border: 1px solid var(--br);}
+.mo input,.mo select{width:100%;background:var(--s3);border:1px solid var(--bs);color:#fff;padding:12px;border-radius:10px;margin-bottom:10px;outline:none;}
+.btn{width:100%;padding:12px;border-radius:10px;border:none;font-weight:bold;cursor:pointer;margin-top:5px;}
+.btn-p{background:var(--pk);color:#fff}
+.hid{display:none!important}
+</style>
+</head>
+<body>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">🌸</div>
+    <h2>日本音楽</h2>
+    <input type="text" id="username" class="auth-input" placeholder="Kullanıcı">
+    <input type="password" id="password" class="auth-input" style="margin-top:10px" placeholder="Şifre">
+    <button class="auth-btn" onclick="checkAuth()">Giriş</button>
+  </div>
+</div>
+
+<div id="app" class="hid" style="height: 100%; display: flex; flex-direction: column;">
+    <input type="file" id="fIn" multiple style="display:none">
+    <div class="topbar">
+      <div><div class="app-title">日本音楽</div></div>
+      <div class="topbar-r">
+        <div id="timerBadge" class="sleep-timer-badge hid">00:00</div>
+        <button id="vToggle" class="tbtn" onclick="toggleVidPanel()">🎬 Video</button>
+        <button class="tbtn" onclick="openSleepMo()">⏳ Uyku</button>
+        <button style="background:none; border:none; color:var(--dm); font-size:18px;" onclick="logout()">✕</button>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="sb">
+        <div class="sb-top"><span class="sb-lbl">LİSTELER</span><button class="sb-add" onclick="openPl()">+</button></div>
+        <div class="sb-list" id="sbList"></div>
+      </div>
+      <div class="ct">
+        <div class="ct-top">
+          <div class="ct-name" id="ctName">...</div>
+          <button class="add-s" onclick="openAddMo()">+ Ekle</button>
+        </div>
+        <div class="sw" id="sw"></div>
+      </div>
+    </div>
+
+    <div class="vp" id="vp" onclick="triggerControls()" ondblclick="toggleFullScreen()">
+        <div id="media-container">
+            <video id="vEl" playsinline></video>
+        </div>
+        <div class="v-overlay-ctrl">
+            <button class="v-btn" onclick="event.stopPropagation(); prev()">⏮</button>
+            <button class="v-btn" style="font-size:48px;" onclick="event.stopPropagation(); togglePlay()">⏯</button>
+            <button class="v-btn" onclick="event.stopPropagation(); next()">⏭</button>
+        </div>
+    </div>
+    <!-- AKILLI YOUTUBE BUTONU -->
+    <a href="#" id="ytExternalLink" class="yt-external-btn" target="_blank">⚠️ YouTube'da İzle</a>
+
+    <div class="player">
+      <div class="vol-row"><input type="range" class="vol-slider" min="0" max="1" step="0.01" value="0.7" oninput="setVol(this.value)"></div>
+      <div id="npT" style="font-size:12px; margin-bottom:5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--mu);">...</div>
+      <div class="prog"><div class="pbar" onclick="seek(event)"><div class="pfill" id="pf"></div></div></div>
+      <div class="ctr">
+        <button class="cb" onclick="prev()">⏮</button>
+        <button class="cb big" id="playB" onclick="togglePlay()">▶</button>
+        <button class="cb" onclick="next()">⏭</button>
+      </div>
+    </div>
+</div>
+
+<script>
+const AUTH_CONFIG = { user: "Hattie", pass: "1234" };
+let db, lists = JSON.parse(localStorage.getItem('nm_data')) || [{id:'l1', name:'Anime OST', icon:'🎌', songs:[]},{id:'l2', name:'J-Pop', icon:'🌸', songs:[]},{id:'l3', name:'Favoriler', icon:'⭐', songs:[]}];
+let curL = 'l1', curI = -1, isPlay = false, vidPanelOpen = false, currentVolume = 0.7, ctrlTimeout = null;
+const AUDIO = new Audio();
+let VIDEO = null, ytPlayer = null, draggingSongIdx = null, draggingListIdx = null;
+
+function checkAuth() { if(document.getElementById('username').value === AUTH_CONFIG.user && document.getElementById('password').value === AUTH_CONFIG.pass) { localStorage.setItem('nihon_music_auth', 'true'); startApp(); } }
+function logout() { localStorage.removeItem('nihon_music_auth'); location.reload(); }
+function startApp() { document.getElementById('auth-screen').classList.add('hid'); document.getElementById('app').classList.remove('hid'); initDB(); }
+if(localStorage.getItem('nihon_music_auth') === 'true') startApp();
+
+function initDB() {
+    const request = indexedDB.open("NihonMusicDB", 1);
+    request.onupgradeneeded = (e) => { db = e.target.result; if (!db.objectStoreNames.contains("files")) db.createObjectStore("files", { keyPath: "id" }); };
+    request.onsuccess = (e) => { db = e.target.result; renderSB(); renderSongs(); };
+}
+function storeFile(id, file) { return new Promise(res => { const tx = db.transaction(["files"], "readwrite"); tx.objectStore("files").add({ id, data: file }).onsuccess = () => res(); }); }
+function getFile(id) { return new Promise(res => { db.transaction(["files"], "readonly").objectStore("files").get(id).onsuccess = e => res(e.target.result?.data); }); }
+function deleteFileFromDB(id) { db.transaction(["files"], "readwrite").objectStore("files").delete(id); }
+function save(){ localStorage.setItem('nm_data', JSON.stringify(lists)); }
+
+function triggerControls() { const vp = document.getElementById('vp'); vp.classList.add('show-ctrl'); clearTimeout(ctrlTimeout); ctrlTimeout = setTimeout(() => { vp.classList.remove('show-ctrl'); }, 3000); }
+
+function renderSB(){
+    let h = ''; lists.forEach((l, i) => h += `<div class="li ${l.id===curL?'act':''}" id="list-${l.id}" draggable="true" ondragstart="handleListDragStart(${i})" ondragover="handleListDragOver(event, ${i}, '${l.id}')" ondragleave="handleListDragLeave('${l.id}')" ondrop="handleListDrop(event, ${i}, '${l.id}')" onclick="selL('${l.id}')">${l.icon} ${l.name}<span class="li-edit" onclick="event.stopPropagation(); openPlEdit(${i})">⚙</span></div>`);
+    document.getElementById('sbList').innerHTML = h;
+    const opt = lists.map(l => `<option value="${l.id}">${l.name}</option>`).join('');
+    document.getElementById('pSel').innerHTML = opt; document.getElementById('editListSel').innerHTML = opt;
+}
+
+function renderSongs(){
+    let lst = lists.find(l => l.id === curL); document.getElementById('ctName').textContent = lst?.name || '';
+    let h = ''; lst?.songs.forEach((s, i) => h += `<div class="sr ${i===curI?'now':''}" id="song-${i}" draggable="true" ondragstart="handleSongDragStart(${i})" ondragover="handleSongDragOver(event, ${i})" ondragleave="handleSongDragLeave(${i})" ondrop="handleSongDrop(event, ${i})" onclick="playSong(${i})"><div style="font-size:18px">${s.isLink?'🌐':(s.isYt?'📺':(s.isVid?'🎬':'🎵'))}</div><div class="si"><div class="st">${s.title}</div></div><div class="sr-more" onclick="event.stopPropagation(); openEdit(${i})">⋮</div></div>`);
+    document.getElementById('sw').innerHTML = h || '<div style="padding:20px; opacity:0.5">Boş.</div>';
+    if(curI !== -1) setTimeout(() => { const el = document.getElementById(`song-${curI}`); if(el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 150);
+}
+
+function handleListDragStart(i) { draggingListIdx = i; }
+function handleListDragOver(e, i, id) { e.preventDefault(); let el = document.getElementById(`list-${id}`); if(draggingListIdx !== null && draggingListIdx !== i) el.classList.add('drag-over-list'); if(draggingSongIdx !== null && curL !== id) el.classList.add('drag-over-song'); }
+function handleListDragLeave(id) { let el = document.getElementById(`list-${id}`); el.classList.remove('drag-over-list', 'drag-over-song'); }
+function handleListDrop(e, i, id) { e.preventDefault(); handleListDragLeave(id); if(draggingListIdx !== null) { let item = lists.splice(draggingListIdx, 1)[0]; lists.splice(i, 0, item); draggingListIdx = null; } else if(draggingSongIdx !== null) { let sList = lists.find(l => l.id === curL); let tList = lists.find(l => l.id === id); tList.songs.push(sList.songs.splice(draggingSongIdx, 1)[0]); draggingSongIdx = null; curI = -1; } save(); renderSB(); renderSongs(); }
+function handleSongDragStart(i) { draggingSongIdx = i; }
+function handleSongDragOver(e, i) { e.preventDefault(); if(draggingSongIdx !== null && draggingSongIdx !== i) document.querySelectorAll('.sr')[i].classList.add('drag-target'); }
+function handleSongDragLeave(i) { document.querySelectorAll('.sr')[i].classList.remove('drag-target'); }
+function handleSongDrop(e, i) { e.preventDefault(); document.querySelectorAll('.sr').forEach(el => el.classList.remove('drag-target')); if(draggingSongIdx !== null && draggingSongIdx !== i) { let lst = lists.find(l => l.id === curL); let item = lst.songs.splice(draggingSongIdx, 1)[0]; lst.songs.splice(i, 0, item); draggingSongIdx = null; curI = -1; save(); renderSongs(); } }
+
+function selL(id){ curL = id; renderSB(); renderSongs(); }
+function toggleVidPanel() { vidPanelOpen = !vidPanelOpen; document.getElementById('vp').classList.toggle('open', vidPanelOpen); document.getElementById('vToggle').classList.toggle('on', vidPanelOpen); if(vidPanelOpen) triggerControls(); }
+
+async function playSong(i){
+    let lst = lists.find(l => l.id === curL); let s = lst.songs[i]; if(!s) return;
+    curI = i; document.getElementById('npT').textContent = s.title;
+    AUDIO.pause(); if(VIDEO) VIDEO.pause(); if(ytPlayer) ytPlayer.stopVideo();
+    
+    // YOUTUBE BUTONUNU SADECE YT VARSA GÖSTER
+    const ytBtn = document.getElementById('ytExternalLink');
+    ytBtn.classList.remove('show');
+    
+    let container = document.getElementById('media-container');
+    if(s.isLink) { window.open(s.url, '_blank'); return; }
+    if(s.isYt) {
+        if(!vidPanelOpen) toggleVidPanel();
+        ytBtn.classList.add('show');
+        ytBtn.href = `https://www.youtube.com/watch?v=${s.ytId}`;
+        container.innerHTML = '<div id="yt-player"></div>';
+        ytPlayer = new YT.Player('yt-player', { height:'100%', width:'100%', videoId:s.ytId, playerVars:{'autoplay':1, 'playsinline':1}, events:{'onReady':e=>e.target.setVolume(currentVolume*100), 'onStateChange':e=>e.data===0&&next()} });
+    } else {
+        if(s.isVid && !vidPanelOpen) toggleVidPanel();
+        container.innerHTML = '<video id="vEl" playsinline></video>';
+        VIDEO = document.getElementById('vEl'); VIDEO.volume = currentVolume; VIDEO.addEventListener('ended', next);
+        let data = await getFile(s.id); if(!data) return;
+        VIDEO.src = URL.createObjectURL(data);
+        if(s.isVid) VIDEO.play(); else AUDIO.src = VIDEO.src, AUDIO.play();
+    }
+    isPlay = true; syncB(); renderSongs(); triggerControls();
+}
+
+function openAddMo() { document.getElementById('sMo').classList.remove('hid'); }
+function closeMo(id) { document.getElementById(id).classList.add('hid'); }
+
+document.getElementById('fIn').onchange = async e => {
+    let files = Array.from(e.target.files), tid = document.getElementById('pSel').value, lst = lists.find(l=>l.id===tid);
+    document.querySelector('.add-s').textContent = "...";
+    for(let f of files) { let id = "f_"+Math.random().toString(36).substr(2,9); await storeFile(id, f); lst.songs.push({id, title:f.name, isVid:f.type.includes('video'), isYt:false, isLink:false}); }
+    document.querySelector('.add-s').textContent = "+ Ekle";
+    save(); renderSongs(); renderSB(); closeMo('sMo');
+};
+
+function addAnyLink() {
+    let url = document.getElementById('ytUrl').value, title = document.getElementById('ytTitle').value || "Link";
+    let ytId = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/)?.[1];
+    let lst = lists.find(l=>l.id===document.getElementById('pSel').value);
+    if(ytId) lst.songs.push({id:"yt_"+Date.now(), title, isYt:true, ytId, isLink:false});
+    else if(url.startsWith('http')) lst.songs.push({id:"lk_"+Date.now(), title, isLink:true, url});
+    else { alert("Geçersiz!"); return; }
+    save(); renderSongs(); renderSB(); closeMo('sMo');
+}
+
+function togglePlay(){
+    let s = lists.find(l => l.id === curL)?.songs[curI]; if(!s || s.isLink) return playSong(0);
+    if(s.isYt) { let st = ytPlayer.getPlayerState(); st===1?ytPlayer.pauseVideo():ytPlayer.playVideo(); isPlay = st!==1; }
+    else { let el = s.isVid?VIDEO:AUDIO; isPlay?el.pause():el.play(); isPlay=!isPlay; }
+    syncB(); triggerControls();
+}
+
+function next() { let lst = lists.find(l=>l.id===curL); playSong((curI+1)%lst.songs.length); }
+function prev() { let lst = lists.find(l=>l.id===curL); playSong((curI-1+lst.songs.length)%lst.songs.length); }
+function setVol(v) { currentVolume=v; AUDIO.volume=v; if(VIDEO)VIDEO.volume=v; if(ytPlayer?.setVolume)ytPlayer.setVolume(v*100); }
+function syncB() { document.getElementById('playB').textContent = isPlay ? '⏸' : '▶'; }
+function toggleFullScreen() { let v = document.getElementById('vp'); if(!document.fullscreenElement) v.requestFullscreen(); else document.exitFullscreen(); }
+
+setInterval(() => {
+    let s = lists.find(l=>l.id===curL)?.songs[curI]; if(!s || s.isLink) return;
+    let fill = document.getElementById('pf'), dur, cur;
+    if(s.isYt && ytPlayer?.getCurrentTime) { dur = ytPlayer.getDuration(); cur = ytPlayer.getCurrentTime(); }
+    else { let el = s.isVid?VIDEO:AUDIO; dur = el?.duration; cur = el?.currentTime; }
+    if(dur>0) fill.style.width = (cur/dur*100)+'%';
+}, 500);
+
+function seek(e) {
+    let s = lists.find(l=>l.id===curL).songs[curI]; if(!s || s.isLink) return;
+    let r = e.currentTarget.getBoundingClientRect(); let pct = (e.clientX-r.left)/r.width;
+    if(s.isYt) ytPlayer.seekTo(pct*ytPlayer.getDuration()); else { let el = s.isVid?VIDEO:AUDIO; el.currentTime = pct*el.duration; }
+}
+
+function openPlEdit(i) { editPlIdx = i; document.getElementById('plEditIn').value = lists[i].name; document.getElementById('plEditMo').classList.remove('hid'); }
+function savePlEdit() { lists[editPlIdx].name = document.getElementById('plEditIn').value; save(); renderSB(); closeMo('plEditMo'); }
+function deletePl() { if(confirm("Sil?")) { lists[editPlIdx].songs.forEach(s => { if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); }); lists.splice(editPlIdx, 1); if(lists.length===0) lists=[{id:'l1',name:'Yeni',icon:'🌸',songs:[]}]; curL=lists[0].id; save(); renderSB(); renderSongs(); closeMo('plEditMo'); } }
+
+let editIdx = null;
+function openEdit(i) { editIdx = i; let s = lists.find(l=>l.id===curL).songs[i]; document.getElementById('editTitle').value=s.title; document.getElementById('editListSel').value=curL; document.getElementById('editMo').classList.remove('hid'); }
+function saveEdit() { let lst = lists.find(l => l.id === curL); lst.songs[editIdx].title = document.getElementById('editTitle').value; let tid = document.getElementById('editListSel').value; if(tid!==curL) lists.find(l => l.id === tid).songs.push(lst.songs.splice(editIdx,1)[0]); save(); renderSB(); renderSongs(); closeMo('editMo'); }
+function confirmDelete() { if(confirm("Sil?")) { let lst = lists.find(l => l.id === curL); let s = lst.songs[editIdx]; if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); lst.songs.splice(editIdx,1); save(); renderSongs(); closeMo('editMo'); } }
+
+function makePl() { let n = document.getElementById('plIn').value; if(n) { lists.push({id:Date.now().toString(), name:n, icon:'🌸', songs:[]}); save(); renderSB(); closeMo('plMo'); } }
+function openPl() { document.getElementById('plMo').classList.remove('hid'); }
+function openSleepMo() { document.getElementById('sleepMo').classList.remove('hid'); }
+
+let sleepInterval;
+function setSleep(min) { clearInterval(sleepInterval); if(min===0) return document.getElementById('timerBadge').classList.add('hid'); let s = min*60; document.getElementById('timerBadge').classList.remove('hid'); sleepInterval = setInterval(() => { s--; let m = Math.floor(s/60); document.getElementById('timerBadge').textContent = `${m}:${s%60<10?'0':''}${s%60}`; if(s<=0) { clearInterval(sleepInterval); AUDIO.pause(); if(VIDEO)VIDEO.pause(); ytPlayer?.stopVideo(); isPlay=false; syncB(); } }, 1000); closeMo('sleepMo'); }
+</script>
+
+<!-- Modals -->
+<div class="ov hid" id="plEditMo"><div class="mo"><h3>Düzenle</h3><input id="plEditIn"><button class="btn btn-p" onclick="savePlEdit()">Kaydet</button><button class="btn" onclick="deletePl()">Sil</button><button class="btn" onclick="closeMo('plEditMo')">İptal</button></div></div>
+<div class="ov hid" id="plMo"><div class="mo"><h3>Yeni Liste</h3><input id="plIn"><button class="btn btn-p" onclick="makePl()">Tamam</button><button class="btn" onclick="closeMo('plMo')">Vazgeç</button></div></div>
+<div class="ov hid" id="sMo"><div class="mo"><h3>Ekle</h3><button class="btn btn-p" onclick="document.getElementById('fIn').click()">Dosya</button><input id="ytUrl" placeholder="Link..."><input id="ytTitle" placeholder="Başlık"><select id="pSel"></select><button class="btn btn-p" onclick="addAnyLink()">Ekle</button><button class="btn" onclick="closeMo('sMo')">Kapat</button></div></div>
+<div class="ov hid" id="editMo"><div class="mo"><h3>Düzenle</h3><input id="editTitle"><select id="editListSel"></select><button class="btn btn-p" onclick="saveEdit()">Kaydet</button><button class="btn" onclick="confirmDelete()">Sil</button><button class="btn" onclick="closeMo('editMo')">Kapat</button></div></div>
+<div class="ov hid" id="sleepMo"><div class="mo"><h3>Uyku</h3><button class="btn" onclick="setSleep(30)">30 Dk</button><button class="btn" onclick="setSleep(60)">1 Saat</button><button class="btn" onclick="setSleep(0)">Kapat</button><button class="btn" onclick="closeMo('sleepMo')">İptal</button></div></div>
+</body>
+</html>
