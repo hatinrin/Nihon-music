@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>日本音楽 — Nihon Music (Smart UI)</title>
+<title>日本音楽 — Nihon Music (Pro Player)</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -28,7 +28,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx); disp
 .tbtn { background: var(--s2); border: 1px solid var(--bs); color: var(--mu); padding: 5px 10px; border-radius: 12px; font-size: 11px; cursor: pointer; }
 .tbtn.on { border-color: var(--pk); color: var(--pk); background: var(--pkd); }
 
-/* MAIN SCROLL FIX */
+/* MAIN */
 .main{display:flex;flex:1;overflow:hidden; min-height: 0;}
 .sb{width:180px;flex-shrink:0;border-right:1px solid var(--bs);display:flex;flex-direction:column;overflow:hidden}
 @media (max-width: 600px) { .sb { width: 135px; } }
@@ -50,7 +50,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx); disp
 .sr:hover{background:var(--s2)}
 .sr.now{background:var(--pkd);border:1px solid var(--br)}
 .sr.drag-target { border-top: 2px solid var(--pk); }
-.sr.dragging { opacity: 0.3; }
 .si{flex:1; min-width:0;}
 .st{font-size:13px;font-weight:500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 .sr-more{color: var(--dm); font-size: 16px; padding: 5px; opacity: 0.6;}
@@ -59,12 +58,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx); disp
 .vp{background:#000;max-height:0;transition:max-height .3s;overflow:hidden;position:relative; flex-shrink: 0;}
 .vp.open{max-height:250px;}
 #media-container { width:100%; height:100%; position: relative; }
-video, iframe { width:100%; height:100%; display:block; object-fit: contain; border:none; }
-.v-overlay-ctrl{position:absolute; inset: 0; display:flex; align-items:center; justify-content: center; gap:25px; background:rgba(0,0,0,0.4); opacity:0; visibility: hidden; transition: 0.3s; z-index: 10;}
+video, iframe { width:100%; height:100%; display:block; object-fit: contain; border:none; pointer-events: auto; }
+.v-overlay-ctrl{position:absolute; inset: 0; display:flex; align-items:center; justify-content: center; gap:15px; background:rgba(0,0,0,0.4); opacity:0; visibility: hidden; transition: 0.3s; z-index: 10;}
 .vp.show-ctrl .v-overlay-ctrl { opacity:1; visibility: visible; }
-.v-btn{background:none;border:none;color:#fff;cursor:pointer;font-size:32px;}
+.v-btn{background:none;border:none;color:#fff;cursor:pointer;font-size:28px;}
+.v-small{font-size: 18px; opacity: 0.8;}
 
-/* SMART YT BUTTON */
 .yt-external-btn { display: none; width: 100%; padding: 8px; background: var(--s3); color: var(--pkl); text-align: center; font-size: 11px; text-decoration: none; border-top: 1px solid var(--bs); font-weight: bold;}
 .yt-external-btn.show { display: block; }
 
@@ -72,12 +71,17 @@ video, iframe { width:100%; height:100%; display:block; object-fit: contain; bor
 .player{background:var(--sur);border-top:1px solid var(--bs);padding:10px 15px 15px; flex-shrink: 0;}
 .vol-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .vol-slider{flex:1;accent-color:var(--pk);height:4px;cursor:pointer}
-.prog{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+
+/* PROGRESS & TIME */
+.prog-container{margin-bottom: 10px;}
+.time-info{display: flex; justify-content: space-between; font-size: 10px; color: var(--mu); margin-bottom: 4px; font-variant-numeric: tabular-nums;}
 .pbar{flex:1;height:5px;background:var(--s3);border-radius:3px;cursor:pointer;position:relative; overflow:hidden;}
 .pfill{height:100%;background:var(--pk);width:0%; transition: width 0.1s linear;}
-.ctr{display:flex;align-items:center;justify-content:center;gap:20px}
+
+.ctr{display:flex;align-items:center;justify-content:center;gap:12px}
 .cb{background:none;border:none;color:var(--mu);font-size:24px;cursor:pointer}
 .cb.big{font-size:32px;color:var(--pk)}
+.cb.small{font-size:18px; opacity: 0.7;}
 
 /* MODALS */
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:999; padding: 20px;}
@@ -133,22 +137,33 @@ video, iframe { width:100%; height:100%; display:block; object-fit: contain; bor
             <video id="vEl" playsinline></video>
         </div>
         <div class="v-overlay-ctrl">
+            <button class="v-btn v-small" onclick="event.stopPropagation(); seekRelative(-5)">-5s</button>
             <button class="v-btn" onclick="event.stopPropagation(); prev()">⏮</button>
             <button class="v-btn" style="font-size:48px;" onclick="event.stopPropagation(); togglePlay()">⏯</button>
             <button class="v-btn" onclick="event.stopPropagation(); next()">⏭</button>
+            <button class="v-btn v-small" onclick="event.stopPropagation(); seekRelative(5)">+5s</button>
         </div>
     </div>
-    <!-- AKILLI YOUTUBE BUTONU -->
     <a href="#" id="ytExternalLink" class="yt-external-btn" target="_blank">⚠️ YouTube'da İzle</a>
 
     <div class="player">
       <div class="vol-row"><input type="range" class="vol-slider" min="0" max="1" step="0.01" value="0.7" oninput="setVol(this.value)"></div>
       <div id="npT" style="font-size:12px; margin-bottom:5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--mu);">...</div>
-      <div class="prog"><div class="pbar" onclick="seek(event)"><div class="pfill" id="pf"></div></div></div>
+      
+      <div class="prog-container">
+        <div class="time-info">
+            <span id="timeCur">0:00</span>
+            <span id="timeRem">-0:00</span>
+        </div>
+        <div class="pbar" onclick="seek(event)"><div class="pfill" id="pf"></div></div>
+      </div>
+
       <div class="ctr">
+        <button class="cb small" onclick="seekRelative(-5)">-5s</button>
         <button class="cb" onclick="prev()">⏮</button>
         <button class="cb big" id="playB" onclick="togglePlay()">▶</button>
         <button class="cb" onclick="next()">⏭</button>
+        <button class="cb small" onclick="seekRelative(5)">+5s</button>
       </div>
     </div>
 </div>
@@ -160,9 +175,27 @@ let curL = 'l1', curI = -1, isPlay = false, vidPanelOpen = false, currentVolume 
 const AUDIO = new Audio();
 let VIDEO = null, ytPlayer = null, draggingSongIdx = null, draggingListIdx = null;
 
+// MediaSession Helper (For Background Play & Lock Screen)
+function updateMediaSession(title) {
+    if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: title,
+            artist: 'Nihon Music',
+            album: 'My Playlist',
+            artwork: [{ src: 'https://cdn-icons-png.flaticon.com/512/2402/2402461.png', sizes: '512x512', type: 'image/png' }]
+        });
+        navigator.mediaSession.setActionHandler('play', togglePlay);
+        navigator.mediaSession.setActionHandler('pause', togglePlay);
+        navigator.mediaSession.setActionHandler('previoustrack', prev);
+        navigator.mediaSession.setActionHandler('nexttrack', next);
+        navigator.mediaSession.setActionHandler('seekbackward', () => seekRelative(-5));
+        navigator.mediaSession.setActionHandler('seekforward', () => seekRelative(5));
+    }
+}
+
 function checkAuth() { if(document.getElementById('username').value === AUTH_CONFIG.user && document.getElementById('password').value === AUTH_CONFIG.pass) { localStorage.setItem('nihon_music_auth', 'true'); startApp(); } }
 function logout() { localStorage.removeItem('nihon_music_auth'); location.reload(); }
-function startApp() { document.getElementById('auth-screen').classList.add('hid'); document.getElementById('app').classList.remove('hid'); initDB(); }
+function startApp() { document.getElementById('auth-screen').classList.add('hid'); document.getElementById('app').classList.remove('hid'); initDB(); document.body.style.height = window.innerHeight + 'px'; }
 if(localStorage.getItem('nihon_music_auth') === 'true') startApp();
 
 function initDB() {
@@ -187,10 +220,11 @@ function renderSB(){
 function renderSongs(){
     let lst = lists.find(l => l.id === curL); document.getElementById('ctName').textContent = lst?.name || '';
     let h = ''; lst?.songs.forEach((s, i) => h += `<div class="sr ${i===curI?'now':''}" id="song-${i}" draggable="true" ondragstart="handleSongDragStart(${i})" ondragover="handleSongDragOver(event, ${i})" ondragleave="handleSongDragLeave(${i})" ondrop="handleSongDrop(event, ${i})" onclick="playSong(${i})"><div style="font-size:18px">${s.isLink?'🌐':(s.isYt?'📺':(s.isVid?'🎬':'🎵'))}</div><div class="si"><div class="st">${s.title}</div></div><div class="sr-more" onclick="event.stopPropagation(); openEdit(${i})">⋮</div></div>`);
-    document.getElementById('sw').innerHTML = h || '<div style="padding:20px; opacity:0.5">Boş.</div>';
+    document.getElementById('sw').innerHTML = h || '<div style="padding:20px; opacity:0.5">Henüz içerik yok.</div>';
     if(curI !== -1) setTimeout(() => { const el = document.getElementById(`song-${curI}`); if(el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 150);
 }
 
+// Drag & Drop
 function handleListDragStart(i) { draggingListIdx = i; }
 function handleListDragOver(e, i, id) { e.preventDefault(); let el = document.getElementById(`list-${id}`); if(draggingListIdx !== null && draggingListIdx !== i) el.classList.add('drag-over-list'); if(draggingSongIdx !== null && curL !== id) el.classList.add('drag-over-song'); }
 function handleListDragLeave(id) { let el = document.getElementById(`list-${id}`); el.classList.remove('drag-over-list', 'drag-over-song'); }
@@ -207,17 +241,16 @@ async function playSong(i){
     let lst = lists.find(l => l.id === curL); let s = lst.songs[i]; if(!s) return;
     curI = i; document.getElementById('npT').textContent = s.title;
     AUDIO.pause(); if(VIDEO) VIDEO.pause(); if(ytPlayer) ytPlayer.stopVideo();
-    
-    // YOUTUBE BUTONUNU SADECE YT VARSA GÖSTER
-    const ytBtn = document.getElementById('ytExternalLink');
-    ytBtn.classList.remove('show');
-    
+    document.getElementById('ytExternalLink').classList.remove('show');
     let container = document.getElementById('media-container');
+
+    updateMediaSession(s.title);
+
     if(s.isLink) { window.open(s.url, '_blank'); return; }
     if(s.isYt) {
         if(!vidPanelOpen) toggleVidPanel();
-        ytBtn.classList.add('show');
-        ytBtn.href = `https://www.youtube.com/watch?v=${s.ytId}`;
+        document.getElementById('ytExternalLink').classList.add('show');
+        document.getElementById('ytExternalLink').href = `https://www.youtube.com/watch?v=${s.ytId}`;
         container.innerHTML = '<div id="yt-player"></div>';
         ytPlayer = new YT.Player('yt-player', { height:'100%', width:'100%', videoId:s.ytId, playerVars:{'autoplay':1, 'playsinline':1}, events:{'onReady':e=>e.target.setVolume(currentVolume*100), 'onStateChange':e=>e.data===0&&next()} });
     } else {
@@ -231,25 +264,43 @@ async function playSong(i){
     isPlay = true; syncB(); renderSongs(); triggerControls();
 }
 
-function openAddMo() { document.getElementById('sMo').classList.remove('hid'); }
-function closeMo(id) { document.getElementById(id).classList.add('hid'); }
+function seekRelative(sec) {
+    let s = lists.find(l => l.id === curL)?.songs[curI]; if(!s) return;
+    if(s.isYt && ytPlayer) {
+        let cur = ytPlayer.getCurrentTime();
+        ytPlayer.seekTo(cur + sec, true);
+    } else {
+        let el = s.isVid ? VIDEO : AUDIO;
+        if(el) el.currentTime += sec;
+    }
+    triggerControls();
+}
 
-document.getElementById('fIn').onchange = async e => {
-    let files = Array.from(e.target.files), tid = document.getElementById('pSel').value, lst = lists.find(l=>l.id===tid);
-    document.querySelector('.add-s').textContent = "...";
-    for(let f of files) { let id = "f_"+Math.random().toString(36).substr(2,9); await storeFile(id, f); lst.songs.push({id, title:f.name, isVid:f.type.includes('video'), isYt:false, isLink:false}); }
-    document.querySelector('.add-s').textContent = "+ Ekle";
-    save(); renderSongs(); renderSB(); closeMo('sMo');
-};
+function formatTime(sec) {
+    if (!sec || isNaN(sec)) return "0:00";
+    let m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+}
 
-function addAnyLink() {
-    let url = document.getElementById('ytUrl').value, title = document.getElementById('ytTitle').value || "Link";
-    let ytId = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/)?.[1];
-    let lst = lists.find(l=>l.id===document.getElementById('pSel').value);
-    if(ytId) lst.songs.push({id:"yt_"+Date.now(), title, isYt:true, ytId, isLink:false});
-    else if(url.startsWith('http')) lst.songs.push({id:"lk_"+Date.now(), title, isLink:true, url});
-    else { alert("Geçersiz!"); return; }
-    save(); renderSongs(); renderSB(); closeMo('sMo');
+setInterval(() => {
+    let s = lists.find(l=>l.id===curL)?.songs[curI]; if(!s || s.isLink) return;
+    let fill = document.getElementById('pf'), dur, cur;
+    if(s.isYt && ytPlayer?.getCurrentTime) { 
+        dur = ytPlayer.getDuration(); cur = ytPlayer.getCurrentTime(); 
+    } else { 
+        let el = s.isVid?VIDEO:AUDIO; dur = el?.duration; cur = el?.currentTime; 
+    }
+    if(dur>0) {
+        fill.style.width = (cur/dur*100)+'%';
+        document.getElementById('timeCur').textContent = formatTime(cur);
+        document.getElementById('timeRem').textContent = "-" + formatTime(dur - cur);
+    }
+}, 500);
+
+function seek(e) {
+    let s = lists.find(l=>l.id===curL).songs[curI]; if(!s || s.isLink) return;
+    let r = e.currentTarget.getBoundingClientRect(); let pct = (e.clientX-r.left)/r.width;
+    if(s.isYt) ytPlayer.seekTo(pct*ytPlayer.getDuration()); else { let el = s.isVid?VIDEO:AUDIO; el.currentTime = pct*el.duration; }
 }
 
 function togglePlay(){
@@ -265,18 +316,25 @@ function setVol(v) { currentVolume=v; AUDIO.volume=v; if(VIDEO)VIDEO.volume=v; i
 function syncB() { document.getElementById('playB').textContent = isPlay ? '⏸' : '▶'; }
 function toggleFullScreen() { let v = document.getElementById('vp'); if(!document.fullscreenElement) v.requestFullscreen(); else document.exitFullscreen(); }
 
-setInterval(() => {
-    let s = lists.find(l=>l.id===curL)?.songs[curI]; if(!s || s.isLink) return;
-    let fill = document.getElementById('pf'), dur, cur;
-    if(s.isYt && ytPlayer?.getCurrentTime) { dur = ytPlayer.getDuration(); cur = ytPlayer.getCurrentTime(); }
-    else { let el = s.isVid?VIDEO:AUDIO; dur = el?.duration; cur = el?.currentTime; }
-    if(dur>0) fill.style.width = (cur/dur*100)+'%';
-}, 500);
+// Modals
+function openAddMo() { document.getElementById('sMo').classList.remove('hid'); }
+function closeMo(id) { document.getElementById(id).classList.add('hid'); }
+function openPl() { document.getElementById('plMo').classList.remove('hid'); }
+function openSleepMo() { document.getElementById('sleepMo').classList.remove('hid'); }
 
-function seek(e) {
-    let s = lists.find(l=>l.id===curL).songs[curI]; if(!s || s.isLink) return;
-    let r = e.currentTarget.getBoundingClientRect(); let pct = (e.clientX-r.left)/r.width;
-    if(s.isYt) ytPlayer.seekTo(pct*ytPlayer.getDuration()); else { let el = s.isVid?VIDEO:AUDIO; el.currentTime = pct*el.duration; }
+document.getElementById('fIn').onchange = async e => {
+    let files = Array.from(e.target.files), tid = document.getElementById('pSel').value, lst = lists.find(l=>l.id===tid);
+    for(let f of files) { let id = "f_"+Math.random().toString(36).substr(2,9); await storeFile(id, f); lst.songs.push({id, title:f.name, isVid:f.type.includes('video'), isYt:false, isLink:false}); }
+    save(); renderSongs(); renderSB(); closeMo('sMo');
+};
+
+function addAnyLink() {
+    let url = document.getElementById('ytUrl').value, title = document.getElementById('ytTitle').value || "Link";
+    let ytId = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/)?.[1];
+    let lst = lists.find(l=>l.id===document.getElementById('pSel').value);
+    if(ytId) lst.songs.push({id:"yt_"+Date.now(), title, isYt:true, ytId, isLink:false});
+    else if(url.startsWith('http')) lst.songs.push({id:"lk_"+Date.now(), title, isLink:true, url});
+    save(); renderSongs(); renderSB(); closeMo('sMo');
 }
 
 function openPlEdit(i) { editPlIdx = i; document.getElementById('plEditIn').value = lists[i].name; document.getElementById('plEditMo').classList.remove('hid'); }
@@ -287,16 +345,12 @@ let editIdx = null;
 function openEdit(i) { editIdx = i; let s = lists.find(l=>l.id===curL).songs[i]; document.getElementById('editTitle').value=s.title; document.getElementById('editListSel').value=curL; document.getElementById('editMo').classList.remove('hid'); }
 function saveEdit() { let lst = lists.find(l => l.id === curL); lst.songs[editIdx].title = document.getElementById('editTitle').value; let tid = document.getElementById('editListSel').value; if(tid!==curL) lists.find(l => l.id === tid).songs.push(lst.songs.splice(editIdx,1)[0]); save(); renderSB(); renderSongs(); closeMo('editMo'); }
 function confirmDelete() { if(confirm("Sil?")) { let lst = lists.find(l => l.id === curL); let s = lst.songs[editIdx]; if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); lst.songs.splice(editIdx,1); save(); renderSongs(); closeMo('editMo'); } }
-
 function makePl() { let n = document.getElementById('plIn').value; if(n) { lists.push({id:Date.now().toString(), name:n, icon:'🌸', songs:[]}); save(); renderSB(); closeMo('plMo'); } }
-function openPl() { document.getElementById('plMo').classList.remove('hid'); }
-function openSleepMo() { document.getElementById('sleepMo').classList.remove('hid'); }
 
 let sleepInterval;
 function setSleep(min) { clearInterval(sleepInterval); if(min===0) return document.getElementById('timerBadge').classList.add('hid'); let s = min*60; document.getElementById('timerBadge').classList.remove('hid'); sleepInterval = setInterval(() => { s--; let m = Math.floor(s/60); document.getElementById('timerBadge').textContent = `${m}:${s%60<10?'0':''}${s%60}`; if(s<=0) { clearInterval(sleepInterval); AUDIO.pause(); if(VIDEO)VIDEO.pause(); ytPlayer?.stopVideo(); isPlay=false; syncB(); } }, 1000); closeMo('sleepMo'); }
 </script>
 
-<!-- Modals -->
 <div class="ov hid" id="plEditMo"><div class="mo"><h3>Düzenle</h3><input id="plEditIn"><button class="btn btn-p" onclick="savePlEdit()">Kaydet</button><button class="btn" onclick="deletePl()">Sil</button><button class="btn" onclick="closeMo('plEditMo')">İptal</button></div></div>
 <div class="ov hid" id="plMo"><div class="mo"><h3>Yeni Liste</h3><input id="plIn"><button class="btn btn-p" onclick="makePl()">Tamam</button><button class="btn" onclick="closeMo('plMo')">Vazgeç</button></div></div>
 <div class="ov hid" id="sMo"><div class="mo"><h3>Ekle</h3><button class="btn btn-p" onclick="document.getElementById('fIn').click()">Dosya</button><input id="ytUrl" placeholder="Link..."><input id="ytTitle" placeholder="Başlık"><select id="pSel"></select><button class="btn btn-p" onclick="addAnyLink()">Ekle</button><button class="btn" onclick="closeMo('sMo')">Kapat</button></div></div>
