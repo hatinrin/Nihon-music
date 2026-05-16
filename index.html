@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Fowalink — Media Player</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -87,10 +90,9 @@ body{font-family:'Inter', sans-serif; color:var(--tx); display:flex; flex-direct
 .sb-lbl{font-size:10px; color:var(--dm); text-transform:uppercase; letter-spacing: 1px; font-weight: 500;}
 .sb-list{flex:1; overflow-y:auto; padding:8px; -webkit-overflow-scrolling: touch;}
 
-/* IPAD YAZI SEÇİMİ (KAYDIRMAYI BOZMAYAN VERSİYON) */
 .li, .sr { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; -webkit-touch-callout: none; }
 
-.li{display:flex; align-items:center; gap:8px; padding:12px 10px; border-radius:10px; cursor:pointer; margin-bottom:4px; font-size: 13px; color: var(--mu); position: relative; font-weight: 400;}
+.li{display:flex; align-items:center; gap:8px; padding:12px 10px; border-radius:10px; cursor:pointer; margin-bottom:4px; font-size: 13px; color: var(--mu); position: relative; touch-action: none; font-weight: 400;}
 .li.act{background:var(--pkd); color:var(--pkl); font-weight: 500;}
 .li.drag-over-list { border-top: 2px solid var(--pk); background: var(--s2); }
 
@@ -99,9 +101,9 @@ body{font-family:'Inter', sans-serif; color:var(--tx); display:flex; flex-direct
 .ct-name{font-family:'Outfit', sans-serif; font-size:16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; color: var(--pkl);}
 .add-s{background:var(--pkd); border:1px solid var(--br); color:var(--pk); padding:6px 12px; border-radius:20px; font-size:11px; cursor:pointer; font-weight: 500; font-family: 'Inter', sans-serif;}
 
-/* SONG LIST & TRACKING DOTS */
+/* SONG LIST */
 .sw{flex:1; overflow-y:scroll; padding:8px; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; display: block;}
-.sr{display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; cursor:pointer; position:relative; margin-bottom:6px;}
+.sr{display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; cursor:pointer; position:relative; margin-bottom:6px; touch-action: none;}
 .sr:hover{background:var(--s2)}
 .sr.now{background:var(--pkd); border:1px solid var(--br)}
 .sr.drag-target { border-top: 2px solid var(--pk); background: var(--s3); }
@@ -117,7 +119,7 @@ body{font-family:'Inter', sans-serif; color:var(--tx); display:flex; flex-direct
 .st-dot.pa.act { background: var(--pk); border-color: var(--pkl); } 
 .st-dot.do.act { background: var(--teal); border-color: var(--teal); } 
 
-/* BOYUTLANDIRMA ÇUBUĞU (RESIZER) */
+/* BOYUTLANDIRMA ÇUBUĞU */
 .vp-resizer {
     height: 12px; background: var(--bg); cursor: ns-resize; display: none; align-items: center; justify-content: center;
     flex-shrink: 0; z-index: 30; border-top: 1px solid var(--bs); border-bottom: 1px solid var(--bs);
@@ -132,7 +134,6 @@ body{font-family:'Inter', sans-serif; color:var(--tx); display:flex; flex-direct
 .vp.resizing { transition: none !important; } 
 #media-container { width:100%; flex:1; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 
-/* Video ve Iframe için Kalıcı Stiller */
 #vEl, #yt-player { width:100%; height:100%; display:none; object-fit: contain; border:none; pointer-events: auto; max-height: 100%; }
 #vEl.show, #yt-player.show { display:block; }
 
@@ -172,7 +173,6 @@ body{font-family:'Inter', sans-serif; color:var(--tx); display:flex; flex-direct
 .cb.big{font-size:36px; color:var(--pk)}
 .cb.small{font-size:18px; opacity: 0.8;}
 
-/* Gelişmiş Shuffle & Repeat İkonları */
 .side-ctr { position: absolute; right: 0; display: flex; gap: 12px; align-items: center; padding-right: 5px; }
 .cb-icon { width: 24px; height: 24px; fill: var(--mu); cursor: pointer; transition: 0.2s; padding: 2px;}
 .cb.small:hover .cb-icon { fill: var(--tx); }
@@ -190,7 +190,7 @@ body{font-family:'Inter', sans-serif; color:var(--tx); display:flex; flex-direct
     #npT { padding: 0 30px; font-size: 12px;}
 }
 
-/* FULLSCREEN MAGIC FIX */
+/* FULLSCREEN MAGIC */
 #app.fullscreen-mode .topbar, #app.fullscreen-mode .main, #app.fullscreen-mode .vp-resizer { display: none !important; }
 #app.fullscreen-mode .vp { position: absolute; inset: 0; width: 100vw; height: 100vh; max-height: 100vh !important; z-index: 1; background: #000; display: flex; justify-content: center; align-items: center;}
 #app.fullscreen-mode .player {
@@ -391,11 +391,11 @@ let customVpHeight = null;
 
 let isShuffle = localStorage.getItem('nm_shuffle') === 'true';
 let isRepeatOne = localStorage.getItem('nm_repeat') === 'true';
-let currentBlobUrl = null;
 
 let AUDIO = null;
 let VIDEO = null;
 let ytPlayer = null, draggingIdx = null, draggingSource = null;
+let userWantsToPlay = false; // Android Arka Plan Oynatma Kalkanı
 
 if (isShuffle) document.getElementById('shufBtn').classList.add('act');
 if (isRepeatOne) document.getElementById('repBtn').classList.add('act');
@@ -403,13 +403,17 @@ if (isRepeatOne) document.getElementById('repBtn').classList.add('act');
 function syncSession(title) {
     if ('mediaSession' in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({ title: title, artist: 'Fowalink', artwork: [{ src: 'https://cdn-icons-png.flaticon.com/512/2402/2402461.png', sizes: '512x512', type: 'image/png' }] });
-        navigator.mediaSession.setActionHandler('play', togglePlay);
-        navigator.mediaSession.setActionHandler('pause', togglePlay);
-        navigator.mediaSession.setActionHandler('previoustrack', prev);
-        navigator.mediaSession.setActionHandler('nexttrack', () => next(false));
-        navigator.mediaSession.setActionHandler('seekbackward', () => seekRelative(-5));
-        navigator.mediaSession.setActionHandler('seekforward', () => seekRelative(5));
     }
+}
+
+// IOS / ANDROID HACK: Arka Planda Şarkı Geçişini Engellememesi İçin MediaSession Hook'ları
+if ('mediaSession' in navigator) {
+    navigator.mediaSession.setActionHandler('play', togglePlay);
+    navigator.mediaSession.setActionHandler('pause', togglePlay);
+    navigator.mediaSession.setActionHandler('previoustrack', prev);
+    navigator.mediaSession.setActionHandler('nexttrack', () => next(false));
+    navigator.mediaSession.setActionHandler('seekbackward', () => seekRelative(-5));
+    navigator.mediaSession.setActionHandler('seekforward', () => seekRelative(5));
 }
 
 function checkAuth() { if(document.getElementById('username').value === AUTH_CONFIG.user && document.getElementById('password').value === AUTH_CONFIG.pass) { localStorage.setItem('nihon_music_auth', 'true'); startApp(); } }
@@ -422,8 +426,19 @@ function startApp() {
     AUDIO = document.getElementById('aEl');
     VIDEO = document.getElementById('vEl');
     
-    const syncPlay = () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; isPlay=true; syncB(); wakeUpControls();};
-    const syncPause = () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused'; isPlay=false; syncB();};
+    const syncPlay = () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; isPlay=true; userWantsToPlay=true; syncB(); wakeUpControls();};
+    
+    const syncPause = () => { 
+        // ANDROID CHROME ARKA PLAN ZORLA DURDURMA KALKANI
+        if (document.hidden && userWantsToPlay) {
+            let s = lists.find(l=>l.id===playL)?.songs[playI];
+            let el = (s && s.isVid) ? VIDEO : AUDIO;
+            if(el) el.play().catch(e=>console.log("Arkaplan kalkanı aktif:", e));
+            return;
+        }
+        if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused'; 
+        isPlay=false; userWantsToPlay=false; syncB();
+    };
     
     AUDIO.addEventListener('play', syncPlay);
     AUDIO.addEventListener('pause', syncPause);
@@ -437,6 +452,17 @@ function startApp() {
 }
 
 if(localStorage.getItem('nihon_music_auth') === 'true') { document.addEventListener('DOMContentLoaded', startApp); }
+
+// Görünürlük Kancası
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden && userWantsToPlay) {
+        let s = lists.find(l=>l.id===playL)?.songs[playI];
+        if (s && !s.isYt) {
+            let el = s.isVid ? VIDEO : AUDIO;
+            if(el && el.paused) el.play().catch(e=>console.log(e));
+        }
+    }
+});
 
 function initDB() {
     const request = indexedDB.open("NihonMusicDB", 1);
@@ -609,12 +635,8 @@ function toggleVidPanel() {
     }
 }
 
-let currentPlayToken = 0;
-
 async function playSong(lId, i){
-    let token = Date.now();
-    currentPlayToken = token;
-
+    userWantsToPlay = true;
     playL = lId; playI = i; let lst = lists.find(l => l.id === playL); 
     lst.lastI = i; save(); 
     let s = lst?.songs[playI]; if(!s) return;
@@ -622,12 +644,11 @@ async function playSong(lId, i){
     document.getElementById('npT').textContent = s.title; 
     document.getElementById('ytExternalLink').classList.remove('show'); 
     syncSession(s.title);
-    if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; // IOS HACK
 
     VIDEO.classList.remove('show');
     document.getElementById('yt-player').classList.remove('show');
 
-    if(s.isLink) { window.open(s.url, '_blank'); AUDIO.pause(); isPlay = false; syncB(); renderSongs(); return; }
+    if(s.isLink) { window.open(s.url, '_blank'); AUDIO.pause(); isPlay = false; userWantsToPlay = false; syncB(); renderSongs(); return; }
     
     if(s.isYt) {
         AUDIO.pause();
@@ -637,40 +658,36 @@ async function playSong(lId, i){
         document.getElementById('yt-player').classList.add('show');
         
         if(!ytPlayer) {
-            ytPlayer = new YT.Player('yt-player', { height:'100%', width:'100%', videoId:s.ytId, playerVars:{'autoplay':1, 'playsinline':1}, events:{'onReady':e=>e.target.setVolume(currentVolume*100), 'onStateChange':e=> { if(e.data===0) next(true); else if(e.data===1) { isPlay=true; syncB(); wakeUpControls(); } else if(e.data===2) { isPlay=false; syncB(); } } } });
+            ytPlayer = new YT.Player('yt-player', { height:'100%', width:'100%', videoId:s.ytId, playerVars:{'autoplay':1, 'playsinline':1}, events:{'onReady':e=>e.target.setVolume(currentVolume*100), 'onStateChange':e=> { if(e.data===0) next(true); else if(e.data===1) { isPlay=true; userWantsToPlay=true; syncB(); wakeUpControls(); } else if(e.data===2) { isPlay=false; userWantsToPlay=false; syncB(); } } } });
         } else {
             if(typeof ytPlayer.loadVideoById === 'function') ytPlayer.loadVideoById(s.ytId);
         }
     } else {
         if(s.isVid && !vidPanelOpen) toggleVidPanel(); 
-        
-        let data = await getFile(s.id); 
-        if(!data || currentPlayToken !== token) return; // Asenkron çakışma önleyici
+        let data = await getFile(s.id); if(!data) return; 
         
         if(ytPlayer && typeof ytPlayer.stopVideo === 'function') try { ytPlayer.stopVideo(); } catch(e){}
         
-        let oldBlob = currentBlobUrl;
-        currentBlobUrl = URL.createObjectURL(data);
+        let oldBlob = VIDEO.src || AUDIO.src;
+        let newBlob = URL.createObjectURL(data);
         
         if(s.isVid) { 
             AUDIO.pause();
-            VIDEO.classList.add('show');
-            VIDEO.src = currentBlobUrl;
-            VIDEO.volume = currentVolume;
-            VIDEO.play().catch(e=>console.log(e));
+            VIDEO.classList.add('show'); VIDEO.src = newBlob; VIDEO.volume = currentVolume; VIDEO.play().catch(e=>console.log(e));
         } else { 
             VIDEO.pause();
-            AUDIO.src = currentBlobUrl;
-            AUDIO.volume = currentVolume;
-            AUDIO.play().catch(e=>console.log(e));
+            AUDIO.src = newBlob; AUDIO.volume = currentVolume; AUDIO.play().catch(e=>console.log(e));
         }
-        if(oldBlob) URL.revokeObjectURL(oldBlob);
+        if(oldBlob && oldBlob.startsWith('blob:')) URL.revokeObjectURL(oldBlob);
     }
     isPlay = true; syncB(); renderSongs(); wakeUpControls();
 }
 
 function togglePlay(){
     let s = lists.find(l => l.id === playL)?.songs[playI]; if(!s || s.isLink) { let curLst = lists.find(l=>l.id===curL); if(curLst && curLst.songs.length > 0) return playSong(curL, 0); return; }
+    
+    userWantsToPlay = !isPlay;
+
     if(s.isYt && ytPlayer && typeof ytPlayer.getPlayerState === 'function') { let st = ytPlayer.getPlayerState(); st===1?ytPlayer.pauseVideo():ytPlayer.playVideo(); }
     else { let el = s.isVid?VIDEO:AUDIO; if (el.paused) el.play().catch(e=>console.log(e)); else el.pause(); }
     wakeUpControls();
@@ -705,12 +722,12 @@ function seek(e) { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s
 
 function openPlEdit(i) { editPlIdx = i; document.getElementById('plEditIn').value = lists[i].name; document.getElementById('plEditMo').classList.remove('hid'); }
 function savePlEdit() { lists[editPlIdx].name = document.getElementById('plEditIn').value; save(); renderSB(); closeMo('plEditMo'); }
-function deletePl() { if(confirm("Listeyi sil?")) { lists[editPlIdx].songs.forEach(s => { if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); }); lists.splice(editPlIdx, 1); if(lists.length===0) lists=[{id:'l1',name:'Yeni',icon:'🌸',songs:[]}]; curL=lists[0].id; if(playL===lists[editPlIdx]?.id) { playL=null; playI=-1; AUDIO.pause(); VIDEO.pause(); isPlay=false; syncB(); } save(); renderSB(); renderSongs(); closeMo('plEditMo'); } }
+function deletePl() { if(confirm("Listeyi sil?")) { lists[editPlIdx].songs.forEach(s => { if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); }); lists.splice(editPlIdx, 1); if(lists.length===0) lists=[{id:'l1',name:'Yeni',icon:'🌸',songs:[]}]; curL=lists[0].id; if(playL===lists[editPlIdx]?.id) { playL=null; playI=-1; AUDIO.pause(); VIDEO.pause(); isPlay=false; userWantsToPlay=false; syncB(); } save(); renderSB(); renderSongs(); closeMo('plEditMo'); } }
 
 let editIdx = null;
 function openEdit(i) { editIdx = i; let s = lists.find(l=>l.id===curL).songs[i]; document.getElementById('editTitle').value=s.title; document.getElementById('editListSel').value=curL; document.getElementById('editMo').classList.remove('hid'); }
 function saveEdit() { let lst = lists.find(l => l.id === curL); lst.songs[editIdx].title = document.getElementById('editTitle').value; let tid = document.getElementById('editListSel').value; if(tid!==curL) moveSongToList(editIdx, curL, tid); save(); renderSB(); renderSongs(); closeMo('editMo'); }
-function confirmDelete() { if(confirm("Sil?")) { let lst = lists.find(l => l.id === curL); let s = lst.songs[editIdx]; if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); lst.songs.splice(editIdx,1); if(playL===curL && playI===editIdx){ playI=-1; isPlay=false; AUDIO.pause(); VIDEO.pause(); syncB(); } else if(playL===curL && editIdx<playI) { playI--; } save(); renderSongs(); closeMo('editMo'); } }
+function confirmDelete() { if(confirm("Sil?")) { let lst = lists.find(l => l.id === curL); let s = lst.songs[editIdx]; if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); lst.songs.splice(editIdx,1); if(playL===curL && playI===editIdx){ playI=-1; isPlay=false; userWantsToPlay=false; AUDIO.pause(); VIDEO.pause(); syncB(); } else if(playL===curL && editIdx<playI) { playI--; } save(); renderSongs(); closeMo('editMo'); } }
 
 function makePl() { let n = document.getElementById('plIn').value; if(n) { lists.push({id:Date.now().toString(), name:n, icon:'🌸', songs:[]}); save(); renderSB(); closeMo('plMo'); } }
 function openPl() { document.getElementById('plMo').classList.remove('hid'); }
@@ -733,7 +750,7 @@ function addAnyLink() {
 }
 
 let sleepInterval;
-function setSleep(min) { clearInterval(sleepInterval); if(min===0) return document.getElementById('timerBadge').classList.add('hid'); let s=min*60; document.getElementById('timerBadge').classList.remove('hid'); sleepInterval=setInterval(()=>{ s--; document.getElementById('timerBadge').textContent=formatTime(s); if(s<=0){ clearInterval(sleepInterval); AUDIO.pause(); if(VIDEO)VIDEO.pause(); try{ytPlayer?.stopVideo();}catch(e){} isPlay=false; syncB(); } },1000); closeMo('sleepMo'); }
+function setSleep(min) { clearInterval(sleepInterval); if(min===0) return document.getElementById('timerBadge').classList.add('hid'); let s=min*60; document.getElementById('timerBadge').classList.remove('hid'); sleepInterval=setInterval(()=>{ s--; document.getElementById('timerBadge').textContent=formatTime(s); if(s<=0){ clearInterval(sleepInterval); AUDIO.pause(); if(VIDEO)VIDEO.pause(); try{ytPlayer?.stopVideo();}catch(e){} isPlay=false; userWantsToPlay=false; syncB(); } },1000); closeMo('sleepMo'); }
 function openSleepMo() { document.getElementById('sleepMo').classList.remove('hid'); }
 </script>
 </body>
