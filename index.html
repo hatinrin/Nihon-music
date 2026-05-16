@@ -103,7 +103,7 @@ body{font-family:'Inter', sans-serif; color:var(--tx); display:flex; flex-direct
 
 /* SONG LIST */
 .sw{flex:1; overflow-y:scroll; padding:8px; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; display: block;}
-.sr{display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; cursor:pointer; position:relative; margin-bottom:6px; touch-action: pan-y;}
+.sr{display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; cursor:pointer; position:relative; margin-bottom:6px;}
 .sr:hover{background:var(--s2)}
 .sr.now{background:var(--pkd); border:1px solid var(--br)}
 .sr.drag-target { border-top: 2px solid var(--pk); background: var(--s3); }
@@ -133,7 +133,6 @@ body{font-family:'Inter', sans-serif; color:var(--tx); display:flex; flex-direct
 .vp.open{height: 240px;} 
 .vp.resizing { transition: none !important; } 
 #media-container { width:100%; flex:1; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-
 #vEl, #yt-player { width:100%; height:100%; display:none; object-fit: contain; border:none; pointer-events: auto; max-height: 100%; }
 #vEl.show, #yt-player.show { display:block; }
 
@@ -400,7 +399,7 @@ let VIDEO = null;
 let ytPlayer = null, draggingIdx = null, draggingSource = null;
 let userWantsToPlay = false; 
 
-// OS DETECTOR: Kalkanın ne zaman açılacağını bilir
+// AKILLI OS DEDEKTÖRÜ (İKİLİ MOTOR MİMARİSİ)
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const isAndroid = /Android/i.test(navigator.userAgent);
 
@@ -433,11 +432,10 @@ function startApp() {
     VIDEO = document.getElementById('vEl');
     
     const syncPlay = () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; isPlay=true; syncB(); wakeUpControls();};
-    
     const syncPause = (e) => { 
-        if (e && e.target && e.target.ended) return; // Şarkı bitişinde kalkan devreye girmesin, next() halledecek
+        if (e && e.target && e.target.ended) return; // Otomatik şarkı bitişinde kalkanı çalıştırma
 
-        // SADECE ANDROID KALKANI: Kullanıcı durdurmadıysa zorla başlat!
+        // ANDROID ARKA PLAN SES KALKANI (iPad'i asla etkilemez)
         if (isAndroid && userWantsToPlay) {
             setTimeout(() => {
                 if (userWantsToPlay && e.target && e.target.paused) {
@@ -464,7 +462,7 @@ function startApp() {
 
 if(localStorage.getItem('nihon_music_auth') === 'true') { document.addEventListener('DOMContentLoaded', startApp); }
 
-// Sadece Android İçin Arka Plan Garantisi
+// Sadece Android Telefonlar İçin Arka Plan Kilit Güvencesi
 document.addEventListener('visibilitychange', () => {
     if (isAndroid && document.hidden && userWantsToPlay) {
         let s = lists.find(l=>l.id===playL)?.songs[playI];
@@ -661,7 +659,7 @@ async function playSong(lId, i){
     VIDEO.classList.remove('show');
     document.getElementById('yt-player').classList.remove('show');
 
-    if(s.isLink) { window.open(s.url, '_blank'); AUDIO.pause(); isPlay = false; userWantsToPlay = false; syncB(); renderSongs(); return; }
+    if(s.isLink) { window.open(s.url, '_blank'); AUDIO.pause(); isPlay = false; syncB(); renderSongs(); return; }
     
     if(s.isYt) {
         AUDIO.pause();
@@ -700,26 +698,45 @@ function togglePlay(){
     let s = lists.find(l => l.id === playL)?.songs[playI]; if(!s || s.isLink) { let curLst = lists.find(l=>l.id===curL); if(curLst && curLst.songs.length > 0) return playSong(curL, 0); return; }
     
     if(isPlay) {
-        userWantsToPlay = false; // Kullanıcı kendi durdurdu (Kalkan çalışmaz)
+        userWantsToPlay = false; 
         if(s.isYt && ytPlayer && typeof ytPlayer.getPlayerState === 'function') ytPlayer.pauseVideo();
         else { let el = s.isVid?VIDEO:AUDIO; el.pause(); }
     } else {
-        userWantsToPlay = true; // Kullanıcı kendi başlattı (Kalkan açılır)
+        userWantsToPlay = true; 
         if(s.isYt && ytPlayer && typeof ytPlayer.getPlayerState === 'function') ytPlayer.playVideo();
         else { let el = s.isVid?VIDEO:AUDIO; el.play().catch(e=>console.log(e)); }
     }
     wakeUpControls();
 }
 
+// --- ARKA PLAN SÜREKLİLİK ZİNCİRİ (Play-Chain Fix) ---
 function next(isAuto = false) { 
     let lst = lists.find(l=>l.id===playL); if(!lst || !lst.songs.length) return; 
-    if (isAuto && isRepeatOne) { playSong(playL, playI); return; }
+    
+    // Şarkı otomatik bittiyse ve telefondaysak widget sönmesin sinyali yolla
+    if (isAuto && 'mediaSession' in navigator) {
+        navigator.mediaSession.playbackState = 'playing';
+    }
+
+    if (isAuto && isRepeatOne) { 
+        playSong(playL, playI); 
+        return; 
+    }
+    
+    let nextIdx = playI;
     if (isShuffle) {
-        let nI = Math.floor(Math.random() * lst.songs.length);
-        if (lst.songs.length > 1 && nI === playI) nI = (nI + 1) % lst.songs.length;
-        playSong(playL, nI);
-    } else { playSong(playL, (playI+1)%lst.songs.length); }
+        nextIdx = Math.floor(Math.random() * lst.songs.length);
+        if (lst.songs.length > 1 && nextIdx === playI) nextIdx = (nextIdx + 1) % lst.songs.length;
+    } else { 
+        nextIdx = (playI + 1) % lst.songs.length; 
+    }
+
+    // Android/iOS widget canlandırma köprüsü
+    setTimeout(() => {
+        playSong(playL, nextIdx);
+    }, 50); 
 }
+
 function prev() { let lst = lists.find(l=>l.id===playL); if(lst && lst.songs.length > 0) playSong(playL, (playI-1+lst.songs.length)%lst.songs.length); }
 function seekRelative(sec) { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s.isLink) return; if(s.isYt) ytPlayer.seekTo(ytPlayer.getCurrentTime()+sec, true); else { let el=s.isVid?VIDEO:AUDIO; el.currentTime+=sec; } wakeUpControls(); }
 function syncB() { document.getElementById('playB').textContent = isPlay ? '⏸' : '▶'; document.getElementById('vpPlayB').textContent = isPlay ? '⏸' : '▶'; }
@@ -740,7 +757,7 @@ function seek(e) { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s
 
 function openPlEdit(i) { editPlIdx = i; document.getElementById('plEditIn').value = lists[i].name; document.getElementById('plEditMo').classList.remove('hid'); }
 function savePlEdit() { lists[editPlIdx].name = document.getElementById('plEditIn').value; save(); renderSB(); closeMo('plEditMo'); }
-function deletePl() { if(confirm("Listeyi sil?")) { lists[editPlIdx].songs.forEach(s => { if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); }); lists.splice(editPlIdx, 1); if(lists.length===0) lists=[{id:'l1',name:'Yeni',icon:'🌸',songs:[]}]; curL=lists[0].id; if(playL===lists[editPlIdx]?.id) { playL=null; playI=-1; AUDIO.pause(); VIDEO.pause(); isPlay=false; userWantsToPlay=false; syncB(); } save(); renderSB(); renderSongs(); closeMo('plEditMo'); } }
+function deletePl() { if(confirm("Listeyi sil?")) { lists[editPlIdx].songs.forEach(s => { if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); }); lists.splice(editPlIdx, 1); if(lists.length===0) lists=[{id:'l1',name:'Yeni',icon:'🌸',songs:[]}]; curL=lists[0].id; if(playL===lists[editPlIdx]?.id) { playL=null; playI=-1; AUDIO.pause(); VIDEO.pause(); isPlay=false; syncB(); } save(); renderSB(); renderSongs(); closeMo('plEditMo'); } }
 
 let editIdx = null;
 function openEdit(i) { editIdx = i; let s = lists.find(l=>l.id===curL).songs[i]; document.getElementById('editTitle').value=s.title; document.getElementById('editListSel').value=curL; document.getElementById('editMo').classList.remove('hid'); }
