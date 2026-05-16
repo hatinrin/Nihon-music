@@ -133,6 +133,7 @@ body{font-family:'Inter', sans-serif; color:var(--tx); display:flex; flex-direct
 .vp.open{height: 240px;} 
 .vp.resizing { transition: none !important; } 
 #media-container { width:100%; flex:1; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+
 #vEl, #yt-player { width:100%; height:100%; display:none; object-fit: contain; border:none; pointer-events: auto; max-height: 100%; }
 #vEl.show, #yt-player.show { display:block; }
 
@@ -399,8 +400,9 @@ let VIDEO = null;
 let ytPlayer = null, draggingIdx = null, draggingSource = null;
 let userWantsToPlay = false; 
 
-// Cihazın iOS olup olmadığını anlayan dedektör
+// OS DETECTOR: Kalkanın ne zaman açılacağını bilir
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const isAndroid = /Android/i.test(navigator.userAgent);
 
 if (isShuffle) document.getElementById('shufBtn').classList.add('act');
 if (isRepeatOne) document.getElementById('repBtn').classList.add('act');
@@ -430,18 +432,23 @@ function startApp() {
     AUDIO = document.getElementById('aEl');
     VIDEO = document.getElementById('vEl');
     
-    const syncPlay = () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; isPlay=true; userWantsToPlay=true; syncB(); wakeUpControls();};
+    const syncPlay = () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; isPlay=true; syncB(); wakeUpControls();};
     
-    const syncPause = () => { 
-        // ANDROID İÇİN ZORLA ÇALMA KALKANI (iOS'TA DEVRE DIŞI BIRAKILDI)
-        if (!isIOS && document.hidden && userWantsToPlay) {
-            let s = lists.find(l=>l.id===playL)?.songs[playI];
-            let el = (s && s.isVid) ? VIDEO : AUDIO;
-            if(el && el.paused) el.play().catch(e=>console.log("Arkaplan kalkanı aktif:", e));
+    const syncPause = (e) => { 
+        if (e && e.target && e.target.ended) return; // Şarkı bitişinde kalkan devreye girmesin, next() halledecek
+
+        // SADECE ANDROID KALKANI: Kullanıcı durdurmadıysa zorla başlat!
+        if (isAndroid && userWantsToPlay) {
+            setTimeout(() => {
+                if (userWantsToPlay && e.target && e.target.paused) {
+                    e.target.play().catch(err => console.log("Android Kalkanı:", err));
+                }
+            }, 100);
             return;
         }
+
         if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused'; 
-        isPlay=false; userWantsToPlay=false; syncB();
+        isPlay=false; syncB();
     };
     
     AUDIO.addEventListener('play', syncPlay);
@@ -457,9 +464,9 @@ function startApp() {
 
 if(localStorage.getItem('nihon_music_auth') === 'true') { document.addEventListener('DOMContentLoaded', startApp); }
 
-// Sadece Android için Görünürlük Kancası
+// Sadece Android İçin Arka Plan Garantisi
 document.addEventListener('visibilitychange', () => {
-    if (!isIOS && document.hidden && userWantsToPlay) {
+    if (isAndroid && document.hidden && userWantsToPlay) {
         let s = lists.find(l=>l.id===playL)?.songs[playI];
         if (s && !s.isYt) {
             let el = s.isVid ? VIDEO : AUDIO;
@@ -642,7 +649,7 @@ function toggleVidPanel() {
 let currentBlobUrl = null;
 
 async function playSong(lId, i){
-    userWantsToPlay = true;
+    userWantsToPlay = true; 
     playL = lId; playI = i; let lst = lists.find(l => l.id === playL); 
     lst.lastI = i; save(); 
     let s = lst?.songs[playI]; if(!s) return;
@@ -692,10 +699,15 @@ async function playSong(lId, i){
 function togglePlay(){
     let s = lists.find(l => l.id === playL)?.songs[playI]; if(!s || s.isLink) { let curLst = lists.find(l=>l.id===curL); if(curLst && curLst.songs.length > 0) return playSong(curL, 0); return; }
     
-    userWantsToPlay = !isPlay;
-
-    if(s.isYt && ytPlayer && typeof ytPlayer.getPlayerState === 'function') { let st = ytPlayer.getPlayerState(); st===1?ytPlayer.pauseVideo():ytPlayer.playVideo(); }
-    else { let el = s.isVid?VIDEO:AUDIO; if (el.paused) el.play().catch(e=>console.log(e)); else el.pause(); }
+    if(isPlay) {
+        userWantsToPlay = false; // Kullanıcı kendi durdurdu (Kalkan çalışmaz)
+        if(s.isYt && ytPlayer && typeof ytPlayer.getPlayerState === 'function') ytPlayer.pauseVideo();
+        else { let el = s.isVid?VIDEO:AUDIO; el.pause(); }
+    } else {
+        userWantsToPlay = true; // Kullanıcı kendi başlattı (Kalkan açılır)
+        if(s.isYt && ytPlayer && typeof ytPlayer.getPlayerState === 'function') ytPlayer.playVideo();
+        else { let el = s.isVid?VIDEO:AUDIO; el.play().catch(e=>console.log(e)); }
+    }
     wakeUpControls();
 }
 
