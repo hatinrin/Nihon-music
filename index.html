@@ -103,7 +103,7 @@ body{font-family:'Inter', sans-serif; color:var(--tx); display:flex; flex-direct
 
 /* SONG LIST */
 .sw{flex:1; overflow-y:scroll; padding:8px; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; display: block;}
-.sr{display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; cursor:pointer; position:relative; margin-bottom:6px;}
+.sr{display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; cursor:pointer; position:relative; margin-bottom:6px; touch-action: pan-y;}
 .sr:hover{background:var(--s2)}
 .sr.now{background:var(--pkd); border:1px solid var(--br)}
 .sr.drag-target { border-top: 2px solid var(--pk); background: var(--s3); }
@@ -189,7 +189,7 @@ body{font-family:'Inter', sans-serif; color:var(--tx); display:flex; flex-direct
     #npT { padding: 0 30px; font-size: 12px;}
 }
 
-/* FULLSCREEN MAGIC */
+/* FULLSCREEN MAGIC FIX */
 #app.fullscreen-mode .topbar, #app.fullscreen-mode .main, #app.fullscreen-mode .vp-resizer { display: none !important; }
 #app.fullscreen-mode .vp { position: absolute !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; max-height: 100vh !important; z-index: 1 !important; background: #000 !important; display: flex !important; justify-content: center !important; align-items: center !important;}
 #app.fullscreen-mode #media-container { width: 100% !important; height: 100% !important; display: flex !important; align-items: center !important; justify-content: center !important;}
@@ -397,6 +397,10 @@ let isRepeatOne = localStorage.getItem('nm_repeat') === 'true';
 let AUDIO = null;
 let VIDEO = null;
 let ytPlayer = null, draggingIdx = null, draggingSource = null;
+let userWantsToPlay = false; 
+
+// Cihazın iOS olup olmadığını anlayan dedektör
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
 if (isShuffle) document.getElementById('shufBtn').classList.add('act');
 if (isRepeatOne) document.getElementById('repBtn').classList.add('act');
@@ -426,8 +430,19 @@ function startApp() {
     AUDIO = document.getElementById('aEl');
     VIDEO = document.getElementById('vEl');
     
-    const syncPlay = () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; isPlay=true; syncB(); wakeUpControls();};
-    const syncPause = () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused'; isPlay=false; syncB();};
+    const syncPlay = () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; isPlay=true; userWantsToPlay=true; syncB(); wakeUpControls();};
+    
+    const syncPause = () => { 
+        // ANDROID İÇİN ZORLA ÇALMA KALKANI (iOS'TA DEVRE DIŞI BIRAKILDI)
+        if (!isIOS && document.hidden && userWantsToPlay) {
+            let s = lists.find(l=>l.id===playL)?.songs[playI];
+            let el = (s && s.isVid) ? VIDEO : AUDIO;
+            if(el && el.paused) el.play().catch(e=>console.log("Arkaplan kalkanı aktif:", e));
+            return;
+        }
+        if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused'; 
+        isPlay=false; userWantsToPlay=false; syncB();
+    };
     
     AUDIO.addEventListener('play', syncPlay);
     AUDIO.addEventListener('pause', syncPause);
@@ -441,6 +456,17 @@ function startApp() {
 }
 
 if(localStorage.getItem('nihon_music_auth') === 'true') { document.addEventListener('DOMContentLoaded', startApp); }
+
+// Sadece Android için Görünürlük Kancası
+document.addEventListener('visibilitychange', () => {
+    if (!isIOS && document.hidden && userWantsToPlay) {
+        let s = lists.find(l=>l.id===playL)?.songs[playI];
+        if (s && !s.isYt) {
+            let el = s.isVid ? VIDEO : AUDIO;
+            if(el && el.paused) el.play().catch(e=>console.log(e));
+        }
+    }
+});
 
 function initDB() {
     const request = indexedDB.open("NihonMusicDB", 1);
@@ -616,6 +642,7 @@ function toggleVidPanel() {
 let currentBlobUrl = null;
 
 async function playSong(lId, i){
+    userWantsToPlay = true;
     playL = lId; playI = i; let lst = lists.find(l => l.id === playL); 
     lst.lastI = i; save(); 
     let s = lst?.songs[playI]; if(!s) return;
@@ -627,7 +654,7 @@ async function playSong(lId, i){
     VIDEO.classList.remove('show');
     document.getElementById('yt-player').classList.remove('show');
 
-    if(s.isLink) { window.open(s.url, '_blank'); AUDIO.pause(); isPlay = false; syncB(); renderSongs(); return; }
+    if(s.isLink) { window.open(s.url, '_blank'); AUDIO.pause(); isPlay = false; userWantsToPlay = false; syncB(); renderSongs(); return; }
     
     if(s.isYt) {
         AUDIO.pause();
@@ -637,7 +664,7 @@ async function playSong(lId, i){
         document.getElementById('yt-player').classList.add('show');
         
         if(!ytPlayer) {
-            ytPlayer = new YT.Player('yt-player', { height:'100%', width:'100%', videoId:s.ytId, playerVars:{'autoplay':1, 'playsinline':1}, events:{'onReady':e=>e.target.setVolume(currentVolume*100), 'onStateChange':e=> { if(e.data===0) next(true); else if(e.data===1) { isPlay=true; syncB(); wakeUpControls(); } else if(e.data===2) { isPlay=false; syncB(); } } } });
+            ytPlayer = new YT.Player('yt-player', { height:'100%', width:'100%', videoId:s.ytId, playerVars:{'autoplay':1, 'playsinline':1}, events:{'onReady':e=>e.target.setVolume(currentVolume*100), 'onStateChange':e=> { if(e.data===0) next(true); else if(e.data===1) { isPlay=true; userWantsToPlay=true; syncB(); wakeUpControls(); } else if(e.data===2) { isPlay=false; userWantsToPlay=false; syncB(); } } } });
         } else {
             if(typeof ytPlayer.loadVideoById === 'function') ytPlayer.loadVideoById(s.ytId);
         }
@@ -665,6 +692,8 @@ async function playSong(lId, i){
 function togglePlay(){
     let s = lists.find(l => l.id === playL)?.songs[playI]; if(!s || s.isLink) { let curLst = lists.find(l=>l.id===curL); if(curLst && curLst.songs.length > 0) return playSong(curL, 0); return; }
     
+    userWantsToPlay = !isPlay;
+
     if(s.isYt && ytPlayer && typeof ytPlayer.getPlayerState === 'function') { let st = ytPlayer.getPlayerState(); st===1?ytPlayer.pauseVideo():ytPlayer.playVideo(); }
     else { let el = s.isVid?VIDEO:AUDIO; if (el.paused) el.play().catch(e=>console.log(e)); else el.pause(); }
     wakeUpControls();
@@ -699,12 +728,12 @@ function seek(e) { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s
 
 function openPlEdit(i) { editPlIdx = i; document.getElementById('plEditIn').value = lists[i].name; document.getElementById('plEditMo').classList.remove('hid'); }
 function savePlEdit() { lists[editPlIdx].name = document.getElementById('plEditIn').value; save(); renderSB(); closeMo('plEditMo'); }
-function deletePl() { if(confirm("Listeyi sil?")) { lists[editPlIdx].songs.forEach(s => { if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); }); lists.splice(editPlIdx, 1); if(lists.length===0) lists=[{id:'l1',name:'Yeni',icon:'🌸',songs:[]}]; curL=lists[0].id; if(playL===lists[editPlIdx]?.id) { playL=null; playI=-1; AUDIO.pause(); VIDEO.pause(); isPlay=false; syncB(); } save(); renderSB(); renderSongs(); closeMo('plEditMo'); } }
+function deletePl() { if(confirm("Listeyi sil?")) { lists[editPlIdx].songs.forEach(s => { if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); }); lists.splice(editPlIdx, 1); if(lists.length===0) lists=[{id:'l1',name:'Yeni',icon:'🌸',songs:[]}]; curL=lists[0].id; if(playL===lists[editPlIdx]?.id) { playL=null; playI=-1; AUDIO.pause(); VIDEO.pause(); isPlay=false; userWantsToPlay=false; syncB(); } save(); renderSB(); renderSongs(); closeMo('plEditMo'); } }
 
 let editIdx = null;
 function openEdit(i) { editIdx = i; let s = lists.find(l=>l.id===curL).songs[i]; document.getElementById('editTitle').value=s.title; document.getElementById('editListSel').value=curL; document.getElementById('editMo').classList.remove('hid'); }
 function saveEdit() { let lst = lists.find(l => l.id === curL); lst.songs[editIdx].title = document.getElementById('editTitle').value; let tid = document.getElementById('editListSel').value; if(tid!==curL) moveSongToList(editIdx, curL, tid); save(); renderSB(); renderSongs(); closeMo('editMo'); }
-function confirmDelete() { if(confirm("Sil?")) { let lst = lists.find(l => l.id === curL); let s = lst.songs[editIdx]; if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); lst.songs.splice(editIdx,1); if(playL===curL && playI===editIdx){ playI=-1; isPlay=false; AUDIO.pause(); VIDEO.pause(); syncB(); } else if(playL===curL && editIdx<playI) { playI--; } save(); renderSongs(); closeMo('editMo'); } }
+function confirmDelete() { if(confirm("Sil?")) { let lst = lists.find(l => l.id === curL); let s = lst.songs[editIdx]; if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); lst.songs.splice(editIdx,1); if(playL===curL && playI===editIdx){ playI=-1; isPlay=false; userWantsToPlay=false; AUDIO.pause(); VIDEO.pause(); syncB(); } else if(playL===curL && editIdx<playI) { playI--; } save(); renderSongs(); closeMo('editMo'); } }
 
 function makePl() { let n = document.getElementById('plIn').value; if(n) { lists.push({id:Date.now().toString(), name:n, icon:'🌸', songs:[]}); save(); renderSB(); closeMo('plMo'); } }
 function openPl() { document.getElementById('plMo').classList.remove('hid'); }
@@ -727,7 +756,7 @@ function addAnyLink() {
 }
 
 let sleepInterval;
-function setSleep(min) { clearInterval(sleepInterval); if(min===0) return document.getElementById('timerBadge').classList.add('hid'); let s=min*60; document.getElementById('timerBadge').classList.remove('hid'); sleepInterval=setInterval(()=>{ s--; document.getElementById('timerBadge').textContent=formatTime(s); if(s<=0){ clearInterval(sleepInterval); AUDIO.pause(); if(VIDEO)VIDEO.pause(); try{ytPlayer?.stopVideo();}catch(e){} isPlay=false; syncB(); } },1000); closeMo('sleepMo'); }
+function setSleep(min) { clearInterval(sleepInterval); if(min===0) return document.getElementById('timerBadge').classList.add('hid'); let s=min*60; document.getElementById('timerBadge').classList.remove('hid'); sleepInterval=setInterval(()=>{ s--; document.getElementById('timerBadge').textContent=formatTime(s); if(s<=0){ clearInterval(sleepInterval); AUDIO.pause(); if(VIDEO)VIDEO.pause(); try{ytPlayer?.stopVideo();}catch(e){} isPlay=false; userWantsToPlay=false; syncB(); } },1000); closeMo('sleepMo'); }
 function openSleepMo() { document.getElementById('sleepMo').classList.remove('hid'); }
 </script>
 </body>
