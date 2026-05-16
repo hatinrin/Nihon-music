@@ -125,12 +125,15 @@ body{font-family:'Inter', sans-serif; color:var(--tx); display:flex; flex-direct
 .vp-resizer::before { content: ''; width: 40px; height: 4px; border-radius: 2px; background: var(--dm); transition: background 0.2s; }
 .vp-resizer:hover::before, .vp-resizer:active::before { background: var(--pk); }
 
-/* VIDEO CONTAINER */
+/* VİDEO İSKELETİ (KALICI) */
 .vp{background:#000; height:0; transition:height 0.4s cubic-bezier(0.2,0.8,0.2,1); overflow:hidden; position:relative; flex-shrink: 0; cursor: pointer; display:flex; flex-direction:column;}
 .vp.open{height: 240px;} 
 .vp.resizing { transition: none !important; } 
 #media-container { width:100%; flex:1; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-video, iframe { width:100%; height:100%; display:block; object-fit: contain; border:none; pointer-events: auto; max-height: 100%; }
+
+/* Video ve Iframe için Kalıcı Stiller */
+#vEl, #yt-player { width:100%; height:100%; display:none; object-fit: contain; border:none; pointer-events: auto; max-height: 100%; }
+#vEl.show, #yt-player.show { display:block; }
 
 /* CENTER OVERLAY CONTROLS */
 .v-overlay-ctrl{position:absolute; inset: 0; display:flex; align-items:center; justify-content: center; gap:25px; background:rgba(0,0,0,0.5); opacity:0; visibility: hidden; transition: 0.3s; z-index: 10; pointer-events: none;}
@@ -242,6 +245,7 @@ body.theme-sunset #app.fullscreen-mode .player { background: rgba(38, 30, 29, 0.
 <div id="themeToast" class="theme-toast hid">Tema Değiştirildi</div>
 
 <div id="app" class="hid">
+    <audio id="aEl" playsinline webkit-playsinline style="display:none;"></audio>
     <input type="file" id="fIn" multiple style="display:none">
     
     <div class="topbar">
@@ -272,7 +276,10 @@ body.theme-sunset #app.fullscreen-mode .player { background: rgba(38, 30, 29, 0.
     <div class="vp-resizer" id="vpResizer"></div>
 
     <div class="vp" id="vp" onclick="handleVideoClick(event)" ondblclick="toggleFullScreen()">
-        <div id="media-container"></div>
+        <div id="media-container">
+            <video id="vEl" playsinline webkit-playsinline></video>
+            <div id="yt-player"></div>
+        </div>
         <div class="v-overlay-ctrl" id="vOverlay">
             <button class="v-btn v-small" onclick="event.stopPropagation(); seekRelative(-5)">-5s</button>
             <button class="v-btn" onclick="event.stopPropagation(); prev()">⏮</button>
@@ -382,32 +389,62 @@ let customVpHeight = null;
 
 let isShuffle = localStorage.getItem('nm_shuffle') === 'true';
 let isRepeatOne = localStorage.getItem('nm_repeat') === 'true';
+let currentBlobUrl = null;
 
-const AUDIO = new Audio();
-let VIDEO = null, ytPlayer = null, draggingIdx = null, draggingSource = null;
+// KALICI MEDYA ELEMENTLERİ (Arka plan widget sönmemesi için)
+let AUDIO = null;
+let VIDEO = null;
+let ytPlayer = null; 
+let draggingIdx = null, draggingSource = null;
 
 if (isShuffle) document.getElementById('shufBtn').classList.add('act');
 if (isRepeatOne) document.getElementById('repBtn').classList.add('act');
 
+// Başlangıç ve MediaSession
+if ('mediaSession' in navigator) {
+    navigator.mediaSession.setActionHandler('play', togglePlay);
+    navigator.mediaSession.setActionHandler('pause', togglePlay);
+    navigator.mediaSession.setActionHandler('previoustrack', prev);
+    navigator.mediaSession.setActionHandler('nexttrack', () => next(false));
+    navigator.mediaSession.setActionHandler('seekbackward', () => seekRelative(-5));
+    navigator.mediaSession.setActionHandler('seekforward', () => seekRelative(5));
+}
+
 function syncSession(title) {
     if ('mediaSession' in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({ title: title, artist: 'Fowalink', artwork: [{ src: 'https://cdn-icons-png.flaticon.com/512/2402/2402461.png', sizes: '512x512', type: 'image/png' }] });
-        navigator.mediaSession.setActionHandler('play', togglePlay);
-        navigator.mediaSession.setActionHandler('pause', togglePlay);
-        navigator.mediaSession.setActionHandler('previoustrack', prev);
-        navigator.mediaSession.setActionHandler('nexttrack', () => next(false));
-        navigator.mediaSession.setActionHandler('seekbackward', () => seekRelative(-5));
-        navigator.mediaSession.setActionHandler('seekforward', () => seekRelative(5));
     }
 }
-AUDIO.addEventListener('play', () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; });
-AUDIO.addEventListener('pause', () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused'; });
-AUDIO.addEventListener('ended', () => next(true));
 
 function checkAuth() { if(document.getElementById('username').value === AUTH_CONFIG.user && document.getElementById('password').value === AUTH_CONFIG.pass) { localStorage.setItem('nihon_music_auth', 'true'); startApp(); } }
 function logout() { localStorage.removeItem('nihon_music_auth'); location.reload(); }
-function startApp() { document.getElementById('auth-screen').classList.add('hid'); document.getElementById('app').classList.remove('hid'); initDB(); bindInteractionEvents(); }
-if(localStorage.getItem('nihon_music_auth') === 'true') startApp();
+
+function startApp() { 
+    document.getElementById('auth-screen').classList.add('hid'); 
+    document.getElementById('app').classList.remove('hid'); 
+    
+    AUDIO = document.getElementById('aEl');
+    VIDEO = document.getElementById('vEl');
+    
+    // Ses Kontrollerinin Senkronu
+    const syncPlay = () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; isPlay=true; syncB(); wakeUpControls();};
+    const syncPause = () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused'; isPlay=false; syncB();};
+    
+    AUDIO.addEventListener('play', syncPlay);
+    AUDIO.addEventListener('pause', syncPause);
+    AUDIO.addEventListener('ended', () => next(true));
+
+    VIDEO.addEventListener('play', syncPlay);
+    VIDEO.addEventListener('pause', syncPause);
+    VIDEO.addEventListener('ended', () => next(true));
+    
+    initDB(); bindInteractionEvents(); 
+}
+
+if(localStorage.getItem('nihon_music_auth') === 'true') {
+    // Sayfa yüklendiğinde DOM hazır olmasını bekle
+    document.addEventListener('DOMContentLoaded', startApp);
+}
 
 function initDB() {
     const request = indexedDB.open("NihonMusicDB", 1);
@@ -461,8 +498,8 @@ function wakeUpControls() {
     }
 }
 
-// YALNIZCA UYANDIRIR, OYNATMA/DURDURMA YAPMAZ
 function handleVideoClick(e) {
+    // TIKLAYINCA SADECE MENÜ AÇILIR (VİDEO DURMAZ)
     if (e.target.closest('.v-btn') || e.target.closest('.yt-external-btn') || e.target.id === 'vpResizer') return; 
     wakeUpControls();
 }
@@ -630,30 +667,54 @@ async function playSong(lId, i){
     playL = lId; playI = i; let lst = lists.find(l => l.id === playL); 
     lst.lastI = i; save(); 
     let s = lst?.songs[playI]; if(!s) return;
-    document.getElementById('npT').textContent = s.title; AUDIO.pause(); if(VIDEO) VIDEO.pause(); if(ytPlayer) try { ytPlayer.stopVideo(); } catch(e){}
+    document.getElementById('npT').textContent = s.title; 
+    AUDIO.pause(); VIDEO.pause(); if(ytPlayer && typeof ytPlayer.stopVideo === 'function') try { ytPlayer.stopVideo(); } catch(e){}
+    
     document.getElementById('ytExternalLink').classList.remove('show'); syncSession(s.title);
-    let container = document.getElementById('media-container');
+    
+    VIDEO.classList.remove('show');
+    document.getElementById('yt-player').classList.remove('show');
+
     if(s.isLink) { window.open(s.url, '_blank'); isPlay = false; syncB(); renderSongs(); return; }
+    
     if(s.isYt) {
-        if(!vidPanelOpen) toggleVidPanel(); document.getElementById('ytExternalLink').classList.add('show'); document.getElementById('ytExternalLink').href = `https://www.youtube.com/watch?v=${s.ytId}`;
-        container.innerHTML = '<div id="yt-player"></div>';
-        ytPlayer = new YT.Player('yt-player', { height:'100%', width:'100%', videoId:s.ytId, playerVars:{'autoplay':1, 'playsinline':1}, events:{'onReady':e=>e.target.setVolume(currentVolume*100), 'onStateChange':e=>e.data===0&&next(true)} });
+        if(!vidPanelOpen) toggleVidPanel(); 
+        document.getElementById('ytExternalLink').classList.add('show'); 
+        document.getElementById('ytExternalLink').href = `https://www.youtube.com/watch?v=${s.ytId}`;
+        document.getElementById('yt-player').classList.add('show');
+        
+        if(!ytPlayer) {
+            ytPlayer = new YT.Player('yt-player', { height:'100%', width:'100%', videoId:s.ytId, playerVars:{'autoplay':1, 'playsinline':1}, events:{'onReady':e=>e.target.setVolume(currentVolume*100), 'onStateChange':e=> { if(e.data===0) next(true); else if(e.data===1) { isPlay=true; syncB(); wakeUpControls(); } else if(e.data===2) { isPlay=false; syncB(); } } } });
+        } else {
+            ytPlayer.loadVideoById(s.ytId);
+        }
     } else {
-        if(s.isVid && !vidPanelOpen) toggleVidPanel(); container.innerHTML = '<video id="vEl" playsinline webkit-playsinline></video>';
-        VIDEO = document.getElementById('vEl'); VIDEO.volume = currentVolume; VIDEO.addEventListener('ended', () => next(true));
-        VIDEO.addEventListener('play', () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; });
-        VIDEO.addEventListener('pause', () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused'; });
-        let data = await getFile(s.id); if(!data) return; VIDEO.src = URL.createObjectURL(data);
-        if(s.isVid) VIDEO.play(); else AUDIO.src = VIDEO.src, AUDIO.play();
+        if(s.isVid && !vidPanelOpen) toggleVidPanel(); 
+        let data = await getFile(s.id); if(!data) return; 
+        
+        // Önemli: Hafıza sızıntısı önleyici (Eski veriyi temizle)
+        if(currentBlobUrl) URL.revokeObjectURL(currentBlobUrl);
+        currentBlobUrl = URL.createObjectURL(data);
+        
+        if(s.isVid) { 
+            VIDEO.classList.add('show');
+            VIDEO.src = currentBlobUrl;
+            VIDEO.volume = currentVolume;
+            VIDEO.play().catch(e=>console.log(e));
+        } else { 
+            AUDIO.src = currentBlobUrl;
+            AUDIO.volume = currentVolume;
+            AUDIO.play().catch(e=>console.log(e));
+        }
     }
-    isPlay = true; syncB(); renderSongs(); wakeUpControls();
+    syncB(); renderSongs(); wakeUpControls();
 }
 
 function togglePlay(){
     let s = lists.find(l => l.id === playL)?.songs[playI]; if(!s || s.isLink) { let curLst = lists.find(l=>l.id===curL); if(curLst && curLst.songs.length > 0) return playSong(curL, 0); return; }
-    if(s.isYt) { let st = ytPlayer.getPlayerState(); st===1?ytPlayer.pauseVideo():ytPlayer.playVideo(); isPlay=st!==1; }
-    else { let el = s.isVid?VIDEO:AUDIO; isPlay?el.pause():el.play(); isPlay=!isPlay; }
-    syncB(); wakeUpControls();
+    if(s.isYt && ytPlayer && typeof ytPlayer.getPlayerState === 'function') { let st = ytPlayer.getPlayerState(); st===1?ytPlayer.pauseVideo():ytPlayer.playVideo(); }
+    else { let el = s.isVid?VIDEO:AUDIO; if (el.paused) el.play().catch(e=>console.log(e)); else el.pause(); }
+    wakeUpControls();
 }
 
 function next(isAuto = false) { 
@@ -685,12 +746,12 @@ function seek(e) { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s
 
 function openPlEdit(i) { editPlIdx = i; document.getElementById('plEditIn').value = lists[i].name; document.getElementById('plEditMo').classList.remove('hid'); }
 function savePlEdit() { lists[editPlIdx].name = document.getElementById('plEditIn').value; save(); renderSB(); closeMo('plEditMo'); }
-function deletePl() { if(confirm("Listeyi sil?")) { lists[editPlIdx].songs.forEach(s => { if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); }); lists.splice(editPlIdx, 1); if(lists.length===0) lists=[{id:'l1',name:'Yeni',icon:'🌸',songs:[]}]; curL=lists[0].id; if(playL===lists[editPlIdx]?.id) { playL=null; playI=-1; AUDIO.pause(); isPlay=false; syncB(); } save(); renderSB(); renderSongs(); closeMo('plEditMo'); } }
+function deletePl() { if(confirm("Listeyi sil?")) { lists[editPlIdx].songs.forEach(s => { if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); }); lists.splice(editPlIdx, 1); if(lists.length===0) lists=[{id:'l1',name:'Yeni',icon:'🌸',songs:[]}]; curL=lists[0].id; if(playL===lists[editPlIdx]?.id) { playL=null; playI=-1; AUDIO.pause(); VIDEO.pause(); isPlay=false; syncB(); } save(); renderSB(); renderSongs(); closeMo('plEditMo'); } }
 
 let editIdx = null;
 function openEdit(i) { editIdx = i; let s = lists.find(l=>l.id===curL).songs[i]; document.getElementById('editTitle').value=s.title; document.getElementById('editListSel').value=curL; document.getElementById('editMo').classList.remove('hid'); }
 function saveEdit() { let lst = lists.find(l => l.id === curL); lst.songs[editIdx].title = document.getElementById('editTitle').value; let tid = document.getElementById('editListSel').value; if(tid!==curL) moveSongToList(editIdx, curL, tid); save(); renderSB(); renderSongs(); closeMo('editMo'); }
-function confirmDelete() { if(confirm("Sil?")) { let lst = lists.find(l => l.id === curL); let s = lst.songs[editIdx]; if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); lst.songs.splice(editIdx,1); if(playL===curL && playI===editIdx){ playI=-1; isPlay=false; AUDIO.pause(); syncB(); } else if(playL===curL && editIdx<playI) { playI--; } save(); renderSongs(); closeMo('editMo'); } }
+function confirmDelete() { if(confirm("Sil?")) { let lst = lists.find(l => l.id === curL); let s = lst.songs[editIdx]; if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); lst.songs.splice(editIdx,1); if(playL===curL && playI===editIdx){ playI=-1; isPlay=false; AUDIO.pause(); VIDEO.pause(); syncB(); } else if(playL===curL && editIdx<playI) { playI--; } save(); renderSongs(); closeMo('editMo'); } }
 
 function makePl() { let n = document.getElementById('plIn').value; if(n) { lists.push({id:Date.now().toString(), name:n, icon:'🌸', songs:[]}); save(); renderSB(); closeMo('plMo'); } }
 function openPl() { document.getElementById('plMo').classList.remove('hid'); }
