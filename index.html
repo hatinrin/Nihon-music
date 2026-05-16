@@ -103,7 +103,7 @@ body{font-family:'Inter', sans-serif; color:var(--tx); display:flex; flex-direct
 
 /* SONG LIST */
 .sw{flex:1; overflow-y:scroll; padding:8px; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; display: block;}
-.sr{display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; cursor:pointer; position:relative; margin-bottom:6px;}
+.sr{display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; cursor:pointer; position:relative; margin-bottom:6px; touch-action: pan-y;}
 .sr:hover{background:var(--s2)}
 .sr.now{background:var(--pkd); border:1px solid var(--br)}
 .sr.drag-target { border-top: 2px solid var(--pk); background: var(--s3); }
@@ -240,9 +240,9 @@ body.theme-sunset #app.fullscreen-mode .player { background: rgba(38, 30, 29, 0.
   <div class="auth-card">
     <div class="auth-logo">🌸</div>
     <h2>Fowalink</h2>
-    <input type="text" id="username" class="auth-input" placeholder="Kullanıcı">
-    <input type="password" id="password" class="auth-input" placeholder="Şifre">
-    <button class="auth-btn" onclick="checkAuth()">Giriş Yap</button>
+    <input type="text" id="username" class="auth-input" data-i18n-ph="loginUser" placeholder="Kullanıcı">
+    <input type="password" id="password" class="auth-input" data-i18n-ph="loginPass" placeholder="Şifre">
+    <button class="auth-btn" onclick="checkAuth()" data-i18n="loginBtn">Giriş Yap</button>
   </div>
 </div>
 
@@ -256,22 +256,22 @@ body.theme-sunset #app.fullscreen-mode .player { background: rgba(38, 30, 29, 0.
       <div><div class="app-title">Fowalink</div></div>
       <div class="topbar-r">
         <div id="timerBadge" class="sleep-timer-badge hid">00:00</div>
-        <button id="vToggle" class="tbtn" onclick="toggleVidPanel()">🎬 Video</button>
-        <button class="tbtn" onclick="openSleepMo()">⏳ Uyku</button>
-        <button class="tbtn" onclick="toggleTheme()" title="Tema Değiştir">🎨 Tema</button>
+        <button id="vToggle" class="tbtn" onclick="toggleVidPanel()" data-i18n="btnVid">🎬 Video</button>
+        <button class="tbtn" onclick="openSleepMo()" data-i18n="btnSleep">⏳ Uyku</button>
+        <button class="tbtn" onclick="openSettingsMo()" data-i18n="btnSettings">⚙ Ayarlar</button>
         <button style="background:none; border:none; color:var(--dm); font-size:18px;" onclick="logout()">✕</button>
       </div>
     </div>
 
     <div class="main">
       <div class="sb">
-        <div class="sb-top"><span class="sb-lbl">LİSTELER</span><button class="sb-add" onclick="openPl()">+</button></div>
+        <div class="sb-top"><span class="sb-lbl" data-i18n="lblLists">LİSTELER</span><button class="sb-add" onclick="openPl()">+</button></div>
         <div class="sb-list" id="sbList"></div>
       </div>
       <div class="ct">
         <div class="ct-top">
           <div class="ct-name" id="ctName">...</div>
-          <button class="add-s" onclick="openAddMo()">+ Ekle</button>
+          <button class="add-s" onclick="openAddMo()" data-i18n="btnAdd">+ Ekle</button>
         </div>
         <div class="sw" id="sw"></div>
       </div>
@@ -293,7 +293,7 @@ body.theme-sunset #app.fullscreen-mode .player { background: rgba(38, 30, 29, 0.
             <button class="v-btn" style="position:absolute; bottom:15px; right:15px; font-size:20px;" onclick="event.stopPropagation(); toggleFullScreen()">⛶</button>
         </div>
     </div>
-    <a href="#" id="ytExternalLink" class="yt-external-btn" target="_blank">⚠️ YouTube'da İzle</a>
+    <a href="#" id="ytExternalLink" class="yt-external-btn" target="_blank" data-i18n="ytWatch">⚠️ YouTube'da İzle</a>
 
     <div class="player" id="playerBar">
       <div class="player-top">
@@ -303,7 +303,7 @@ body.theme-sunset #app.fullscreen-mode .player { background: rgba(38, 30, 29, 0.
                 <input type="range" class="vol-slider" id="vSlider" min="0" max="1" step="0.01" value="0.7" oninput="setVol(this.value)">
             </div>
         </div>
-        <div id="npT" style="font-size:13px; font-weight:500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--tx); padding: 0 40px;">Seçilmedi</div>
+        <div id="npT" style="font-size:13px; font-weight:500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--tx); padding: 0 40px;" data-i18n="selNotSelected">Seçilmedi</div>
       </div>
       
       <div class="prog-container">
@@ -320,10 +320,10 @@ body.theme-sunset #app.fullscreen-mode .player { background: rgba(38, 30, 29, 0.
             <button class="cb small" onclick="seekRelative(5)">+5s</button>
           </div>
           <div class="side-ctr">
-              <button class="cb small" id="shufBtn" onclick="toggleShuffle()" title="Rastgele Çal">
+              <button class="cb small" id="shufBtn" onclick="toggleShuffle()" data-i18n-title="shufBtn" title="Rastgele Çal">
                   <svg class="cb-icon" viewBox="0 0 24 24"><path d="M14.83,13.41L13.42,14.83L17.59,19H2V21H17.59L13.42,25.17L14.83,26.58L21.41,20L14.83,13.41M14.83,6.58L13.42,8L17.59,12.17H21.41L14.83,5.59M2,5V7H15.17L13.17,5H2M2,12V14H8.17L6.17,12H2Z" transform="translate(0 -2)"/></svg>
               </button>
-              <button class="cb small" id="repBtn" onclick="toggleRepeat()" title="Aynı Şarkıyı Tekrarla">
+              <button class="cb small" id="repBtn" onclick="toggleRepeat()" data-i18n-title="repBtn" title="Aynı Şarkıyı Tekrarla">
                   <svg class="cb-icon" viewBox="0 0 24 24"><path d="M17 17H7V14L3 18L7 22V19H19V13H17M7 7H17V10L21 6L17 2V5H5V11H7V7Z"/></svg>
               </button>
           </div>
@@ -331,44 +331,112 @@ body.theme-sunset #app.fullscreen-mode .player { background: rgba(38, 30, 29, 0.
     </div>
 </div>
 
-<div class="ov hid" id="plEditMo"><div class="mo"><h3>Düzenle</h3><input id="plEditIn"><button class="btn btn-p" onclick="savePlEdit()">Kaydet</button><button class="btn" style="background:var(--s3); color:var(--pk)" onclick="deletePl()">Listeyi Sil ✕</button><button class="btn btn-s" onclick="closeMo('plEditMo')">İptal</button></div></div>
-<div class="ov hid" id="plMo"><div class="mo"><h3>Yeni Liste</h3><input id="plIn" placeholder="Adı..."><button class="btn btn-p" onclick="makePl()">Tamam</button><button class="btn btn-s" onclick="closeMo('plMo')">Vazgeç</button></div></div>
-<div class="ov hid" id="sMo"><div class="mo"><h3>İçerik Ekle</h3><button class="btn btn-p" onclick="document.getElementById('fIn').click()">Cihazdan Dosya Seç</button><div style="margin: 8px 0; font-size: 10px; color: var(--dm); text-align: center;">— VEYA LINK —</div><input id="ytUrl" placeholder="Site / Ders Linki..."><input id="ytTitle" placeholder="Başlık"><label style="font-size: 10px; color: var(--dm);">HEDEF:</label><select id="pSel" style="outline:none;"></select><button class="btn btn-p" style="background:var(--teal); color:var(--bg);" onclick="addAnyLink()">Link Ekle</button><button class="btn btn-s" onclick="closeMo('sMo')">Kapat</button></div></div>
-<div class="ov hid" id="editMo"><div class="mo"><h3>Düzenle</h3><input id="editTitle"><label style="font-size: 10px;">TAŞI:</label><select id="editListSel"></select><button class="btn btn-p" onclick="saveEdit()">Kaydet</button><button class="btn" style="color:var(--pk);" onclick="confirmDelete()">Sil ✕</button><button class="btn btn-s" onclick="closeMo('editMo')">Kapat</button></div></div>
+<div class="ov hid" id="plEditMo"><div class="mo"><h3 data-i18n="moEditTitle">Düzenle</h3><input id="plEditIn"><button class="btn btn-p" onclick="savePlEdit()" data-i18n="btnSave">Kaydet</button><button class="btn" style="background:var(--s3); color:var(--pk)" onclick="deletePl()" data-i18n="btnDeleteList">Listeyi Sil ✕</button><button class="btn btn-s" onclick="closeMo('plEditMo')" data-i18n="btnCancel">İptal</button></div></div>
+<div class="ov hid" id="plMo"><div class="mo"><h3 data-i18n="moNewList">Yeni Liste</h3><input id="plIn" data-i18n-ph="plNameHolder" placeholder="Adı..."><button class="btn btn-p" onclick="makePl()" data-i18n="btnOk">Tamam</button><button class="btn btn-s" onclick="closeMo('plMo')" data-i18n="btnCancelList">Vazgeç</button></div></div>
+<div class="ov hid" id="sMo"><div class="mo"><h3 data-i18n="moAddContent">İçerik Ekle</h3><button class="btn btn-p" onclick="document.getElementById('fIn').click()" data-i18n="btnLocalFile">Cihazdan Dosya Seç</button><div style="margin: 8px 0; font-size: 10px; color: var(--dm); text-align: center;" data-i18n="lblOrLink">— VEYA LINK —</div><input id="ytUrl" data-i18n-ph="linkUrlHolder" placeholder="Site / Ders Linki..."><input id="ytTitle" data-i18n-ph="linkTitleHolder" placeholder="Başlık"><label style="font-size: 10px; color: var(--dm);" data-i18n="lblTarget">HEDEF:</label><select id="pSel" style="outline:none;"></select><button class="btn btn-p" style="background:var(--teal); color:var(--bg);" onclick="addAnyLink()" data-i18n="btnAddLink">Link Ekle</button><button class="btn btn-s" onclick="closeMo('sMo')" data-i18n="btnClose">Kapat</button></div></div>
+<div class="ov hid" id="editMo"><div class="mo"><h3 data-i18n="moEditTitle">Düzenle</h3><input id="editTitle"><label style="font-size: 10px;" data-i18n="lblMove">TAŞI:</label><select id="editListSel"></select><button class="btn btn-p" onclick="saveEdit()" data-i18n="btnSave">Kaydet</button><button class="btn" style="color:var(--pk);" onclick="confirmDelete()" data-i18n="btnDelete">Sil ✕</button><button class="btn btn-s" onclick="closeMo('editMo')" data-i18n="btnClose">Kapat</button></div></div>
 <div class="ov hid" id="sleepMo">
   <div class="mo">
-    <h3>Uyku Zamanlayıcısı</h3>
-    <button class="btn btn-s" onclick="setSleep(15)">15 Dakika</button>
-    <button class="btn btn-s" onclick="setSleep(30)">30 Dakika</button>
-    <button class="btn btn-s" onclick="setSleep(60)">1 Saat</button>
-    <button class="btn btn-s" onclick="setSleep(120)">2 Saat</button>
-    <button class="btn btn-p" style="margin-top:10px;" onclick="setSleep(0)">Zamanlayıcıyı İptal Et</button>
-    <button class="btn btn-s" style="background: transparent; color: var(--mu);" onclick="closeMo('sleepMo')">Kapat</button>
+    <h3 data-i18n="moSleep">Uyku Zamanlayıcısı</h3>
+    <button class="btn btn-s" onclick="setSleep(15)" data-i18n="min15">15 Dakika</button>
+    <button class="btn btn-s" onclick="setSleep(30)" data-i18n="min30">30 Dakika</button>
+    <button class="btn btn-s" onclick="setSleep(60)" data-i18n="hour1">1 Saat</button>
+    <button class="btn btn-s" onclick="setSleep(120)" data-i18n="hour2">2 Saat</button>
+    <button class="btn btn-p" style="margin-top:10px;" onclick="setSleep(0)" data-i18n="cancelTimer">Zamanlayıcıyı İptal Et</button>
+    <button class="btn btn-s" style="background: transparent; color: var(--mu);" onclick="closeMo('sleepMo')" data-i18n="btnClose">Kapat</button>
+  </div>
+</div>
+<div class="ov hid" id="settingsMo">
+  <div class="mo">
+    <h3 data-i18n="moSettings">Ayarlar</h3>
+    <label style="font-size: 10px; color: var(--dm);" data-i18n="lblLang">Dil / Language:</label>
+    <select id="langSel" style="outline:none;">
+        <option value="tr">Türkçe</option>
+        <option value="en">English</option>
+        <option value="ja">日本語 (Japanese)</option>
+        <option value="es">Español (Spanish)</option>
+        <option value="fr">Français (French)</option>
+        <option value="de">Deutsch (German)</option>
+        <option value="zh">中文 (Chinese)</option>
+        <option value="ru">Русский (Russian)</option>
+        <option value="pt">Português (Portuguese)</option>
+        <option value="ar">العربية (Arabic)</option>
+    </select>
+    <button class="btn btn-s" style="background:transparent; border:1px solid var(--bs); color:var(--tx); margin-top:15px;" onclick="previewTheme()" data-i18n="btnThemeCycle">🎨 Temayı Değiştir</button>
+    <button class="btn btn-p" style="margin-top:15px;" onclick="saveSettings()" data-i18n="btnSave">Kaydet</button>
+    <button class="btn btn-s" style="background: transparent; color: var(--mu);" onclick="cancelSettings()" data-i18n="btnCancel">İptal</button>
   </div>
 </div>
 
 <script>
+// --- I18N SÖZLÜĞÜ (DİL DESTEĞİ) ---
+const i18n = {
+  tr: {
+    loginUser: "Kullanıcı", loginPass: "Şifre", loginBtn: "Giriş Yap", btnVid: "🎬 Video", btnSleep: "⏳ Uyku", btnSettings: "⚙ Ayarlar", lblLists: "LİSTELER", btnAdd: "+ Ekle", lblEmpty: "Boş.", moEditTitle: "Düzenle", btnSave: "Kaydet", btnDeleteList: "Listeyi Sil ✕", btnCancel: "İptal", moNewList: "Yeni Liste", plNameHolder: "Adı...", btnOk: "Tamam", btnCancelList: "Vazgeç", moAddContent: "İçerik Ekle", btnLocalFile: "Cihazdan Dosya Seç", lblOrLink: "— VEYA LINK —", linkUrlHolder: "Site / Ders Linki...", linkTitleHolder: "Başlık", lblTarget: "HEDEF:", btnAddLink: "Link Ekle", btnClose: "Kapat", lblMove: "TAŞI:", btnDelete: "Sil ✕", moSleep: "Uyku Zamanlayıcısı", min15: "15 Dakika", min30: "30 Dakika", hour1: "1 Saat", hour2: "2 Saat", cancelTimer: "Zamanlayıcıyı İptal Et", themeToast: "🎨 Tema: ", selNotSelected: "Seçilmedi", watchNot: "İzlemedim", watchStay: "Burada kaldım", watchDone: "İzledim", ytWatch: "⚠️ YouTube'da İzle", moSettings: "Ayarlar", lblLang: "Dil / Language:", btnThemeCycle: "🎨 Temayı Değiştir", shufBtn: "Rastgele Çal", repBtn: "Aynı Şarkıyı Tekrarla"
+  },
+  en: {
+    loginUser: "Username", loginPass: "Password", loginBtn: "Login", btnVid: "🎬 Video", btnSleep: "⏳ Sleep", btnSettings: "⚙ Settings", lblLists: "PLAYLISTS", btnAdd: "+ Add", lblEmpty: "Empty.", moEditTitle: "Edit", btnSave: "Save", btnDeleteList: "Delete List ✕", btnCancel: "Cancel", moNewList: "New List", plNameHolder: "Name...", btnOk: "OK", btnCancelList: "Cancel", moAddContent: "Add Content", btnLocalFile: "Choose Local File", lblOrLink: "— OR LINK —", linkUrlHolder: "Site / Lesson Link...", linkTitleHolder: "Title", lblTarget: "TARGET:", btnAddLink: "Add Link", btnClose: "Close", lblMove: "MOVE:", btnDelete: "Delete ✕", moSleep: "Sleep Timer", min15: "15 Minutes", min30: "30 Minutes", hour1: "1 Hour", hour2: "2 Hours", cancelTimer: "Cancel Timer", themeToast: "🎨 Theme: ", selNotSelected: "Not Selected", watchNot: "Not Watched", watchStay: "Left Here", watchDone: "Watched", ytWatch: "⚠️ Watch on YouTube", moSettings: "Settings", lblLang: "Language / Dil:", btnThemeCycle: "🎨 Change Theme", shufBtn: "Shuffle", repBtn: "Repeat"
+  },
+  ja: {
+    loginUser: "ユーザー名", loginPass: "パスワード", loginBtn: "ログイン", btnVid: "🎬 ビデオ", btnSleep: "⏳ スリープ", btnSettings: "⚙ 設定", lblLists: "プレイリスト", btnAdd: "+ 追加", lblEmpty: "空です。", moEditTitle: "編集", btnSave: "保存", btnDeleteList: "リストを削除 ✕", btnCancel: "キャンセル", moNewList: "新しいリスト", plNameHolder: "名前...", btnOk: "OK", btnCancelList: "キャンセル", moAddContent: "コンテンツを追加", btnLocalFile: "デバイスからファイルを選択", lblOrLink: "— またはリンク —", linkUrlHolder: "サイト/レッスンのリンク...", linkTitleHolder: "タイトル", lblTarget: "対象:", btnAddLink: "リンクを追加", btnClose: "閉じる", lblMove: "移動:", btnDelete: "削除 ✕", moSleep: "スリープタイマー", min15: "15分", min30: "30分", hour1: "1時間", hour2: "2時間", cancelTimer: "タイマーをキャンセル", themeToast: "🎨 テーマ: ", selNotSelected: "未選択", watchNot: "未視聴", watchStay: "ここで停止", watchDone: "視聴済み", ytWatch: "⚠️ YouTubeで見る", moSettings: "設定", lblLang: "言語 / Language:", btnThemeCycle: "🎨 テーマを変更", shufBtn: "シャッフル", repBtn: "リピート"
+  },
+  es: {
+    loginUser: "Usuario", loginPass: "Contraseña", loginBtn: "Iniciar sesión", btnVid: "🎬 Video", btnSleep: "⏳ Dormir", btnSettings: "⚙ Ajustes", lblLists: "LISTAS", btnAdd: "+ Añadir", lblEmpty: "Vacío.", moEditTitle: "Editar", btnSave: "Guardar", btnDeleteList: "Borrar Lista ✕", btnCancel: "Cancelar", moNewList: "Nueva Lista", plNameHolder: "Nombre...", btnOk: "Aceptar", btnCancelList: "Cancelar", moAddContent: "Añadir Contenido", btnLocalFile: "Elegir Archivo Local", lblOrLink: "— O ENLACE —", linkUrlHolder: "Enlace del sitio/clase...", linkTitleHolder: "Título", lblTarget: "DESTINO:", btnAddLink: "Añadir Enlace", btnClose: "Cerrar", lblMove: "MOVER:", btnDelete: "Borrar ✕", moSleep: "Temporizador de sueño", min15: "15 Minutos", min30: "30 Minutos", hour1: "1 Hora", hour2: "2 Horas", cancelTimer: "Cancelar Temporizador", themeToast: "🎨 Tema: ", selNotSelected: "No Seleccionado", watchNot: "No Visto", watchStay: "Me quedé aquí", watchDone: "Visto", ytWatch: "⚠️ Ver en YouTube", moSettings: "Ajustes", lblLang: "Idioma / Language:", btnThemeCycle: "🎨 Cambiar Tema", shufBtn: "Aleatorio", repBtn: "Repetir"
+  },
+  fr: {
+    loginUser: "Utilisateur", loginPass: "Mot de passe", loginBtn: "Connexion", btnVid: "🎬 Vidéo", btnSleep: "⏳ Veille", btnSettings: "⚙ Paramètres", lblLists: "LISTES", btnAdd: "+ Ajouter", lblEmpty: "Vide.", moEditTitle: "Éditer", btnSave: "Enregistrer", btnDeleteList: "Supprimer Liste ✕", btnCancel: "Annuler", moNewList: "Nouvelle Liste", plNameHolder: "Nom...", btnOk: "OK", btnCancelList: "Annuler", moAddContent: "Ajouter du contenu", btnLocalFile: "Choisir un fichier", lblOrLink: "— OU LIEN —", linkUrlHolder: "Lien du site/leçon...", linkTitleHolder: "Titre", lblTarget: "CIBLE:", btnAddLink: "Ajouter Lien", btnClose: "Fermer", lblMove: "DÉPLACER:", btnDelete: "Supprimer ✕", moSleep: "Minuterie de veille", min15: "15 Minutes", min30: "30 Minutes", hour1: "1 Heure", hour2: "2 Heures", cancelTimer: "Annuler la Minuterie", themeToast: "🎨 Thème: ", selNotSelected: "Non sélectionné", watchNot: "Non regardé", watchStay: "Arrêté ici", watchDone: "Regardé", ytWatch: "⚠️ Regarder sur YouTube", moSettings: "Paramètres", lblLang: "Langue / Language:", btnThemeCycle: "🎨 Changer de Thème", shufBtn: "Aléatoire", repBtn: "Répéter"
+  },
+  de: {
+    loginUser: "Benutzer", loginPass: "Passwort", loginBtn: "Anmelden", btnVid: "🎬 Video", btnSleep: "⏳ Schlaf", btnSettings: "⚙ Einstellungen", lblLists: "LISTEN", btnAdd: "+ Hinzufügen", lblEmpty: "Leer.", moEditTitle: "Bearbeiten", btnSave: "Speichern", btnDeleteList: "Liste löschen ✕", btnCancel: "Abbrechen", moNewList: "Neue Liste", plNameHolder: "Name...", btnOk: "OK", btnCancelList: "Abbrechen", moAddContent: "Inhalt hinzufügen", btnLocalFile: "Lokale Datei wählen", lblOrLink: "— ODER LINK —", linkUrlHolder: "Link zur Seite/Lektion...", linkTitleHolder: "Titel", lblTarget: "ZIEL:", btnAddLink: "Link hinzufügen", btnClose: "Schließen", lblMove: "VERSCHIEBEN:", btnDelete: "Löschen ✕", moSleep: "Schlaf-Timer", min15: "15 Minuten", min30: "30 Minuten", hour1: "1 Stunde", hour2: "2 Stunden", cancelTimer: "Timer abbrechen", themeToast: "🎨 Thema: ", selNotSelected: "Nicht ausgewählt", watchNot: "Nicht angesehen", watchStay: "Hier geblieben", watchDone: "Angesehen", ytWatch: "⚠️ Auf YouTube ansehen", moSettings: "Einstellungen", lblLang: "Sprache / Language:", btnThemeCycle: "🎨 Thema ändern", shufBtn: "Zufällig", repBtn: "Wiederholen"
+  },
+  zh: {
+    loginUser: "用户名", loginPass: "密码", loginBtn: "登录", btnVid: "🎬 视频", btnSleep: "⏳ 睡眠", btnSettings: "⚙ 设置", lblLists: "播放列表", btnAdd: "+ 添加", lblEmpty: "空的。", moEditTitle: "编辑", btnSave: "保存", btnDeleteList: "删除列表 ✕", btnCancel: "取消", moNewList: "新列表", plNameHolder: "名称...", btnOk: "确定", btnCancelList: "取消", moAddContent: "添加内容", btnLocalFile: "选择本地文件", lblOrLink: "— 或链接 —", linkUrlHolder: "网站/课程链接...", linkTitleHolder: "标题", lblTarget: "目标:", btnAddLink: "添加链接", btnClose: "关闭", lblMove: "移动:", btnDelete: "删除 ✕", moSleep: "睡眠定时器", min15: "15 分钟", min30: "30 分钟", hour1: "1 小时", hour2: "2 小时", cancelTimer: "取消定时器", themeToast: "🎨 主题: ", selNotSelected: "未选择", watchNot: "未观看", watchStay: "停留在此", watchDone: "已观看", ytWatch: "⚠️ 在 YouTube 上观看", moSettings: "设置", lblLang: "语言 / Language:", btnThemeCycle: "🎨 更改主题", shufBtn: "随机播放", repBtn: "循环播放"
+  },
+  ru: {
+    loginUser: "Пользователь", loginPass: "Пароль", loginBtn: "Войти", btnVid: "🎬 Видео", btnSleep: "⏳ Сон", btnSettings: "⚙ Настройки", lblLists: "ПЛЕЙЛИСТЫ", btnAdd: "+ Добавить", lblEmpty: "Пусто.", moEditTitle: "Изменить", btnSave: "Сохранить", btnDeleteList: "Удалить список ✕", btnCancel: "Отмена", moNewList: "Новый список", plNameHolder: "Имя...", btnOk: "ОК", btnCancelList: "Отмена", moAddContent: "Добавить контент", btnLocalFile: "Выбрать файл", lblOrLink: "— ИЛИ ССЫЛКА —", linkUrlHolder: "Ссылка на сайт/урок...", linkTitleHolder: "Заголовок", lblTarget: "ЦЕЛЬ:", btnAddLink: "Добавить ссылку", btnClose: "Закрыть", lblMove: "ПЕРЕМЕСТИТЬ:", btnDelete: "Удалить ✕", moSleep: "Таймер сна", min15: "15 Минут", min30: "30 Минут", hour1: "1 Час", hour2: "2 Часа", cancelTimer: "Отменить таймер", themeToast: "🎨 Тема: ", selNotSelected: "Не выбрано", watchNot: "Не смотрел", watchStay: "Остановился здесь", watchDone: "Просмотрено", ytWatch: "⚠️ Смотреть на YouTube", moSettings: "Настройки", lblLang: "Язык / Language:", btnThemeCycle: "🎨 Изменить тему", shufBtn: "Перемешать", repBtn: "Повторить"
+  },
+  pt: {
+    loginUser: "Usuário", loginPass: "Senha", loginBtn: "Entrar", btnVid: "🎬 Vídeo", btnSleep: "⏳ Dormir", btnSettings: "⚙ Configurações", lblLists: "LISTAS", btnAdd: "+ Adicionar", lblEmpty: "Vazio.", moEditTitle: "Editar", btnSave: "Salvar", btnDeleteList: "Excluir Lista ✕", btnCancel: "Cancelar", moNewList: "Nova Lista", plNameHolder: "Nome...", btnOk: "OK", btnCancelList: "Cancelar", moAddContent: "Adicionar Conteúdo", btnLocalFile: "Escolher Arquivo", lblOrLink: "— OU LINK —", linkUrlHolder: "Link do site/aula...", linkTitleHolder: "Título", lblTarget: "DESTINO:", btnAddLink: "Adicionar Link", btnClose: "Fechar", lblMove: "MOVER:", btnDelete: "Excluir ✕", moSleep: "Temporizador de sono", min15: "15 Minutos", min30: "30 Minutos", hour1: "1 Hora", hour2: "2 Horas", cancelTimer: "Cancelar Temporizador", themeToast: "🎨 Tema: ", selNotSelected: "Não Selecionado", watchNot: "Não Visto", watchStay: "Parei aqui", watchDone: "Visto", ytWatch: "⚠️ Assistir no YouTube", moSettings: "Configurações", lblLang: "Idioma / Language:", btnThemeCycle: "🎨 Mudar Tema", shufBtn: "Aleatório", repBtn: "Repetir"
+  },
+  ar: {
+    loginUser: "المستخدم", loginPass: "كلمة المرور", loginBtn: "تسجيل الدخول", btnVid: "🎬 فيديو", btnSleep: "⏳ نوم", btnSettings: "⚙ إعدادات", lblLists: "القوائم", btnAdd: "+ إضافة", lblEmpty: "فارغ.", moEditTitle: "تعديل", btnSave: "حفظ", btnDeleteList: "حذف القائمة ✕", btnCancel: "إلغاء", moNewList: "قائمة جديدة", plNameHolder: "الاسم...", btnOk: "موافق", btnCancelList: "إلغاء", moAddContent: "إضافة محتوى", btnLocalFile: "اختر ملف محلي", lblOrLink: "— أو رابط —", linkUrlHolder: "رابط الموقع/الدرس...", linkTitleHolder: "العنوان", lblTarget: "الهدف:", btnAddLink: "إضافة رابط", btnClose: "إغلاق", lblMove: "نقل:", btnDelete: "حذف ✕", moSleep: "مؤقت النوم", min15: "15 دقيقة", min30: "30 دقيقة", hour1: "1 ساعة", hour2: "2 ساعة", cancelTimer: "إلغاء المؤقت", themeToast: "🎨 السمة: ", selNotSelected: "لم يتم التحديد", watchNot: "لم يشاهد", watchStay: "توقفت هنا", watchDone: "تمت المشاهدة", ytWatch: "⚠️ شاهد على يوتيوب", moSettings: "إعدادات", lblLang: "اللغة / Language:", btnThemeCycle: "🎨 تغيير السمة", shufBtn: "تبديل", repBtn: "تكرار"
+  }
+};
+
+let curLang = localStorage.getItem('nm_lang') || 'tr';
+
+function applyLang() {
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = i18n[curLang][el.getAttribute('data-i18n')]; });
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = i18n[curLang][el.getAttribute('data-i18n-ph')]; });
+    document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = i18n[curLang][el.getAttribute('data-i18n-title')]; });
+    renderSongs();
+    if (!isPlay && playI === -1) { document.getElementById('npT').textContent = i18n[curLang].selNotSelected; }
+}
+
 const AUTH_CONFIG = { user: "Hattie", pass: "1234" };
 let db, lists = JSON.parse(localStorage.getItem('nm_data')) || [{id:'l1', name:'Anime OST', icon:'🎌', songs:[]},{id:'l2', name:'J-Pop', icon:'🌸', songs:[]},{id:'l3', name:'Favoriler', icon:'⭐', songs:[]}];
 
-const themes = [
-    {id: 'sakura', name: 'Sakura (Kiraz Çiçeği)'},
-    {id: 'lavender', name: 'Lavender (Lavanta)'},
-    {id: 'ocean', name: 'Ocean (Okyanus)'},
-    {id: 'sage', name: 'Sage (Adaçayı)'},
-    {id: 'mocha', name: 'Mocha (Kahve)'},
-    {id: 'berry', name: 'Berry (Böğürtlen)'},
-    {id: 'sunset', name: 'Sunset (Günbatımı)'}
-];
+const themes = ['sakura', 'lavender', 'ocean', 'sage', 'mocha', 'berry', 'sunset'];
+const themeNames = {
+    'sakura': { tr: 'Sakura', en: 'Sakura', ja: '桜 (Sakura)', es: 'Sakura', fr: 'Sakura', de: 'Sakura', zh: '樱花 (Sakura)', ru: 'Сакура', pt: 'Sakura', ar: 'ساكورا' },
+    'lavender': { tr: 'Lavanta', en: 'Lavender', ja: 'ラベンダー', es: 'Lavanda', fr: 'Lavande', de: 'Lavendel', zh: '薰衣草', ru: 'Лаванда', pt: 'Lavanda', ar: 'لافندر' },
+    'ocean': { tr: 'Okyanus', en: 'Ocean', ja: '海 (Ocean)', es: 'Océano', fr: 'Océan', de: 'Ozean', zh: '海洋', ru: 'Океан', pt: 'Oceano', ar: 'محيط' },
+    'sage': { tr: 'Adaçayı', en: 'Sage', ja: 'セージ', es: 'Salvia', fr: 'Sauge', de: 'Salbei', zh: '鼠尾草', ru: 'Шалфей', pt: 'Sálvia', ar: 'مريمية' },
+    'mocha': { tr: 'Kahve', en: 'Mocha', ja: 'モカ', es: 'Moca', fr: 'Moka', de: 'Mokka', zh: '摩卡', ru: 'Мокко', pt: 'Mocha', ar: 'موكا' },
+    'berry': { tr: 'Böğürtlen', en: 'Berry', ja: 'ベリー', es: 'Baya', fr: 'Baie', de: 'Beere', zh: '浆果', ru: 'Ягода', pt: 'Baga', ar: 'توت' },
+    'sunset': { tr: 'Günbatımı', en: 'Sunset', ja: '夕日 (Sunset)', es: 'Atardecer', fr: 'Coucher', de: 'Sonnenuntergang', zh: '日落', ru: 'Закат', pt: 'Pôr do sol', ar: 'غروب' }
+};
+
 let savedTheme = localStorage.getItem('nm_theme') || 'sakura';
-let curThemeIdx = themes.findIndex(t => t.id === savedTheme);
+let curThemeIdx = themes.indexOf(savedTheme);
 if (curThemeIdx < 0) curThemeIdx = 0;
-document.body.className = 'theme-' + themes[curThemeIdx].id;
+let tempThemeIdx = curThemeIdx; 
+document.body.className = 'theme-' + themes[curThemeIdx];
 
 let toastTimer;
 function showThemeToast(name) {
     const t = document.getElementById('themeToast');
-    t.textContent = "🎨 Tema: " + name;
+    t.textContent = i18n[curLang].themeToast + name;
     t.classList.remove('hid');
     setTimeout(() => t.classList.add('show'), 10);
     clearTimeout(toastTimer);
@@ -378,11 +446,28 @@ function showThemeToast(name) {
     }, 2500);
 }
 
-function toggleTheme() {
-    curThemeIdx = (curThemeIdx + 1) % themes.length;
-    document.body.className = 'theme-' + themes[curThemeIdx].id;
-    localStorage.setItem('nm_theme', themes[curThemeIdx].id);
-    showThemeToast(themes[curThemeIdx].name);
+function previewTheme() {
+    tempThemeIdx = (tempThemeIdx + 1) % themes.length;
+    document.body.className = 'theme-' + themes[tempThemeIdx];
+    showThemeToast(themeNames[themes[tempThemeIdx]][curLang] || themeNames[themes[tempThemeIdx]]['en']);
+}
+function openSettingsMo() {
+    document.getElementById('langSel').value = curLang;
+    tempThemeIdx = curThemeIdx; 
+    document.getElementById('settingsMo').classList.remove('hid');
+}
+function saveSettings() {
+    curThemeIdx = tempThemeIdx;
+    localStorage.setItem('nm_theme', themes[curThemeIdx]);
+    curLang = document.getElementById('langSel').value;
+    localStorage.setItem('nm_lang', curLang);
+    applyLang();
+    closeMo('settingsMo');
+}
+function cancelSettings() {
+    tempThemeIdx = curThemeIdx;
+    document.body.className = 'theme-' + themes[curThemeIdx];
+    closeMo('settingsMo');
 }
 
 let curL = 'l1'; 
@@ -399,7 +484,6 @@ let VIDEO = null;
 let ytPlayer = null, draggingIdx = null, draggingSource = null;
 let userWantsToPlay = false; 
 
-// AKILLI OS DEDEKTÖRÜ (İKİLİ MOTOR MİMARİSİ)
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const isAndroid = /Android/i.test(navigator.userAgent);
 
@@ -425,17 +509,18 @@ function checkAuth() { if(document.getElementById('username').value === AUTH_CON
 function logout() { localStorage.removeItem('nihon_music_auth'); location.reload(); }
 
 function startApp() { 
+    applyLang();
     document.getElementById('auth-screen').classList.add('hid'); 
     document.getElementById('app').classList.remove('hid'); 
     
     AUDIO = document.getElementById('aEl');
     VIDEO = document.getElementById('vEl');
     
-    const syncPlay = () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; isPlay=true; syncB(); wakeUpControls();};
+    const syncPlay = () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; isPlay=true; userWantsToPlay=true; syncB(); wakeUpControls();};
+    
     const syncPause = (e) => { 
-        if (e && e.target && e.target.ended) return; // Otomatik şarkı bitişinde kalkanı çalıştırma
+        if (e && e.target && e.target.ended) return; 
 
-        // ANDROID ARKA PLAN SES KALKANI (iPad'i asla etkilemez)
         if (isAndroid && userWantsToPlay) {
             setTimeout(() => {
                 if (userWantsToPlay && e.target && e.target.paused) {
@@ -446,7 +531,7 @@ function startApp() {
         }
 
         if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused'; 
-        isPlay=false; syncB();
+        isPlay=false; userWantsToPlay=false; syncB();
     };
     
     AUDIO.addEventListener('play', syncPlay);
@@ -462,7 +547,6 @@ function startApp() {
 
 if(localStorage.getItem('nihon_music_auth') === 'true') { document.addEventListener('DOMContentLoaded', startApp); }
 
-// Sadece Android Telefonlar İçin Arka Plan Kilit Güvencesi
 document.addEventListener('visibilitychange', () => {
     if (isAndroid && document.hidden && userWantsToPlay) {
         let s = lists.find(l=>l.id===playL)?.songs[playI];
@@ -575,12 +659,12 @@ function renderSongs(){
         let stHTML = '';
         if(s.isLink || s.isYt) {
             let st = s.status || 0;
-            stHTML = `<div class="st-trk" onclick="event.stopPropagation()"><div class="st-dot un ${st===0?'act':''}" title="İzlemedim" onclick="setStatus('${curL}', ${i}, 0)"></div><div class="st-dot pa ${st===1?'act':''}" title="Burada kaldım" onclick="setStatus('${curL}', ${i}, 1)"></div><div class="st-dot do ${st===2?'act':''}" title="İzledim" onclick="setStatus('${curL}', ${i}, 2)"></div></div>`;
+            stHTML = `<div class="st-trk" onclick="event.stopPropagation()"><div class="st-dot un ${st===0?'act':''}" data-i18n-title="watchNot" title="${i18n[curLang].watchNot}" onclick="setStatus('${curL}', ${i}, 0)"></div><div class="st-dot pa ${st===1?'act':''}" data-i18n-title="watchStay" title="${i18n[curLang].watchStay}" onclick="setStatus('${curL}', ${i}, 1)"></div><div class="st-dot do ${st===2?'act':''}" data-i18n-title="watchDone" title="${i18n[curLang].watchDone}" onclick="setStatus('${curL}', ${i}, 2)"></div></div>`;
         }
         let isNowClass = (i === highlightIdx) ? 'now' : '';
         h += `<div class="sr ${isNowClass}" id="song-${i}" ontouchstart="handleTouchStart(event, 'song', ${i})" ontouchmove="handleTouchMove(event)" ontouchend="handleTouchEnd(event)" draggable="true" ondragstart="draggingSource='song'; draggingIdx=${i}" ondragover="event.preventDefault(); this.classList.add('drag-target')" ondragleave="this.classList.remove('drag-target')" ondrop="dropSongIn(event, ${i})" onclick="playSong('${curL}', ${i})">${stHTML}<div style="font-size:18px; margin-right:5px;">${s.isLink?'🌐':(s.isYt?'📺':(s.isVid?'🎬':'🎵'))}</div><div class="si" style="overflow:hidden;"><div class="st">${s.title}</div></div><div class="sr-more" onclick="event.stopPropagation(); openEdit(${i})">⋮</div></div>`;
     });
-    document.getElementById('sw').innerHTML = h || '<div style="padding:20px; opacity:0.5; font-size:12px">Boş.</div>';
+    document.getElementById('sw').innerHTML = h || `<div style="padding:20px; opacity:0.5; font-size:12px" data-i18n="lblEmpty">${i18n[curLang].lblEmpty}</div>`;
     
     if(highlightIdx !== -1) { setTimeout(() => { const el = document.getElementById(`song-${highlightIdx}`); if(el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 150); }
 }
@@ -659,7 +743,7 @@ async function playSong(lId, i){
     VIDEO.classList.remove('show');
     document.getElementById('yt-player').classList.remove('show');
 
-    if(s.isLink) { window.open(s.url, '_blank'); AUDIO.pause(); isPlay = false; syncB(); renderSongs(); return; }
+    if(s.isLink) { window.open(s.url, '_blank'); AUDIO.pause(); isPlay = false; userWantsToPlay = false; syncB(); renderSongs(); return; }
     
     if(s.isYt) {
         AUDIO.pause();
@@ -709,11 +793,9 @@ function togglePlay(){
     wakeUpControls();
 }
 
-// --- ARKA PLAN SÜREKLİLİK ZİNCİRİ (Play-Chain Fix) ---
 function next(isAuto = false) { 
     let lst = lists.find(l=>l.id===playL); if(!lst || !lst.songs.length) return; 
     
-    // Şarkı otomatik bittiyse ve telefondaysak widget sönmesin sinyali yolla
     if (isAuto && 'mediaSession' in navigator) {
         navigator.mediaSession.playbackState = 'playing';
     }
@@ -731,7 +813,6 @@ function next(isAuto = false) {
         nextIdx = (playI + 1) % lst.songs.length; 
     }
 
-    // Android/iOS widget canlandırma köprüsü
     setTimeout(() => {
         playSong(playL, nextIdx);
     }, 50); 
@@ -757,12 +838,12 @@ function seek(e) { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s
 
 function openPlEdit(i) { editPlIdx = i; document.getElementById('plEditIn').value = lists[i].name; document.getElementById('plEditMo').classList.remove('hid'); }
 function savePlEdit() { lists[editPlIdx].name = document.getElementById('plEditIn').value; save(); renderSB(); closeMo('plEditMo'); }
-function deletePl() { if(confirm("Listeyi sil?")) { lists[editPlIdx].songs.forEach(s => { if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); }); lists.splice(editPlIdx, 1); if(lists.length===0) lists=[{id:'l1',name:'Yeni',icon:'🌸',songs:[]}]; curL=lists[0].id; if(playL===lists[editPlIdx]?.id) { playL=null; playI=-1; AUDIO.pause(); VIDEO.pause(); isPlay=false; syncB(); } save(); renderSB(); renderSongs(); closeMo('plEditMo'); } }
+function deletePl() { if(confirm(i18n[curLang].btnDeleteList)) { lists[editPlIdx].songs.forEach(s => { if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); }); lists.splice(editPlIdx, 1); if(lists.length===0) lists=[{id:'l1',name:'Yeni',icon:'🌸',songs:[]}]; curL=lists[0].id; if(playL===lists[editPlIdx]?.id) { playL=null; playI=-1; AUDIO.pause(); VIDEO.pause(); isPlay=false; userWantsToPlay=false; syncB(); } save(); renderSB(); renderSongs(); closeMo('plEditMo'); } }
 
 let editIdx = null;
 function openEdit(i) { editIdx = i; let s = lists.find(l=>l.id===curL).songs[i]; document.getElementById('editTitle').value=s.title; document.getElementById('editListSel').value=curL; document.getElementById('editMo').classList.remove('hid'); }
 function saveEdit() { let lst = lists.find(l => l.id === curL); lst.songs[editIdx].title = document.getElementById('editTitle').value; let tid = document.getElementById('editListSel').value; if(tid!==curL) moveSongToList(editIdx, curL, tid); save(); renderSB(); renderSongs(); closeMo('editMo'); }
-function confirmDelete() { if(confirm("Sil?")) { let lst = lists.find(l => l.id === curL); let s = lst.songs[editIdx]; if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); lst.songs.splice(editIdx,1); if(playL===curL && playI===editIdx){ playI=-1; isPlay=false; userWantsToPlay=false; AUDIO.pause(); VIDEO.pause(); syncB(); } else if(playL===curL && editIdx<playI) { playI--; } save(); renderSongs(); closeMo('editMo'); } }
+function confirmDelete() { if(confirm(i18n[curLang].btnDelete)) { let lst = lists.find(l => l.id === curL); let s = lst.songs[editIdx]; if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); lst.songs.splice(editIdx,1); if(playL===curL && playI===editIdx){ playI=-1; isPlay=false; userWantsToPlay=false; AUDIO.pause(); VIDEO.pause(); syncB(); } else if(playL===curL && editIdx<playI) { playI--; } save(); renderSongs(); closeMo('editMo'); } }
 
 function makePl() { let n = document.getElementById('plIn').value; if(n) { lists.push({id:Date.now().toString(), name:n, icon:'🌸', songs:[]}); save(); renderSB(); closeMo('plMo'); } }
 function openPl() { document.getElementById('plMo').classList.remove('hid'); }
@@ -773,7 +854,7 @@ document.getElementById('fIn').onchange = async e => {
     let files = Array.from(e.target.files), tid = document.getElementById('pSel').value, lst = lists.find(l=>l.id===tid);
     document.querySelector('.add-s').textContent = "Yükleniyor...";
     for(let f of files) { let id = "f_"+Math.random().toString(36).substr(2,9); await storeFile(id, f); lst.songs.push({id, title:f.name, isVid:f.type.includes('video'), isYt:false, isLink:false, status:0}); }
-    document.querySelector('.add-s').textContent = "+ Ekle"; save(); renderSongs(); renderSB(); closeMo('sMo');
+    document.querySelector('.add-s').textContent = i18n[curLang].btnAdd; save(); renderSongs(); renderSB(); closeMo('sMo');
 };
 
 function addAnyLink() {
