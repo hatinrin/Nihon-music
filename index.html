@@ -335,6 +335,7 @@ body.theme-sunset #app.fullscreen-mode .player { background: rgba(38, 30, 29, 0.
 <div class="ov hid" id="plMo"><div class="mo"><h3 data-i18n="moNewList">Yeni Liste</h3><input id="plIn" data-i18n-ph="plNameHolder" placeholder="Adı..."><button class="btn btn-p" onclick="makePl()" data-i18n="btnOk">Tamam</button><button class="btn btn-s" onclick="closeMo('plMo')" data-i18n="btnCancelList">Vazgeç</button></div></div>
 <div class="ov hid" id="sMo"><div class="mo"><h3 data-i18n="moAddContent">İçerik Ekle</h3><button class="btn btn-p" onclick="document.getElementById('fIn').click()" data-i18n="btnLocalFile">Cihazdan Dosya Seç</button><div style="margin: 8px 0; font-size: 10px; color: var(--dm); text-align: center;" data-i18n="lblOrLink">— VEYA LINK —</div><input id="ytUrl" data-i18n-ph="linkUrlHolder" placeholder="Site / Ders Linki..."><input id="ytTitle" data-i18n-ph="linkTitleHolder" placeholder="Başlık"><label style="font-size: 10px; color: var(--dm);" data-i18n="lblTarget">HEDEF:</label><select id="pSel" style="outline:none;"></select><button class="btn btn-p" style="background:var(--teal); color:var(--bg);" onclick="addAnyLink()" data-i18n="btnAddLink">Link Ekle</button><button class="btn btn-s" onclick="closeMo('sMo')" data-i18n="btnClose">Kapat</button></div></div>
 <div class="ov hid" id="editMo"><div class="mo"><h3 data-i18n="moEditTitle">Düzenle</h3><input id="editTitle"><label style="font-size: 10px;" data-i18n="lblMove">TAŞI:</label><select id="editListSel"></select><button class="btn btn-p" onclick="saveEdit()" data-i18n="btnSave">Kaydet</button><button class="btn" style="color:var(--pk);" onclick="confirmDelete()" data-i18n="btnDelete">Sil ✕</button><button class="btn btn-s" onclick="closeMo('editMo')" data-i18n="btnClose">Kapat</button></div></div>
+
 <div class="ov hid" id="sleepMo">
   <div class="mo">
     <h3 data-i18n="moSleep">Uyku Zamanlayıcısı</h3>
@@ -346,6 +347,7 @@ body.theme-sunset #app.fullscreen-mode .player { background: rgba(38, 30, 29, 0.
     <button class="btn btn-s" style="background: transparent; color: var(--mu);" onclick="closeMo('sleepMo')" data-i18n="btnClose">Kapat</button>
   </div>
 </div>
+
 <div class="ov hid" id="settingsMo">
   <div class="mo">
     <h3 data-i18n="moSettings">Ayarlar</h3>
@@ -484,6 +486,7 @@ let VIDEO = null;
 let ytPlayer = null, draggingIdx = null, draggingSource = null;
 let userWantsToPlay = false; 
 
+// AKILLI OS DEDEKTÖRÜ (İKİLİ MOTOR MİMARİSİ)
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const isAndroid = /Android/i.test(navigator.userAgent);
 
@@ -521,6 +524,7 @@ function startApp() {
     const syncPause = (e) => { 
         if (e && e.target && e.target.ended) return; 
 
+        // ANDROID ARKA PLAN SES KALKANI (iPad'i asla etkilemez)
         if (isAndroid && userWantsToPlay) {
             setTimeout(() => {
                 if (userWantsToPlay && e.target && e.target.paused) {
@@ -531,7 +535,7 @@ function startApp() {
         }
 
         if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused'; 
-        isPlay=false; userWantsToPlay=false; syncB();
+        isPlay=false; syncB();
     };
     
     AUDIO.addEventListener('play', syncPlay);
@@ -547,6 +551,7 @@ function startApp() {
 
 if(localStorage.getItem('nihon_music_auth') === 'true') { document.addEventListener('DOMContentLoaded', startApp); }
 
+// Sadece Android Telefonlar İçin Arka Plan Kilit Güvencesi
 document.addEventListener('visibilitychange', () => {
     if (isAndroid && document.hidden && userWantsToPlay) {
         let s = lists.find(l=>l.id===playL)?.songs[playI];
@@ -793,9 +798,11 @@ function togglePlay(){
     wakeUpControls();
 }
 
+// --- ZİNCİRLEME OYNATMA (PLAY-CHAIN) ---
 function next(isAuto = false) { 
     let lst = lists.find(l=>l.id===playL); if(!lst || !lst.songs.length) return; 
     
+    // Sistem ekran kapalıyken bile cihazı uyanık tutmaya zorlanır
     if (isAuto && 'mediaSession' in navigator) {
         navigator.mediaSession.playbackState = 'playing';
     }
@@ -813,9 +820,8 @@ function next(isAuto = false) {
         nextIdx = (playI + 1) % lst.songs.length; 
     }
 
-    setTimeout(() => {
-        playSong(playL, nextIdx);
-    }, 50); 
+    // Android'in hızı kesmemesi için Async köprü iptal edildi, doğrudan komut verildi.
+    playSong(playL, nextIdx); 
 }
 
 function prev() { let lst = lists.find(l=>l.id===playL); if(lst && lst.songs.length > 0) playSong(playL, (playI-1+lst.songs.length)%lst.songs.length); }
@@ -866,7 +872,38 @@ function addAnyLink() {
 }
 
 let sleepInterval;
-function setSleep(min) { clearInterval(sleepInterval); if(min===0) return document.getElementById('timerBadge').classList.add('hid'); let s=min*60; document.getElementById('timerBadge').classList.remove('hid'); sleepInterval=setInterval(()=>{ s--; document.getElementById('timerBadge').textContent=formatTime(s); if(s<=0){ clearInterval(sleepInterval); AUDIO.pause(); if(VIDEO)VIDEO.pause(); try{ytPlayer?.stopVideo();}catch(e){} isPlay=false; userWantsToPlay=false; syncB(); } },1000); closeMo('sleepMo'); }
+function setSleep(min) {
+    clearInterval(sleepInterval);
+    if(min===0) {
+        document.getElementById('timerBadge').classList.add('hid');
+        return closeMo('sleepMo');
+    }
+    let s=min*60;
+    document.getElementById('timerBadge').classList.remove('hid');
+    document.getElementById('timerBadge').textContent=formatTime(s);
+    sleepInterval=setInterval(()=>{
+        s--;
+        if(s<=0){
+            clearInterval(sleepInterval);
+            document.getElementById('timerBadge').classList.add('hid');
+            
+            // KALKAN DEVRE DIŞI BIRAKILIYOR (Önce bayraklar iniyor)
+            isPlay=false;
+            userWantsToPlay=false;
+            
+            // SONRA MEDYA DURDURULUYOR
+            if(AUDIO) AUDIO.pause();
+            if(VIDEO) VIDEO.pause();
+            try{ if(ytPlayer && typeof ytPlayer.pauseVideo === 'function') ytPlayer.pauseVideo(); }catch(e){}
+            
+            syncB();
+            wakeUpControls();
+        } else {
+            document.getElementById('timerBadge').textContent=formatTime(s);
+        }
+    },1000);
+    closeMo('sleepMo');
+}
 function openSleepMo() { document.getElementById('sleepMo').classList.remove('hid'); }
 </script>
 </body>
