@@ -7,271 +7,244 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Fowalink — Media Player</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="icon" href="assets/icon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="assets/logo.png">
+<link rel="fluid-icon" href="assets/splash.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* --- TEMA TANIMLAMALARI (7 TEMA) --- */
-body.theme-sakura {
-  --bg: #0d0d14; --sur: #15151f; --s2: #1c1c2a; --s3: #232333;
-  --pk: #e8739a; --pkl: #f0a0be; --pkd: rgba(232,115,154,0.13);
-  --tx: #f0eaf4; --mu: #8a859c; --dm: #5a5570;
-  --br: rgba(232,115,154,0.2); --bs: rgba(255,255,255,0.07);
-  --teal: #6ec8c8; 
-}
-body.theme-lavender {
-  --bg: #1e2025; --sur: #25282e; --s2: #2d3138; --s3: #3b4048; 
-  --pk: #b1bce6; --pkl: #c8d1f2; --pkd: rgba(177, 188, 230, 0.12); 
-  --tx: #e0e2e6; --mu: #9ba0a8; --dm: #686e75; 
-  --br: rgba(177, 188, 230, 0.15); --bs: rgba(255, 255, 255, 0.04); 
-  --teal: #b2d8d8;
-}
-body.theme-ocean {
-  --bg: #111a24; --sur: #19232e; --s2: #212c38; --s3: #2a3642; 
-  --pk: #a3d9ff; --pkl: #c4e9ff; --pkd: rgba(163, 217, 255, 0.12); 
-  --tx: #e0f2f1; --mu: #90a4ae; --dm: #607d8b; 
-  --br: rgba(163, 217, 255, 0.15); --bs: rgba(255, 255, 255, 0.04); 
-  --teal: #a4ebd6;
-}
-body.theme-sage {
-  --bg: #1c2e25; --sur: #25382e; --s2: #2d4238; --s3: #3b4e43; 
-  --pk: #a3ffbd; --pkl: #c4ffd6; --pkd: rgba(163, 255, 189, 0.12); 
-  --tx: #f1f8e9; --mu: #9eb1a4; --dm: #758a7e; 
-  --br: rgba(163, 255, 189, 0.15); --bs: rgba(255, 255, 255, 0.04); 
-  --teal: #d6ebae;
-}
-body.theme-mocha {
-  --bg: #211a18; --sur: #2b2320; --s2: #362c28; --s3: #423833; 
-  --pk: #ffc5a3; --pkl: #ffe0c4; --pkd: rgba(255, 197, 163, 0.12); 
-  --tx: #faf0e6; --mu: #b7a59d; --dm: #8a736a; 
-  --br: rgba(255, 197, 163, 0.15); --bs: rgba(255, 255, 255, 0.04); 
-  --teal: #ffdcbe;
-}
-body.theme-berry {
-  --bg: #1c1924; --sur: #25222e; --s2: #302c38; --s3: #3f3a47; 
-  --pk: #d9b8e6; --pkl: #ecd3f5; --pkd: rgba(217, 184, 230, 0.12); 
-  --tx: #ece8ea; --mu: #aba2aa; --dm: #7a7078; 
-  --br: rgba(217, 184, 230, 0.15); --bs: rgba(255, 255, 255, 0.04); 
-  --teal: #b8e6d9;
-}
-body.theme-sunset {
-  --bg: #261e1f; --sur: #332829; --s2: #403233; --s3: #524143; 
-  --pk: #ffbfa3; --pkl: #ffd8c2; --pkd: rgba(255, 191, 163, 0.12); 
-  --tx: #f2ebe9; --mu: #b5a7a4; --dm: #857875; 
-  --br: rgba(255, 191, 163, 0.15); --bs: rgba(255, 255, 255, 0.04); 
-  --teal: #a3ffbf;
-}
+/* --- GECE MODU (DARK) TEMA DEĞİŞKENLERİ --- */
+body.theme-sakura { --bg: #0d0d14; --sur: #15151f; --s2: #1c1c2a; --s3: #232333; --pk: #e8739a; --pkl: #f0a0be; --pkd: rgba(232,115,154,0.15); --tx: #f0eaf4; --mu: #8a859c; --dm: #5a5570; --br: rgba(232,115,154,0.2); --bs: rgba(0,0,0,0.3); --teal: #6ec8c8; }
+body.theme-lavender { --bg: #16181d; --sur: #1e2128; --s2: #262a33; --s3: #323742; --pk: #b1bce6; --pkl: #c8d1f2; --pkd: rgba(177, 188, 230, 0.15); --tx: #e0e2e6; --mu: #9ba0a8; --dm: #686e75; --br: rgba(177, 188, 230, 0.2); --bs: rgba(0,0,0,0.3); --teal: #b2d8d8; }
+body.theme-ocean { --bg: #0d141c; --sur: #141e2a; --s2: #1c2938; --s3: #283a4f; --pk: #a3d9ff; --pkl: #c4e9ff; --pkd: rgba(163, 217, 255, 0.15); --tx: #e0f2f1; --mu: #90a4ae; --dm: #607d8b; --br: rgba(163, 217, 255, 0.2); --bs: rgba(0,0,0,0.3); --teal: #a4ebd6; }
+body.theme-sage { --bg: #141c18; --sur: #1c2922; --s2: #25382e; --s3: #324a3e; --pk: #a3ffbd; --pkl: #c4ffd6; --pkd: rgba(163, 255, 189, 0.15); --tx: #f1f8e9; --mu: #9eb1a4; --dm: #758a7e; --br: rgba(163, 255, 189, 0.2); --bs: rgba(0,0,0,0.3); --teal: #d6ebae; }
+body.theme-mocha { --bg: #1c1513; --sur: #261d1a; --s2: #332723; --s3: #42332e; --pk: #ffc5a3; --pkl: #ffe0c4; --pkd: rgba(255, 197, 163, 0.15); --tx: #faf0e6; --mu: #b7a59d; --dm: #8a736a; --br: rgba(255, 197, 163, 0.2); --bs: rgba(0,0,0,0.3); --teal: #ffdcbe; }
+
+/* --- GÜNDÜZ MODU (LIGHT) TEMA DEĞİŞKENLERİ --- */
+body.light-mode.theme-sakura { --bg: #fdf2f6; --sur: #ffffff; --s2: #fce8ed; --s3: #f8dce4; --pk: #d9487b; --pkl: #b82d5c; --pkd: rgba(217,72,123,0.15); --tx: #2d1622; --mu: #6b4c5a; --dm: #9e8593; --br: rgba(217,72,123,0.2); --bs: rgba(0,0,0,0.06); --teal: #2c7a7a; }
+body.light-mode.theme-lavender { --bg: #f4f5fa; --sur: #ffffff; --s2: #ebeef6; --s3: #dce1f0; --pk: #5a6ac2; --pkl: #4352a1; --pkd: rgba(90,106,194,0.15); --tx: #1e2233; --mu: #575e7a; --dm: #878ea3; --br: rgba(90,106,194,0.2); --bs: rgba(0,0,0,0.06); --teal: #4b8c8c; }
+body.light-mode.theme-ocean { --bg: #f0f7f9; --sur: #ffffff; --s2: #e0f0f5; --s3: #cce3ed; --pk: #2a88c7; --pkl: #1c6699; --pkd: rgba(42,136,199,0.15); --tx: #112833; --mu: #43667a; --dm: #7696a8; --br: rgba(42,136,199,0.2); --bs: rgba(0,0,0,0.06); --teal: #23856b; }
+body.light-mode.theme-sage { --bg: #f2f7f4; --sur: #ffffff; --s2: #e3efe8; --s3: #cde3d6; --pk: #2d9956; --pkl: #1e733e; --pkd: rgba(45,153,86,0.15); --tx: #15291d; --mu: #486e56; --dm: #7aa18a; --br: rgba(45,153,86,0.2); --bs: rgba(0,0,0,0.06); --teal: #658531; }
+body.light-mode.theme-mocha { --bg: #f8f5f3; --sur: #ffffff; --s2: #f0ebe6; --s3: #e6ddd6; --pk: #c46231; --pkl: #99471f; --pkd: rgba(196,98,49,0.15); --tx: #33241c; --mu: #7a5e4f; --dm: #a88d80; --br: rgba(196,98,49,0.2); --bs: rgba(0,0,0,0.06); --teal: #a87247; }
+
+/* Gündüz Modunda Logo Rengi */
+body.light-mode .topbar-logo img { filter: invert(0.85) drop-shadow(0px 1px 2px rgba(0,0,0,0.1)); }
 
 /* --- ANA STİLLER --- */
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html, body { height: 100dvh; width: 100%; overflow: hidden; position: fixed; background: var(--bg); transition: background 0.4s; } 
+*{box-sizing:border-box;margin:0;padding:0; outline:none; -webkit-tap-highlight-color: transparent;}
+html, body { height: 100dvh; width: 100%; overflow: hidden; position: fixed; background: var(--bg); transition: background 0.4s, color 0.4s; } 
 body{font-family:'Inter', sans-serif; color:var(--tx); display:flex; flex-direction:column; }
-
 #app { height: 100%; width: 100%; display: flex; flex-direction: column; overflow: hidden; position: relative; }
 #app.hide-cursor, #app.hide-cursor * { cursor: none !important; }
 
-/* AUTH */
-#auth-screen { position: fixed; inset: 0; z-index: 9999; background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 20px; transition: background 0.4s;}
-.auth-card { background: var(--sur); border: 1px solid var(--br); padding: 30px; border-radius: 24px; width: 100%; max-width: 360px; text-align: center; transition: background 0.3s;}
-.auth-card h2 { font-family: 'Outfit', sans-serif; color: var(--pkl); margin-bottom: 20px; font-size: 22px; font-weight: 600; }
-.auth-btn { width: 100%; padding: 14px; background: var(--pk); border: none; border-radius: 12px; color: var(--bg); font-weight: 600; cursor: pointer; margin-top:10px; font-family: 'Inter', sans-serif; }
-.auth-input { width: 100%; padding: 14px; margin-bottom: 12px; background: var(--bg); border: 1px solid var(--bs); border-radius: 12px; color: #fff; outline: none; font-family: 'Inter', sans-serif; }
-
 /* TOPBAR */
-.topbar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--bs);flex-shrink:0; height: 60px;}
-.app-title{font-family:'Outfit', sans-serif; font-size:18px; color:var(--pkl); font-weight: 600; letter-spacing: 0.5px;}
+.topbar{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--bs);flex-shrink:0; height: 70px; background: var(--sur);}
 .topbar-r{margin-left:auto;display:flex;gap:6px;align-items:center}
-.tbtn { background: var(--s2); border: 1px solid var(--bs); color: var(--mu); padding: 6px 12px; border-radius: 12px; font-size: 11px; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 500;}
-.tbtn.on { border-color: var(--pk); color: var(--bg); background: var(--pk); }
+.tbtn { background: var(--s2); border: 1px solid var(--bs); color: var(--tx); padding: 8px 12px; border-radius: 12px; font-size: 13px; cursor: pointer; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: 0.2s;}
+.tbtn:hover { background: var(--s3); }
+.tbtn.on { border-color: var(--pk); color: #fff; background: var(--pk); }
+body.light-mode .tbtn.on { color: #fff; }
 
 /* MAIN LAYOUT */
 .main{display:flex; flex:1; overflow:hidden; min-height: 0;}
 .sb{width:160px; flex-shrink:0; border-right:1px solid var(--bs); display:flex; flex-direction:column; overflow:hidden; background: var(--sur); transition: background 0.3s;}
 @media (max-width: 600px) { .sb { width: 125px; } }
 .sb-top{padding:12px; display:flex; align-items:center; justify-content:space-between}
-.sb-lbl{font-size:10px; color:var(--dm); text-transform:uppercase; letter-spacing: 1px; font-weight: 500;}
-.sb-list{flex:1; overflow-y:auto; padding:8px; -webkit-overflow-scrolling: touch;}
+.sb-lbl{font-size:10px; color:var(--dm); text-transform:uppercase; font-weight: 700; letter-spacing: 0.5px;}
+.sb-list{flex:1; overflow-y:auto; padding:8px;}
 
-.li, .sr { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; touch-action: pan-y; }
+.li{display:flex; align-items:center; gap:8px; padding:12px 10px; border-radius:10px; cursor:pointer; margin-bottom:4px; font-size: 13px; color: var(--mu); font-weight: 500; transition: 0.2s;}
+.li:hover{background: var(--s2);}
+.li.act{background:var(--pkd); color:var(--pkl); font-weight: 600;}
 
-.li{display:flex; align-items:center; gap:8px; padding:12px 10px; border-radius:10px; cursor:pointer; margin-bottom:4px; font-size: 13px; color: var(--mu); position: relative; font-weight: 400;}
-.li.act{background:var(--pkd); color:var(--pkl); font-weight: 500;}
-.li.drag-over-list { border-top: 2px solid var(--pk); background: var(--s2); }
-
-.ct{flex:1; display:flex; flex-direction:column; overflow:hidden; min-width: 0; background: var(--bg); transition: background 0.3s;}
+.ct{flex:1; display:flex; flex-direction:column; overflow:hidden; background: var(--bg);}
 .ct-top{padding:10px 14px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--bs); flex-shrink: 0;}
-.ct-name{font-family:'Outfit', sans-serif; font-size:16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; color: var(--pkl);}
-.add-s{background:var(--pkd); border:1px solid var(--br); color:var(--pk); padding:6px 12px; border-radius:20px; font-size:11px; cursor:pointer; font-weight: 500; font-family: 'Inter', sans-serif;}
+.ct-name{font-family:'Outfit', sans-serif; font-size:16px; font-weight: 600; color: var(--pkl);}
+.add-s{background:var(--pkd); border:1px solid var(--br); color:var(--pkl); padding:6px 12px; border-radius:20px; font-size:12px; cursor:pointer; font-weight: 600; transition: 0.2s;}
+.add-s:hover { background: var(--pk); color: #fff; }
 
 /* SONG LIST */
-.sw{flex:1; overflow-y:scroll; padding:8px; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; display: block;}
-.sr{display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; cursor:pointer; position:relative; margin-bottom:6px; touch-action: pan-y;}
+/* GÖRSEL (THUMBNAIL) KUTUSU */
+.s-thumb { width:42px; height:42px; border-radius:8px; background:var(--s2); display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden; margin-right:12px; border: 1px solid var(--bs); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.sw{flex:1; overflow-y:auto; padding:8px;}
+.sr{display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; cursor:pointer; margin-bottom:6px; color: var(--tx); transition: 0.2s;}
 .sr:hover{background:var(--s2)}
-.sr.now{background:var(--pkd); border:1px solid var(--br)}
-.sr.drag-target { border-top: 2px solid var(--pk); background: var(--s3); }
-.st{font-size:13px; font-weight:400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;}
-.sr.now .st { font-weight: 600; color: var(--pkl); }
-.sr-more{color: var(--dm); font-size: 18px; padding: 5px; opacity: 0.6;}
+.sr.now{background:var(--pkd); border:1px solid var(--br); font-weight: 600; color: var(--pkl);}
+.st{font-size:13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;}
+.sr-more{color: var(--dm); font-size: 18px; padding: 5px;}
 
 /* TRACKING DOTS */
 .st-trk { display:flex; gap:6px; margin-right:8px; align-items:center; }
-.st-dot { width:12px; height:12px; border-radius:50%; background:transparent; border:2px solid var(--bs); cursor:pointer; transition:0.2s;}
-.st-dot:hover { transform: scale(1.3); }
+.st-dot { width:12px; height:12px; border-radius:50%; border:2px solid var(--bs); cursor:pointer;}
 .st-dot.un.act { background: var(--dm); border-color: var(--dm); }
 .st-dot.pa.act { background: var(--pk); border-color: var(--pkl); } 
 .st-dot.do.act { background: var(--teal); border-color: var(--teal); } 
 
-/* BOYUTLANDIRMA ÇUBUĞU */
-.vp-resizer {
-    height: 12px; background: var(--bg); cursor: ns-resize; display: none; align-items: center; justify-content: center;
-    flex-shrink: 0; z-index: 30; border-top: 1px solid var(--bs); border-bottom: 1px solid var(--bs);
-}
+/* VİDEO İSKELETİ & ALTYAZI */
+.vp-resizer { height: 12px; background: var(--bg); cursor: ns-resize; display: none; align-items: center; justify-content: center; border-top: 1px solid var(--bs); border-bottom: 1px solid var(--bs); }
 .vp-resizer.show { display: flex; }
-.vp-resizer::before { content: ''; width: 40px; height: 4px; border-radius: 2px; background: var(--dm); transition: background 0.2s; }
-.vp-resizer:hover::before, .vp-resizer:active::before { background: var(--pk); }
+.vp-resizer::before { content: ''; width: 40px; height: 4px; border-radius: 2px; background: var(--dm); }
 
-/* VİDEO İSKELETİ */
-.vp{background:#000; height:0; transition:height 0.4s cubic-bezier(0.2,0.8,0.2,1); overflow:hidden; position:relative; flex-shrink: 0; cursor: pointer; display:flex; flex-direction:column;}
+.vp{background:#000; height:0; transition:height 0.4s; overflow:hidden; position:relative; flex-shrink: 0; display:flex; flex-direction:column;}
 .vp.open{height: 240px;} 
-.vp.resizing { transition: none !important; } 
 #media-container { width:100%; flex:1; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-#vEl, #yt-player { width:100%; height:100%; display:none; object-fit: contain; border:none; pointer-events: auto; max-height: 100%; }
+#vEl, #yt-player { width:100%; height:100%; display:none; object-fit: contain; }
 #vEl.show, #yt-player.show { display:block; }
+::cue { background-color: rgba(0, 0, 0, 0.8); color: white; font-size: 18px; font-family: 'Inter', sans-serif; text-shadow: 2px 2px 4px black; }
 
-/* CENTER OVERLAY CONTROLS */
-.v-overlay-ctrl{position:absolute; inset: 0; display:flex; align-items:center; justify-content: center; gap:25px; background:rgba(0,0,0,0.5); opacity:0; visibility: hidden; transition: 0.3s; z-index: 10; pointer-events: none;}
+/* --- SVG İKON BUTON STİLLERİ --- */
+.btn-icon { background: none; border: none; cursor: pointer; padding: 10px; display: flex; align-items: center; justify-content: center; opacity: 0.85; transition: 0.2s; user-select: none !important; -webkit-user-select: none !important; outline: none !important; }
+.btn-icon:hover { transform: scale(1.15); opacity: 1; }
+.btn-svg { width: 24px; height: 24px; fill: var(--tx); transition: 0.2s; pointer-events: none; }
+.btn-icon:hover .btn-svg { fill: var(--pk); }
+.btn-icon.big .btn-svg { width: 44px; height: 44px; fill: var(--pk); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));} 
+.btn-sec-text { font-size: 14px; font-weight: 700; font-family: 'Outfit', sans-serif; margin: 0 4px; color: var(--tx); transition: 0.2s; pointer-events: none; user-select: none !important;}
+.btn-icon:hover .btn-sec-text { color: var(--pk); }
+
+/* VİDEO ÜSTÜ KONTROLLER (BEYAZ VE GÖLGELİ) */
+.v-overlay-ctrl{position:absolute; inset: 0; display:flex; flex-direction:column; align-items:center; justify-content: center; background:rgba(0,0,0,0.6); opacity:0; visibility: hidden; transition: 0.3s; z-index: 10; pointer-events: none;}
 .vp.show-ctrl .v-overlay-ctrl { opacity:1; visibility: visible; pointer-events: auto; }
-.v-btn{background:none; border:none; color:#fff; cursor:pointer; font-size:32px; text-shadow: 0 2px 8px rgba(0,0,0,0.8);}
-.v-small{font-size: 18px; opacity: 0.8;}
+.center-ctrl-wrap { display: flex; align-items: center; justify-content: center; gap: 25px; }
 
-.yt-external-btn { display: none; width: 100%; padding: 8px; background: var(--s3); color: var(--pkl); text-align: center; font-size: 11px; text-decoration: none; border-top: 1px solid var(--bs); font-weight: 500;}
+.v-overlay-ctrl .btn-svg { fill: #fff; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.6)); }
+.v-overlay-ctrl .btn-sec-text { color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.6); }
+.v-overlay-ctrl .btn-icon:hover .btn-svg { fill: var(--pkl); }
+.v-overlay-ctrl .btn-icon:hover .btn-sec-text { color: var(--pkl); }
+.v-overlay-ctrl .btn-icon.big .btn-svg { fill: var(--pkl); }
+
+/* Aktif / Pasif Durumları */
+.toggle-btn { opacity: 0.4; transition: 0.3s; }
+.toggle-btn.active { opacity: 1; transform: scale(1.1); }
+.toggle-btn.active .btn-svg { fill: var(--pk); }
+
+/* KÖŞE BUTONLARI (SAĞ ALT - YENİ YERLEŞİM) */
+.bottom-corner-btns { position: absolute; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 50; transition: bottom 0.3s; pointer-events: auto; }
+.corner-btn { background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; font-family: 'Inter', sans-serif;}
+.corner-btn:hover { background: var(--pk); border-color: var(--pk); }
+
+/* CC MENÜSÜ */
+.cc-menu { position: absolute; bottom: 60px; right: 20px; top: auto; background: var(--sur); border: 1px solid var(--bs); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 5px; z-index: 60; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s; opacity: 0; pointer-events: none;}
+.cc-menu.show { opacity: 1; pointer-events: auto; }
+.cc-menu button { background: var(--s2); border: none; color: var(--tx); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; text-align: left; transition: 0.2s;}
+.cc-menu button:hover { background: var(--pk); color: #fff; }
+
+.yt-external-btn { display: none; width: 100%; padding: 8px; background: var(--s3); color: var(--tx); text-align: center; font-size: 12px; text-decoration: none; border-top: 1px solid var(--bs); font-weight: 600;}
 .yt-external-btn.show { display: block; }
 
 /* PLAYER & VERTICAL VOLUME */
-.player{background:var(--sur); border-top:1px solid var(--bs); padding:12px 16px; flex-shrink: 0; position: relative; transition: background 0.3s;}
+.player{background:var(--sur); border-top:1px solid var(--bs); padding:12px 16px; flex-shrink: 0; position: relative;}
 .player-top { display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 8px; height: 26px; }
-.vol-wrapper { position: absolute; left: 0; bottom: 0; display: flex; align-items: center; justify-content: center; z-index: 50; }
-.vol-popup {
-    position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%);
-    width: 36px; height: 0; overflow: hidden; transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s, background 0.3s;
-    opacity: 0; display: flex; align-items: center; justify-content: center;
-    background: var(--s2); border: 1px solid var(--br); border-radius: 18px;
-}
-.vol-popup.show { height: 110px; opacity: 1; padding: 15px 0; }
-.vol-slider { -webkit-appearance: none; background: transparent; cursor: pointer; width: 80px; transform: rotate(-90deg); margin: 0; }
+
+.vol-wrapper { position: absolute; left: 0; bottom: -5px; padding-bottom: 5px; z-index: 50; cursor: pointer; }
+.vol-popup { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); width: 36px; height: 0; overflow: hidden; transition: 0.2s; opacity: 0; background: var(--s2); border: 1px solid var(--br); border-radius: 18px; pointer-events: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3);}
+.vol-wrapper:hover .vol-popup { height: 110px; opacity: 1; padding: 15px 0; pointer-events: auto; }
+.vol-slider { -webkit-appearance: none; background: transparent; width: 80px; transform: rotate(-90deg); margin: 0; cursor: pointer;}
 .vol-slider::-webkit-slider-runnable-track { width: 100%; height: 4px; background: var(--s3); border-radius: 2px; }
-.vol-slider::-webkit-slider-thumb { -webkit-appearance: none; height: 14px; width: 14px; border-radius: 50%; background: var(--pk); margin-top: -5px; box-shadow: 0 0 5px rgba(0,0,0,0.5);}
+.vol-slider::-webkit-slider-thumb { -webkit-appearance: none; height: 14px; width: 14px; border-radius: 50%; background: var(--pk); margin-top: -5px;}
 
 .prog-container{margin-bottom: 12px;}
-.time-info{display: flex; justify-content: space-between; font-size: 11px; color: var(--mu); margin-bottom: 6px; font-family: monospace; font-variant-numeric: tabular-nums;}
-.pbar{flex:1; height:6px; background:var(--s3); border-radius:3px; cursor:pointer; position:relative; overflow:visible;}
-.pfill{height:100%; background:var(--pk); width:0%; border-radius:3px; position:relative; transition: 0.1s linear;}
+.time-info{display: flex; justify-content: space-between; font-size: 11px; color: var(--mu); margin-bottom: 6px; font-family: monospace; font-weight:600;}
+.pbar{flex:1; height:6px; background:var(--s3); border-radius:3px; cursor:pointer;}
+.pfill{height:100%; background:var(--pk); width:0%; border-radius:3px; transition: 0.1s linear;}
 
-/* CONTROL ALANLARI */
 .player-controls-wrapper { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; }
-.ctr{display:flex; align-items:center; justify-content:center; gap:15px}
-.cb{background:none; border:none; color:var(--mu); font-size:26px; cursor:pointer; transition: color 0.2s;}
-.cb.big{font-size:36px; color:var(--pk)}
-.cb.small{font-size:18px; opacity: 0.8;}
+.ctr{display:flex; align-items:center; justify-content:center; gap: 15px;}
+.side-ctr { position: absolute; right: 0; display: flex; gap: 5px; }
 
-.side-ctr { position: absolute; right: 0; display: flex; gap: 12px; align-items: center; padding-right: 5px; }
-.cb-icon { width: 24px; height: 24px; fill: var(--mu); cursor: pointer; transition: 0.2s; padding: 2px;}
-.cb.small:hover .cb-icon { fill: var(--tx); }
-.cb.act .cb-icon { fill: var(--pk); }
-.cb.act { background: var(--pkd); border-radius: 8px;}
-
-/* RESPONSIVE */
-@media (max-width: 500px) {
-    .ctr { gap: 8px; }
-    .cb { font-size: 22px; }
-    .cb.big { font-size: 32px; }
-    .cb.small { font-size: 14px; }
-    .side-ctr { gap: 4px; padding-right: 2px; }
-    .cb-icon { width: 20px; height: 20px; }
-    #npT { padding: 0 30px; font-size: 12px;}
-}
-
-/* FULLSCREEN MAGIC FIX */
+/* FULLSCREEN MAGIC (YÜKSEKLİK GÜNCELLENDİ) */
 #app.fullscreen-mode .topbar, #app.fullscreen-mode .main, #app.fullscreen-mode .vp-resizer { display: none !important; }
-#app.fullscreen-mode .vp { position: absolute !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; max-height: 100vh !important; z-index: 1 !important; background: #000 !important; display: flex !important; justify-content: center !important; align-items: center !important;}
-#app.fullscreen-mode #media-container { width: 100% !important; height: 100% !important; display: flex !important; align-items: center !important; justify-content: center !important;}
-#app.fullscreen-mode video, #app.fullscreen-mode iframe { max-height: 100vh !important; max-width: 100vw !important;}
-
-#app.fullscreen-mode .player {
-    position: absolute; bottom: 0; left: 0; width: 100vw; z-index: 20;
-    backdrop-filter: blur(15px);
-    border-top: 1px solid var(--bs); padding-bottom: max(16px, env(safe-area-inset-bottom));
-    transition: opacity 0.3s, visibility 0.3s; opacity: 0; visibility: hidden;
-}
-
-body.theme-sakura #app.fullscreen-mode .player { background: rgba(13, 13, 20, 0.92); }
-body.theme-lavender #app.fullscreen-mode .player { background: rgba(30, 32, 37, 0.92); }
-body.theme-ocean #app.fullscreen-mode .player { background: rgba(17, 26, 36, 0.92); }
-body.theme-sage #app.fullscreen-mode .player { background: rgba(28, 46, 37, 0.92); }
-body.theme-mocha #app.fullscreen-mode .player { background: rgba(33, 26, 24, 0.92); }
-body.theme-berry #app.fullscreen-mode .player { background: rgba(28, 25, 36, 0.92); }
-body.theme-sunset #app.fullscreen-mode .player { background: rgba(38, 30, 29, 0.92); }
-
+#app.fullscreen-mode .vp { position: absolute !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 1 !important; }
+#app.fullscreen-mode .player { position: absolute; bottom: 0; left: 0; width: 100vw; z-index: 20; background: rgba(10,10,15,0.95); border-top: 1px solid rgba(255,255,255,0.1); opacity: 0; visibility: hidden; transition: 0.3s;}
+body.light-mode #app.fullscreen-mode .player { background: rgba(255,255,255,0.95); border-top: 1px solid rgba(0,0,0,0.1); }
 #app.fullscreen-mode.show-fs-ctrl .player { opacity: 1; visibility: visible; }
+#app.fullscreen-mode.show-fs-ctrl .bottom-corner-btns { bottom: 170px; }
+#app.fullscreen-mode.show-fs-ctrl .cc-menu { bottom: 210px; }
 
 /* MODALS */
 .ov{position:fixed; inset:0; background:rgba(0,0,0,.85); display:flex; align-items:center; justify-content:center; z-index:1000; padding: 20px;}
-.mo{background:var(--s2); padding:24px; border-radius:20px; width:100%; max-width:340px; border: 1px solid var(--br); transition: background 0.3s;}
-.mo h3{color:var(--pkl); margin-bottom:15px; font-family:'Outfit', sans-serif; font-weight: 500; font-size: 18px;}
-.mo input, .mo select{width:100%; background:var(--s3); border:1px solid var(--bs); color:#fff; padding:14px; border-radius:12px; margin-bottom:12px; outline:none; font-family: 'Inter', sans-serif; font-size: 13px; transition: background 0.3s;}
-.btn{width:100%; padding:14px; border-radius:12px; border:none; font-weight:600; cursor:pointer; margin-top:5px; font-family: 'Inter', sans-serif; font-size: 13px; transition: 0.2s;}
-.btn-p{background:var(--pk); color:var(--bg)}
-.btn-s{background:var(--s3); color:#fff} 
+.mo{background:var(--sur); padding:24px; border-radius:20px; width:100%; max-width:360px; border: 1px solid var(--br); max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.5);}
+.mo h3{color:var(--pkl); margin-bottom:15px; font-family:'Outfit', sans-serif; font-size: 18px; font-weight: 700;}
+.mo input, .mo select{width:100%; background:var(--bg); border:1px solid var(--bs); color:var(--tx); padding:14px; border-radius:12px; margin-bottom:12px; font-family: 'Inter', sans-serif; font-size: 13px; transition: 0.2s;}
+.mo input:focus, .mo select:focus { border-color: var(--pk); }
+.btn{width:100%; padding:14px; border-radius:12px; border:none; font-weight:600; cursor:pointer; margin-top:5px; font-size: 13px; transition: 0.2s;}
+.btn-p { background: var(--pk); color: #111; }
+body.light-mode .btn-p { color: #fff; }
+.btn-p:hover{filter: brightness(1.1);}
+.btn-s{background:var(--s3); color:var(--tx);} 
+.btn-s:hover{background:var(--s2);}
 .hid{display:none!important}
 
-/* THEME TOAST NOTIFICATION */
-.theme-toast {
-    position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
-    background: var(--pk); color: var(--bg); padding: 8px 20px;
-    border-radius: 20px; font-size: 13px; font-weight: 600; z-index: 10000;
-    opacity: 0; pointer-events: none; transition: opacity 0.3s, top 0.3s;
-}
+.info-box { background: var(--bg); border-left: 3px solid var(--pk); padding: 12px; border-radius: 8px; font-size: 12px; color: var(--mu); line-height: 1.5; margin-bottom: 15px; }
+.info-box strong { color: var(--tx); }
+
+.theme-toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: var(--pk); color: #fff; padding: 10px 24px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 10000; opacity: 0; pointer-events: none; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3);}
 .theme-toast.show { opacity: 1; top: 20px; }
+
+/* --- ÇİFT TIKLAMA MAVİ SEÇİM VE POPUP ENGELLEYİCİ --- */
+*, html, body {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
+
+::selection { background: transparent !important; color: inherit !important; }
+::-moz-selection { background: transparent !important; color: inherit !important; }
+
+input, textarea, select {
+    -webkit-user-select: auto !important;
+    -moz-user-select: auto !important;
+    -ms-user-select: auto !important;
+    user-select: auto !important;
+}
+
+/* YAN SÜTUN BOYUTLANDIRICI */
+.sb-resizer { width: 5px; cursor: col-resize; background: transparent; transition: background 0.2s; z-index: 10; flex-shrink: 0; }
+.sb-resizer:hover, .sb-resizer.active { background: var(--pk); }
+
+/* SÜRÜKLE BIRAK EFEKTİ */
+.dragging { opacity: 0.4 !important; border: 2px dashed var(--pk); }
+
 </style>
 </head>
-<body>
+<body class="theme-sakura">
 
 <script src="https://www.youtube.com/iframe_api"></script>
+<div id="themeToast" class="theme-toast hid">Bilgi</div>
 
-<div id="auth-screen">
-  <div class="auth-card">
-    <div class="auth-logo">🌸</div>
-    <h2>Fowalink</h2>
-    <input type="text" id="username" class="auth-input" data-i18n-ph="loginUser" placeholder="Kullanıcı">
-    <input type="password" id="password" class="auth-input" data-i18n-ph="loginPass" placeholder="Şifre">
-    <button class="auth-btn" onclick="checkAuth()" data-i18n="loginBtn">Giriş Yap</button>
-  </div>
-</div>
-
-<div id="themeToast" class="theme-toast hid">Tema Değiştirildi</div>
-
-<div id="app" class="hid">
+<div id="app">
     <audio id="aEl" playsinline webkit-playsinline style="display:none;"></audio>
     <input type="file" id="fIn" multiple style="display:none">
+    <input type="file" id="subIn" accept=".srt,.vtt" style="display:none">
     
     <div class="topbar">
-      <div><div class="app-title">Fowalink</div></div>
+      <div class="topbar-logo" style="display:flex; align-items:center;">
+          <img src="assets/logo.png" alt="Logo" style="height:35px; width:auto; object-fit:contain; cursor:pointer;" onclick="location.reload()" onerror="this.style.display='none'">
+      </div>
+      
       <div class="topbar-r">
-        <div id="timerBadge" class="sleep-timer-badge hid">00:00</div>
-        <button id="vToggle" class="tbtn" onclick="toggleVidPanel()" data-i18n="btnVid">🎬 Video</button>
-        <button class="tbtn" onclick="openSleepMo()" data-i18n="btnSleep">⏳ Uyku</button>
-        <button class="tbtn" onclick="openSettingsMo()" data-i18n="btnSettings">⚙ Ayarlar</button>
-        <button style="background:none; border:none; color:var(--dm); font-size:18px;" onclick="logout()">✕</button>
+        <button class="tbtn" onclick="cycleEQ()" id="eqTopBtn" title="Ses Modunu (EQ) Değiştir" data-i18n-title="tip_eq" data-i18n="eq_btn">🎵 EQ Modu</button>
+        <button id="vToggle" class="tbtn" onclick="toggleVidPanel()" title="Video Ekranını Aç/Kapat" data-i18n-title="tip_vid" data-i18n="video_btn">📺 Video</button>
+        <button class="tbtn" onclick="openSleepMo()" title="Uyku Zamanlayıcısı Kur" data-i18n-title="tip_sleep" data-i18n="sleep_btn">🌙 Uyku</button>
+        <button class="tbtn" onclick="openSettingsMo()" title="Ayarlar ve Temalar" data-i18n-title="tip_set" data-i18n="settings_btn">⚙️ Ayarlar</button>
       </div>
     </div>
 
     <div class="main">
-      <div class="sb">
-        <div class="sb-top"><span class="sb-lbl" data-i18n="lblLists">LİSTELER</span><button class="sb-add" onclick="openPl()">+</button></div>
+      <div class="sb" id="sbEle">
+        <div class="sb-top"><span class="sb-lbl" data-i18n="lists_lbl">LİSTELER</span><button class="sb-add" style="background:none; border:none; color:var(--pk); font-size:22px; cursor:pointer; font-weight:300;" onclick="openPl()" title="Yeni Liste Oluştur" data-i18n-title="tip_add_list">+</button></div>
         <div class="sb-list" id="sbList"></div>
       </div>
+      
+      <!-- Yeni Boyutlandırma Çubuğu -->
+      <div class="sb-resizer" id="sbResizer"></div>
+      
       <div class="ct">
         <div class="ct-top">
           <div class="ct-name" id="ctName">...</div>
-          <button class="add-s" onclick="openAddMo()" data-i18n="btnAdd">+ Ekle</button>
+          <button class="add-s" onclick="openAddMo()" title="Cihazdan dosya veya link ekle" data-i18n-title="tip_add_c" data-i18n="add_content_btn">+ İçerik Ekle</button>
         </div>
         <div class="sw" id="sw"></div>
       </div>
@@ -279,31 +252,56 @@ body.theme-sunset #app.fullscreen-mode .player { background: rgba(38, 30, 29, 0.
 
     <div class="vp-resizer" id="vpResizer"></div>
 
-    <div class="vp" id="vp" onclick="handleVideoClick(event)" ondblclick="toggleFullScreen()">
+    <div class="vp" id="vp" onclick="handleVideoClick(event)" ondblclick="handleDoubleTap(event)">
         <div id="media-container">
-            <video id="vEl" playsinline webkit-playsinline></video>
+            <video id="vEl" playsinline webkit-playsinline crossorigin="anonymous">
+                <track id="vTrack" kind="subtitles" srclang="tr" label="Altyazı">
+            </video>
             <div id="yt-player"></div>
         </div>
+        
         <div class="v-overlay-ctrl" id="vOverlay">
-            <button class="v-btn v-small" onclick="event.stopPropagation(); seekRelative(-5)">-5s</button>
-            <button class="v-btn" onclick="event.stopPropagation(); prev()">⏮</button>
-            <button class="v-btn" style="font-size:48px;" id="vpPlayB" onclick="event.stopPropagation(); togglePlay()">⏯</button>
-            <button class="v-btn" onclick="event.stopPropagation(); next(false)">⏭</button>
-            <button class="v-btn v-small" onclick="event.stopPropagation(); seekRelative(5)">+5s</button>
-            <button class="v-btn" style="position:absolute; bottom:15px; right:15px; font-size:20px;" onclick="event.stopPropagation(); toggleFullScreen()">⛶</button>
+            
+            <div class="bottom-corner-btns" id="cornerBtns">
+                <button class="corner-btn" onclick="event.stopPropagation(); toggleCCMenu()" title="Altyazı Menüsü" data-i18n-title="tip_cc" data-i18n="cc_btn">💬 CC</button>
+                <button class="corner-btn" onclick="event.stopPropagation(); toggleFullScreen()" title="Tam Ekran Ayarı" data-i18n-title="tip_fs">⛶ <span id="fsBtnText" data-i18n="fs_btn">Tam Ekran</span></button>
+            </div>
+
+            <div class="center-ctrl-wrap">
+                <button class="btn-icon" onclick="event.stopPropagation(); seekToStart()" title="Başa Al" data-i18n-title="tip_start">
+                    <svg class="btn-svg" viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+                </button>
+                <button class="btn-icon" onclick="event.stopPropagation(); seekRelative(-5)" title="5 Saniye Geri" data-i18n-title="tip_m5">
+                    <span class="btn-sec-text">-5s</span>
+                    <svg class="btn-svg" viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
+                </button>
+                <button class="btn-icon big" onclick="event.stopPropagation(); togglePlay()" id="vpPlayBImg" title="Oynat / Duraklat" data-i18n-title="tip_pp"></button>
+                <button class="btn-icon" onclick="event.stopPropagation(); seekRelative(5)" title="5 Saniye İleri" data-i18n-title="tip_p5">
+                    <svg class="btn-svg" viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>
+                    <span class="btn-sec-text">+5s</span>
+                </button>
+                <button class="btn-icon" onclick="event.stopPropagation(); next(false)" title="Sonraki Şarkı/Video" data-i18n-title="tip_next">
+                    <svg class="btn-svg" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                </button>
+            </div>
+        </div>
+        
+        <div class="cc-menu" id="ccMenu">
+            <button onclick="event.stopPropagation(); document.getElementById('subIn').click(); toggleCCMenu();" data-i18n="sub_sel_btn">📥 Altyazı Seç (.srt/.vtt)</button>
+            <button onclick="event.stopPropagation(); setCCTrack(false); toggleCCMenu();" data-i18n="sub_off_btn">❌ Altyazıyı Kapat</button>
         </div>
     </div>
-    <a href="#" id="ytExternalLink" class="yt-external-btn" target="_blank" data-i18n="ytWatch">⚠️ YouTube'da İzle</a>
+    <a href="#" id="ytExternalLink" class="yt-external-btn" target="_blank" data-i18n="yt_ext_btn">⚠️ YouTube'da İzle</a>
 
     <div class="player" id="playerBar">
       <div class="player-top">
-        <div class="vol-wrapper">
-            <button class="cb small" id="volIconBtn" onclick="toggleVolBox()">🔊</button>
+        <div class="vol-wrapper" title="Ses Ayarı" data-i18n-title="tip_vol">
+            <button style="background:none; border:none; font-size:18px; cursor:pointer; padding:5px;" id="volIconBtn" onclick="toggleMute()">🔊</button>
             <div class="vol-popup" id="volPopup">
                 <input type="range" class="vol-slider" id="vSlider" min="0" max="1" step="0.01" value="0.7" oninput="setVol(this.value)">
             </div>
         </div>
-        <div id="npT" style="font-size:13px; font-weight:500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--tx); padding: 0 40px;" data-i18n="selNotSelected">Seçilmedi</div>
+        <div id="npT" style="font-size:13px; font-weight:600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 40px; color:var(--tx);" data-i18n="not_selected">Seçilmedi</div>
       </div>
       
       <div class="prog-container">
@@ -313,254 +311,309 @@ body.theme-sunset #app.fullscreen-mode .player { background: rgba(38, 30, 29, 0.
 
       <div class="player-controls-wrapper">
           <div class="ctr">
-            <button class="cb small" onclick="seekRelative(-5)">-5s</button>
-            <button class="cb" onclick="prev()">⏮</button>
-            <button class="cb big" id="playB" onclick="togglePlay()">▶</button>
-            <button class="cb" onclick="next(false)">⏭</button>
-            <button class="cb small" onclick="seekRelative(5)">+5s</button>
+            <button class="btn-icon" onclick="seekToStart()" title="Başa Al" data-i18n-title="tip_start">
+                <svg class="btn-svg" viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+            </button>
+            <button class="btn-icon" onclick="seekRelative(-5)" title="5 Saniye Geri" data-i18n-title="tip_m5">
+                <span class="btn-sec-text">-5s</span>
+                <svg class="btn-svg" viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
+            </button>
+            <button class="btn-icon" onclick="prev()" title="Önceki Şarkı" data-i18n-title="tip_prev">
+                <svg class="btn-svg" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+            </button> 
+            <button class="btn-icon big" onclick="togglePlay()" id="playBImg" title="Oynat / Duraklat" data-i18n-title="tip_pp"></button>
+            <button class="btn-icon" onclick="next(false)" title="Sonraki Şarkı" data-i18n-title="tip_next">
+                <svg class="btn-svg" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+            </button>
+            <button class="btn-icon" onclick="seekRelative(5)" title="5 Saniye İleri" data-i18n-title="tip_p5">
+                <svg class="btn-svg" viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>
+                <span class="btn-sec-text">+5s</span>
+            </button>
           </div>
           <div class="side-ctr">
-              <button class="cb small" id="shufBtn" onclick="toggleShuffle()" data-i18n-title="shufBtn" title="Rastgele Çal">
-                  <svg class="cb-icon" viewBox="0 0 24 24"><path d="M14.83,13.41L13.42,14.83L17.59,19H2V21H17.59L13.42,25.17L14.83,26.58L21.41,20L14.83,13.41M14.83,6.58L13.42,8L17.59,12.17H21.41L14.83,5.59M2,5V7H15.17L13.17,5H2M2,12V14H8.17L6.17,12H2Z" transform="translate(0 -2)"/></svg>
+              <button class="btn-icon toggle-btn" id="shufImg" onclick="toggleShuffle()" title="Listeyi Karışık Çal" data-i18n-title="tip_shuf">
+                  <svg class="btn-svg" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
               </button>
-              <button class="cb small" id="repBtn" onclick="toggleRepeat()" data-i18n-title="repBtn" title="Aynı Şarkıyı Tekrarla">
-                  <svg class="cb-icon" viewBox="0 0 24 24"><path d="M17 17H7V14L3 18L7 22V19H19V13H17M7 7H17V10L21 6L17 2V5H5V11H7V7Z"/></svg>
+              <button class="btn-icon toggle-btn" id="repImg" onclick="toggleRepeat()" title="Aynı Şarkıyı/Videoyu Sürekli Tekrarla" data-i18n-title="tip_rep">
+                  <svg class="btn-svg" viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
               </button>
           </div>
       </div>
     </div>
 </div>
 
-<div class="ov hid" id="plEditMo"><div class="mo"><h3 data-i18n="moEditTitle">Düzenle</h3><input id="plEditIn"><button class="btn btn-p" onclick="savePlEdit()" data-i18n="btnSave">Kaydet</button><button class="btn" style="background:var(--s3); color:var(--pk)" onclick="deletePl()" data-i18n="btnDeleteList">Listeyi Sil ✕</button><button class="btn btn-s" onclick="closeMo('plEditMo')" data-i18n="btnCancel">İptal</button></div></div>
-<div class="ov hid" id="plMo"><div class="mo"><h3 data-i18n="moNewList">Yeni Liste</h3><input id="plIn" data-i18n-ph="plNameHolder" placeholder="Adı..."><button class="btn btn-p" onclick="makePl()" data-i18n="btnOk">Tamam</button><button class="btn btn-s" onclick="closeMo('plMo')" data-i18n="btnCancelList">Vazgeç</button></div></div>
-<div class="ov hid" id="sMo"><div class="mo"><h3 data-i18n="moAddContent">İçerik Ekle</h3><button class="btn btn-p" onclick="document.getElementById('fIn').click()" data-i18n="btnLocalFile">Cihazdan Dosya Seç</button><div style="margin: 8px 0; font-size: 10px; color: var(--dm); text-align: center;" data-i18n="lblOrLink">— VEYA LINK —</div><input id="ytUrl" data-i18n-ph="linkUrlHolder" placeholder="Site / Ders Linki..."><input id="ytTitle" data-i18n-ph="linkTitleHolder" placeholder="Başlık"><label style="font-size: 10px; color: var(--dm);" data-i18n="lblTarget">HEDEF:</label><select id="pSel" style="outline:none;"></select><button class="btn btn-p" style="background:var(--teal); color:var(--bg);" onclick="addAnyLink()" data-i18n="btnAddLink">Link Ekle</button><button class="btn btn-s" onclick="closeMo('sMo')" data-i18n="btnClose">Kapat</button></div></div>
-<div class="ov hid" id="editMo"><div class="mo"><h3 data-i18n="moEditTitle">Düzenle</h3><input id="editTitle"><label style="font-size: 10px;" data-i18n="lblMove">TAŞI:</label><select id="editListSel"></select><button class="btn btn-p" onclick="saveEdit()" data-i18n="btnSave">Kaydet</button><button class="btn" style="color:var(--pk);" onclick="confirmDelete()" data-i18n="btnDelete">Sil ✕</button><button class="btn btn-s" onclick="closeMo('editMo')" data-i18n="btnClose">Kapat</button></div></div>
+<div class="ov hid" id="plEditMo"><div class="mo"><h3 data-i18n="edit_list_title">Düzenle</h3><input id="plEditIn"><button class="btn btn-p" onclick="savePlEdit()" data-i18n="save_btn">Kaydet</button><button class="btn" style="background:var(--s3); color:var(--pk)" onclick="deletePl()" data-i18n="delete_btn">Listeyi Sil ✕</button><button class="btn btn-s" onclick="closeMo('plEditMo')" data-i18n="cancel_btn">İptal</button></div></div>
+<div class="ov hid" id="plMo"><div class="mo"><h3 data-i18n="new_list_title">Yeni Liste</h3><input id="plIn" placeholder="Adı..." data-i18n="new_list_title"><button class="btn btn-p" onclick="makePl()">Tamam</button><button class="btn btn-s" onclick="closeMo('plMo')" data-i18n="cancel_btn">Vazgeç</button></div></div>
+<div class="ov hid" id="sMo"><div class="mo"><h3 data-i18n="add_content_btn">İçerik Ekle</h3><button class="btn btn-p" onclick="document.getElementById('fIn').click()" data-i18n="add_file_btn">Cihazdan Dosya Seç</button><div style="margin: 10px 0; font-size: 11px; text-align: center; color:var(--dm);" data-i18n="or_link">— VEYA LINK —</div><input id="ytUrl" placeholder="Site / Ders Linki..." data-i18n="ph_url"><input id="ytTitle" placeholder="Başlık" data-i18n="ph_title"><div style="margin-bottom:10px;"><button class="btn btn-s" style="background:transparent; border:1px solid var(--bs); color:var(--tx);" onclick="document.getElementById('addThumbIn').click()" data-i18n="add_thumb">🖼 Görsel Ekle (İsteğe Bağlı)</button><input type="file" id="addThumbIn" accept="image/*" style="display:none" onchange="handleThumbSel(event, 'add')"><div id="addThumbStatus" style="font-size:11px; color:var(--pk); text-align:center; margin-top:5px; display:none;" data-i18n="thumb_ok">Görsel Seçildi ✓</div></div><label style="font-size: 10px; color: var(--dm);" data-i18n="target_list">HEDEF LİSTE:</label><select id="pSel"></select><button class="btn btn-p" style="background:var(--teal); color:#000;" onclick="addAnyLink()" data-i18n="add_link_btn">Link Ekle</button><button class="btn btn-s" onclick="closeMo('sMo')" data-i18n="close_btn">Kapat</button></div></div>
 
-<div class="ov hid" id="sleepMo">
-  <div class="mo">
-    <h3 data-i18n="moSleep">Uyku Zamanlayıcısı</h3>
-    <button class="btn btn-s" onclick="setSleep(15)" data-i18n="min15">15 Dakika</button>
-    <button class="btn btn-s" onclick="setSleep(30)" data-i18n="min30">30 Dakika</button>
-    <button class="btn btn-s" onclick="setSleep(60)" data-i18n="hour1">1 Saat</button>
-    <button class="btn btn-s" onclick="setSleep(120)" data-i18n="hour2">2 Saat</button>
-    <button class="btn btn-p" style="margin-top:10px;" onclick="setSleep(0)" data-i18n="cancelTimer">Zamanlayıcıyı İptal Et</button>
-    <button class="btn btn-s" style="background: transparent; color: var(--mu);" onclick="closeMo('sleepMo')" data-i18n="btnClose">Kapat</button>
-  </div>
-</div>
+<div class="ov hid" id="editMo"><div class="mo"><h3 data-i18n="edit_list_title">Düzenle</h3><input id="editTitle"><div style="display:flex; gap:5px; margin-bottom:10px;"><button class="btn btn-s" style="background:transparent; border:1px solid var(--bs); flex:1; color:var(--tx);" onclick="document.getElementById('editThumbIn').click()" data-i18n="edit_thumb">🖼 Görseli Değiştir</button><button class="btn btn-s" style="background:transparent; border:1px solid var(--br); color:var(--pk); width:auto; padding: 0 10px;" onclick="removeEditThumb()" data-i18n-title="remove_thumb_btn" title="Görseli Kaldır">🗑</button></div><input type="file" id="editThumbIn" accept="image/*" style="display:none" onchange="handleThumbSel(event, 'edit')"><div id="editThumbStatus" style="font-size:11px; color:var(--pk); text-align:center; margin-bottom:10px; display:none;" data-i18n="thumb_ok">Görsel Seçildi ✓</div><label style="font-size: 10px;" data-i18n="target_list">TAŞI / HEDEF:</label><select id="editListSel"></select><button class="btn btn-p" onclick="saveEdit()" data-i18n="save_btn">Kaydet</button><button class="btn" style="background:var(--s3); color:var(--pk);" onclick="confirmDelete()" data-i18n="delete_btn">Sil ✕</button><button class="btn btn-s" onclick="closeMo('editMo')" data-i18n="close_btn">Kapat</button></div></div>
+
+<div class="ov hid" id="editMo"><div class="mo"><h3 data-i18n="edit_list_title">Düzenle</h3><input id="editTitle"><div style="display:flex; gap:5px; margin-bottom:10px;"><button class="btn btn-s" style="background:transparent; border:1px solid var(--bs); flex:1;" onclick="document.getElementById('editThumbIn').click()" data-i18n="edit_thumb">🖼 Görseli Değiştir</button><button class="btn btn-s" style="background:transparent; border:1px solid var(--br); color:var(--pk); width:auto; padding: 0 10px;" onclick="removeEditThumb()" data-i18n-title="remove_thumb_btn" title="Görseli Kaldır">🗑</button></div><input type="file" id="editThumbIn" accept="image/*" style="display:none" onchange="handleThumbSel(event, 'edit')"><div id="editThumbStatus" style="font-size:11px; color:var(--pk); text-align:center; margin-bottom:10px; display:none;" data-i18n="thumb_ok">Görsel Seçildi ✓</div><label style="font-size: 10px;" data-i18n="target_list">TAŞI / HEDEF:</label><select id="editListSel"></select><button class="btn btn-p" onclick="saveEdit()" data-i18n="save_btn">Kaydet</button><button class="btn" style="color:var(--pk);" onclick="confirmDelete()" data-i18n="delete_btn">Sil ✕</button><button class="btn btn-s" onclick="closeMo('editMo')" data-i18n="close_btn">Kapat</button></div></div>
+<div class="ov hid" id="sleepMo"><div class="mo"><h3 data-i18n="sleep_title">Uyku Zamanlayıcısı</h3><button class="btn btn-s" onclick="setSleep(15)" data-i18n="sleep_15">15 Dakika</button><button class="btn btn-s" onclick="setSleep(30)" data-i18n="sleep_30">30 Dakika</button><button class="btn btn-s" onclick="setSleep(60)" data-i18n="sleep_60">1 Saat</button><button class="btn btn-p" style="margin-top:10px;" onclick="setSleep(0)" data-i18n="sleep_cancel">İptal Et</button><button class="btn btn-s" style="background:transparent; border:1px solid var(--bs);" onclick="closeMo('sleepMo')" data-i18n="close_btn">Kapat</button></div></div>
 
 <div class="ov hid" id="settingsMo">
   <div class="mo">
-    <h3 data-i18n="moSettings">Ayarlar</h3>
-    <label style="font-size: 10px; color: var(--dm);" data-i18n="lblLang">Dil / Language:</label>
-    <select id="langSel" style="outline:none;">
-        <option value="tr">Türkçe</option>
-        <option value="en">English</option>
-        <option value="ja">日本語 (Japanese)</option>
-        <option value="es">Español (Spanish)</option>
-        <option value="fr">Français (French)</option>
-        <option value="de">Deutsch (German)</option>
-        <option value="zh">中文 (Chinese)</option>
-        <option value="ru">Русский (Russian)</option>
-        <option value="pt">Português (Portuguese)</option>
-        <option value="ar">العربية (Arabic)</option>
+    <h3 data-i18n="set_title">Ayarlar</h3>
+    
+    <label style="font-size: 12px; color: var(--tx); font-weight:700; margin-top:5px; display:block;" data-i18n="set_lang_lbl">Dil / Language:</label>
+    <select id="langSel" onchange="setLanguage(this.value)" style="margin-top: 5px; font-weight:600;">
+        <option value="tr">Türkçe</option><option value="en">English</option><option value="ja">日本語</option><option value="ko">한국어</option>
+        <option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="ru">Русский</option>
     </select>
-    <button class="btn btn-s" style="background:transparent; border:1px solid var(--bs); color:var(--tx); margin-top:15px;" onclick="previewTheme()" data-i18n="btnThemeCycle">🎨 Temayı Değiştir</button>
-    <button class="btn btn-p" style="margin-top:15px;" onclick="saveSettings()" data-i18n="btnSave">Kaydet</button>
-    <button class="btn btn-s" style="background: transparent; color: var(--mu);" onclick="cancelSettings()" data-i18n="btnCancel">İptal</button>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px; margin-bottom:10px;">
+        <label style="font-size: 12px; color: var(--tx); font-weight:700;" data-i18n="set_eq_lbl">Ses Dengeleyici:</label>
+        <button id="compBtn" class="btn-s" style="padding:8px 16px; border-radius:12px; border:1px solid var(--bs); background:var(--s2); color:var(--tx); cursor:pointer; font-size:12px; transition:0.2s;" onclick="toggleCompressorMode()">Standart (Kapalı)</button>
+    </div>
+    <div class="info-box" style="margin-top:0;" data-i18n="set_comp_desc">
+        <strong>Kompresör Nedir?</strong> Düşük sesleri otomatik yükseltir, aniden patlayan yüksek sesleri bastırarak tüm medyayı eşit ve rahat bir seviyede duymanı sağlar.
+    </div>
+
+    <label style="font-size: 12px; color: var(--tx); font-weight:700; margin-top:10px; display:block;" data-i18n="set_theme_lbl">Genel Görünüm Modu:</label>
+    <div style="display:flex; gap:10px; margin-top:5px; margin-bottom:15px;">
+        <button class="btn btn-s" id="btnDayMode" style="background:#e2e8f0; color:#1a202c;" onclick="setLightMode(true)" data-i18n="set_day">☀️ Gündüz</button>
+        <button class="btn btn-s" id="btnNightMode" style="background:#101828; color:#80c1ff; border:1px solid #182436;" onclick="setLightMode(false)" data-i18n="set_night">🌙 Gece</button>
+    </div>
+    <button class="btn btn-s" style="background:transparent; border:1px solid var(--pk); color:var(--tx);" onclick="previewTheme()" data-i18n="set_color">🎨 Renk Temasını Değiştir</button>
+
+    <div style="display:flex; gap:10px; margin-top:20px; border-top: 1px solid var(--bs); padding-top:15px;">
+        <button class="btn btn-s" onclick="openExportMo()" data-i18n="set_export">⬇️ Listeleri İndir</button>
+        <button class="btn btn-s" onclick="document.getElementById('importFile').click()" data-i18n="set_import">⬆️ İçe Aktar</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    </div>
+    <p style="font-size:10px; color:var(--mu); margin-top:5px; text-align:center;" data-i18n="local_warn">Yerel dosyalar güvenlik gereği dışa aktarılamaz, sadece isimler ve linkler yedeklenir.</p>
+
+    <button class="btn btn-p" style="margin-top:20px; color:#000;" onclick="closeMo('settingsMo')" data-i18n="close_btn">Kapat</button>
+  </div>
+</div>
+
+<div class="ov hid" id="exportMo">
+  <div class="mo">
+    <h3 data-i18n="export_mo_title">Dışa Aktarılacak Listeler</h3>
+    <p style="font-size:11px; color:var(--mu); margin-bottom:15px; line-height: 1.4;" data-i18n="export_mo_desc">Sadece içinde link veya YouTube videosu olan listeler aşağıda görünür. İstemediğin listelerin işaretini kaldırabilirsin.</p>
+    
+    <div id="exportCheckboxes" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px; text-align: left; background: var(--bg); padding: 10px; border-radius: 8px; border: 1px solid var(--bs);">
+        </div>
+    
+    <button class="btn btn-p" onclick="executeExport()" data-i18n="export_mo_btn">Seçilenleri İndir</button>
+    <button class="btn btn-s" onclick="closeMo('exportMo')" data-i18n="cancel_btn">İptal</button>
   </div>
 </div>
 
 <script>
-// --- I18N SÖZLÜĞÜ (DİL DESTEĞİ) ---
-const i18n = {
-  tr: {
-    loginUser: "Kullanıcı", loginPass: "Şifre", loginBtn: "Giriş Yap", btnVid: "🎬 Video", btnSleep: "⏳ Uyku", btnSettings: "⚙ Ayarlar", lblLists: "LİSTELER", btnAdd: "+ Ekle", lblEmpty: "Boş.", moEditTitle: "Düzenle", btnSave: "Kaydet", btnDeleteList: "Listeyi Sil ✕", btnCancel: "İptal", moNewList: "Yeni Liste", plNameHolder: "Adı...", btnOk: "Tamam", btnCancelList: "Vazgeç", moAddContent: "İçerik Ekle", btnLocalFile: "Cihazdan Dosya Seç", lblOrLink: "— VEYA LINK —", linkUrlHolder: "Site / Ders Linki...", linkTitleHolder: "Başlık", lblTarget: "HEDEF:", btnAddLink: "Link Ekle", btnClose: "Kapat", lblMove: "TAŞI:", btnDelete: "Sil ✕", moSleep: "Uyku Zamanlayıcısı", min15: "15 Dakika", min30: "30 Dakika", hour1: "1 Saat", hour2: "2 Saat", cancelTimer: "Zamanlayıcıyı İptal Et", themeToast: "🎨 Tema: ", selNotSelected: "Seçilmedi", watchNot: "İzlemedim", watchStay: "Burada kaldım", watchDone: "İzledim", ytWatch: "⚠️ YouTube'da İzle", moSettings: "Ayarlar", lblLang: "Dil / Language:", btnThemeCycle: "🎨 Temayı Değiştir", shufBtn: "Rastgele Çal", repBtn: "Aynı Şarkıyı Tekrarla"
-  },
-  en: {
-    loginUser: "Username", loginPass: "Password", loginBtn: "Login", btnVid: "🎬 Video", btnSleep: "⏳ Sleep", btnSettings: "⚙ Settings", lblLists: "PLAYLISTS", btnAdd: "+ Add", lblEmpty: "Empty.", moEditTitle: "Edit", btnSave: "Save", btnDeleteList: "Delete List ✕", btnCancel: "Cancel", moNewList: "New List", plNameHolder: "Name...", btnOk: "OK", btnCancelList: "Cancel", moAddContent: "Add Content", btnLocalFile: "Choose Local File", lblOrLink: "— OR LINK —", linkUrlHolder: "Site / Lesson Link...", linkTitleHolder: "Title", lblTarget: "TARGET:", btnAddLink: "Add Link", btnClose: "Close", lblMove: "MOVE:", btnDelete: "Delete ✕", moSleep: "Sleep Timer", min15: "15 Minutes", min30: "30 Minutes", hour1: "1 Hour", hour2: "2 Hours", cancelTimer: "Cancel Timer", themeToast: "🎨 Theme: ", selNotSelected: "Not Selected", watchNot: "Not Watched", watchStay: "Left Here", watchDone: "Watched", ytWatch: "⚠️ Watch on YouTube", moSettings: "Settings", lblLang: "Language / Dil:", btnThemeCycle: "🎨 Change Theme", shufBtn: "Shuffle", repBtn: "Repeat"
-  },
-  ja: {
-    loginUser: "ユーザー名", loginPass: "パスワード", loginBtn: "ログイン", btnVid: "🎬 ビデオ", btnSleep: "⏳ スリープ", btnSettings: "⚙ 設定", lblLists: "プレイリスト", btnAdd: "+ 追加", lblEmpty: "空です。", moEditTitle: "編集", btnSave: "保存", btnDeleteList: "リストを削除 ✕", btnCancel: "キャンセル", moNewList: "新しいリスト", plNameHolder: "名前...", btnOk: "OK", btnCancelList: "キャンセル", moAddContent: "コンテンツを追加", btnLocalFile: "デバイスからファイルを選択", lblOrLink: "— またはリンク —", linkUrlHolder: "サイト/レッスンのリンク...", linkTitleHolder: "タイトル", lblTarget: "対象:", btnAddLink: "リンクを追加", btnClose: "閉じる", lblMove: "移動:", btnDelete: "削除 ✕", moSleep: "スリープタイマー", min15: "15分", min30: "30分", hour1: "1時間", hour2: "2時間", cancelTimer: "タイマーをキャンセル", themeToast: "🎨 テーマ: ", selNotSelected: "未選択", watchNot: "未視聴", watchStay: "ここで停止", watchDone: "視聴済み", ytWatch: "⚠️ YouTubeで見る", moSettings: "設定", lblLang: "言語 / Language:", btnThemeCycle: "🎨 テーマを変更", shufBtn: "シャッフル", repBtn: "リピート"
-  },
-  es: {
-    loginUser: "Usuario", loginPass: "Contraseña", loginBtn: "Iniciar sesión", btnVid: "🎬 Video", btnSleep: "⏳ Dormir", btnSettings: "⚙ Ajustes", lblLists: "LISTAS", btnAdd: "+ Añadir", lblEmpty: "Vacío.", moEditTitle: "Editar", btnSave: "Guardar", btnDeleteList: "Borrar Lista ✕", btnCancel: "Cancelar", moNewList: "Nueva Lista", plNameHolder: "Nombre...", btnOk: "Aceptar", btnCancelList: "Cancelar", moAddContent: "Añadir Contenido", btnLocalFile: "Elegir Archivo Local", lblOrLink: "— O ENLACE —", linkUrlHolder: "Enlace del sitio/clase...", linkTitleHolder: "Título", lblTarget: "DESTINO:", btnAddLink: "Añadir Enlace", btnClose: "Cerrar", lblMove: "MOVER:", btnDelete: "Borrar ✕", moSleep: "Temporizador de sueño", min15: "15 Minutos", min30: "30 Minutos", hour1: "1 Hora", hour2: "2 Horas", cancelTimer: "Cancelar Temporizador", themeToast: "🎨 Tema: ", selNotSelected: "No Seleccionado", watchNot: "No Visto", watchStay: "Me quedé aquí", watchDone: "Visto", ytWatch: "⚠️ Ver en YouTube", moSettings: "Ajustes", lblLang: "Idioma / Language:", btnThemeCycle: "🎨 Cambiar Tema", shufBtn: "Aleatorio", repBtn: "Repetir"
-  },
-  fr: {
-    loginUser: "Utilisateur", loginPass: "Mot de passe", loginBtn: "Connexion", btnVid: "🎬 Vidéo", btnSleep: "⏳ Veille", btnSettings: "⚙ Paramètres", lblLists: "LISTES", btnAdd: "+ Ajouter", lblEmpty: "Vide.", moEditTitle: "Éditer", btnSave: "Enregistrer", btnDeleteList: "Supprimer Liste ✕", btnCancel: "Annuler", moNewList: "Nouvelle Liste", plNameHolder: "Nom...", btnOk: "OK", btnCancelList: "Annuler", moAddContent: "Ajouter du contenu", btnLocalFile: "Choisir un fichier", lblOrLink: "— OU LIEN —", linkUrlHolder: "Lien du site/leçon...", linkTitleHolder: "Titre", lblTarget: "CIBLE:", btnAddLink: "Ajouter Lien", btnClose: "Fermer", lblMove: "DÉPLACER:", btnDelete: "Supprimer ✕", moSleep: "Minuterie de veille", min15: "15 Minutes", min30: "30 Minutes", hour1: "1 Heure", hour2: "2 Heures", cancelTimer: "Annuler la Minuterie", themeToast: "🎨 Thème: ", selNotSelected: "Non sélectionné", watchNot: "Non regardé", watchStay: "Arrêté ici", watchDone: "Regardé", ytWatch: "⚠️ Regarder sur YouTube", moSettings: "Paramètres", lblLang: "Langue / Language:", btnThemeCycle: "🎨 Changer de Thème", shufBtn: "Aléatoire", repBtn: "Répéter"
-  },
-  de: {
-    loginUser: "Benutzer", loginPass: "Passwort", loginBtn: "Anmelden", btnVid: "🎬 Video", btnSleep: "⏳ Schlaf", btnSettings: "⚙ Einstellungen", lblLists: "LISTEN", btnAdd: "+ Hinzufügen", lblEmpty: "Leer.", moEditTitle: "Bearbeiten", btnSave: "Speichern", btnDeleteList: "Liste löschen ✕", btnCancel: "Abbrechen", moNewList: "Neue Liste", plNameHolder: "Name...", btnOk: "OK", btnCancelList: "Abbrechen", moAddContent: "Inhalt hinzufügen", btnLocalFile: "Lokale Datei wählen", lblOrLink: "— ODER LINK —", linkUrlHolder: "Link zur Seite/Lektion...", linkTitleHolder: "Titel", lblTarget: "ZIEL:", btnAddLink: "Link hinzufügen", btnClose: "Schließen", lblMove: "VERSCHIEBEN:", btnDelete: "Löschen ✕", moSleep: "Schlaf-Timer", min15: "15 Minuten", min30: "30 Minuten", hour1: "1 Stunde", hour2: "2 Stunden", cancelTimer: "Timer abbrechen", themeToast: "🎨 Thema: ", selNotSelected: "Nicht ausgewählt", watchNot: "Nicht angesehen", watchStay: "Hier geblieben", watchDone: "Angesehen", ytWatch: "⚠️ Auf YouTube ansehen", moSettings: "Einstellungen", lblLang: "Sprache / Language:", btnThemeCycle: "🎨 Thema ändern", shufBtn: "Zufällig", repBtn: "Wiederholen"
-  },
-  zh: {
-    loginUser: "用户名", loginPass: "密码", loginBtn: "登录", btnVid: "🎬 视频", btnSleep: "⏳ 睡眠", btnSettings: "⚙ 设置", lblLists: "播放列表", btnAdd: "+ 添加", lblEmpty: "空的。", moEditTitle: "编辑", btnSave: "保存", btnDeleteList: "删除列表 ✕", btnCancel: "取消", moNewList: "新列表", plNameHolder: "名称...", btnOk: "确定", btnCancelList: "取消", moAddContent: "添加内容", btnLocalFile: "选择本地文件", lblOrLink: "— 或链接 —", linkUrlHolder: "网站/课程链接...", linkTitleHolder: "标题", lblTarget: "目标:", btnAddLink: "添加链接", btnClose: "关闭", lblMove: "移动:", btnDelete: "删除 ✕", moSleep: "睡眠定时器", min15: "15 分钟", min30: "30 分钟", hour1: "1 小时", hour2: "2 小时", cancelTimer: "取消定时器", themeToast: "🎨 主题: ", selNotSelected: "未选择", watchNot: "未观看", watchStay: "停留在此", watchDone: "已观看", ytWatch: "⚠️ 在 YouTube 上观看", moSettings: "设置", lblLang: "语言 / Language:", btnThemeCycle: "🎨 更改主题", shufBtn: "随机播放", repBtn: "循环播放"
-  },
-  ru: {
-    loginUser: "Пользователь", loginPass: "Пароль", loginBtn: "Войти", btnVid: "🎬 Видео", btnSleep: "⏳ Сон", btnSettings: "⚙ Настройки", lblLists: "ПЛЕЙЛИСТЫ", btnAdd: "+ Добавить", lblEmpty: "Пусто.", moEditTitle: "Изменить", btnSave: "Сохранить", btnDeleteList: "Удалить список ✕", btnCancel: "Отмена", moNewList: "Новый список", plNameHolder: "Имя...", btnOk: "ОК", btnCancelList: "Отмена", moAddContent: "Добавить контент", btnLocalFile: "Выбрать файл", lblOrLink: "— ИЛИ ССЫЛКА —", linkUrlHolder: "Ссылка на сайт/урок...", linkTitleHolder: "Заголовок", lblTarget: "ЦЕЛЬ:", btnAddLink: "Добавить ссылку", btnClose: "Закрыть", lblMove: "ПЕРЕМЕСТИТЬ:", btnDelete: "Удалить ✕", moSleep: "Таймер сна", min15: "15 Минут", min30: "30 Минут", hour1: "1 Час", hour2: "2 Часа", cancelTimer: "Отменить таймер", themeToast: "🎨 Тема: ", selNotSelected: "Не выбрано", watchNot: "Не смотрел", watchStay: "Остановился здесь", watchDone: "Просмотрено", ytWatch: "⚠️ Смотреть на YouTube", moSettings: "Настройки", lblLang: "Язык / Language:", btnThemeCycle: "🎨 Изменить тему", shufBtn: "Перемешать", repBtn: "Повторить"
-  },
-  pt: {
-    loginUser: "Usuário", loginPass: "Senha", loginBtn: "Entrar", btnVid: "🎬 Vídeo", btnSleep: "⏳ Dormir", btnSettings: "⚙ Configurações", lblLists: "LISTAS", btnAdd: "+ Adicionar", lblEmpty: "Vazio.", moEditTitle: "Editar", btnSave: "Salvar", btnDeleteList: "Excluir Lista ✕", btnCancel: "Cancelar", moNewList: "Nova Lista", plNameHolder: "Nome...", btnOk: "OK", btnCancelList: "Cancelar", moAddContent: "Adicionar Conteúdo", btnLocalFile: "Escolher Arquivo", lblOrLink: "— OU LINK —", linkUrlHolder: "Link do site/aula...", linkTitleHolder: "Título", lblTarget: "DESTINO:", btnAddLink: "Adicionar Link", btnClose: "Fechar", lblMove: "MOVER:", btnDelete: "Excluir ✕", moSleep: "Temporizador de sono", min15: "15 Minutos", min30: "30 Minutos", hour1: "1 Hora", hour2: "2 Horas", cancelTimer: "Cancelar Temporizador", themeToast: "🎨 Tema: ", selNotSelected: "Não Selecionado", watchNot: "Não Visto", watchStay: "Parei aqui", watchDone: "Visto", ytWatch: "⚠️ Assistir no YouTube", moSettings: "Configurações", lblLang: "Idioma / Language:", btnThemeCycle: "🎨 Mudar Tema", shufBtn: "Aleatório", repBtn: "Repetir"
-  },
-  ar: {
-    loginUser: "المستخدم", loginPass: "كلمة المرور", loginBtn: "تسجيل الدخول", btnVid: "🎬 فيديو", btnSleep: "⏳ نوم", btnSettings: "⚙ إعدادات", lblLists: "القوائم", btnAdd: "+ إضافة", lblEmpty: "فارغ.", moEditTitle: "تعديل", btnSave: "حفظ", btnDeleteList: "حذف القائمة ✕", btnCancel: "إلغاء", moNewList: "قائمة جديدة", plNameHolder: "الاسم...", btnOk: "موافق", btnCancelList: "إلغاء", moAddContent: "إضافة محتوى", btnLocalFile: "اختر ملف محلي", lblOrLink: "— أو رابط —", linkUrlHolder: "رابط الموقع/الدرس...", linkTitleHolder: "العنوان", lblTarget: "الهدف:", btnAddLink: "إضافة رابط", btnClose: "إغلاق", lblMove: "نقل:", btnDelete: "حذف ✕", moSleep: "مؤقت النوم", min15: "15 دقيقة", min30: "30 دقيقة", hour1: "1 ساعة", hour2: "2 ساعة", cancelTimer: "إلغاء المؤقت", themeToast: "🎨 السمة: ", selNotSelected: "لم يتم التحديد", watchNot: "لم يشاهد", watchStay: "توقفت هنا", watchDone: "تمت المشاهدة", ytWatch: "⚠️ شاهد على يوتيوب", moSettings: "إعدادات", lblLang: "اللغة / Language:", btnThemeCycle: "🎨 تغيير السمة", shufBtn: "تبديل", repBtn: "تكرار"
-  }
+// ÇEVİRİ ALTYAPISI (İÇERİK VE İPUÇLARI / TOOLTIPS DAHİL)
+const dict = {
+    'tr': { export_mo_title:'Dışa Aktarılacak Listeler', export_mo_desc:'Sadece içinde link veya YouTube videosu olan listeler aşağıda görünür. İstemediğin listelerin işaretini kaldırabilirsin.', export_mo_empty:'Dışa aktarılacak link/video barındıran liste yok. Cihazındaki yerel dosyalar aktarılamaz.', export_mo_btn:'Seçilenleri İndir', export_mo_alert:'Lütfen en az bir liste seçin.', add_thumb: '🖼 Görsel Ekle (İsteğe Bağlı)', edit_thumb: '🖼 Görseli Değiştir', thumb_ok: 'Görsel Seçildi ✓', thumb_rem: 'Kaldırılacak 🗑', remove_thumb_btn: 'Görseli Kaldır', ph_url: 'Site / Ders Linki...', ph_title: 'Başlık', tip_eq: 'Ses Modunu (EQ) Değiştir', tip_vid: 'Video Ekranını Aç/Kapat', tip_sleep: 'Uyku Zamanlayıcısı Kur', tip_set: 'Ayarlar ve Temalar', tip_add_list: 'Yeni Liste Oluştur', tip_add_c: 'Cihazdan dosya veya link ekle', tip_cc: 'Altyazı Menüsü', tip_fs: 'Tam Ekran Ayarı', tip_start: 'Başa Al', tip_m5: '5 Saniye Geri', tip_pp: 'Oynat / Duraklat', tip_p5: '5 Saniye İleri', tip_next: 'Sonraki Şarkı/Video', tip_vol: 'Ses Ayarı', tip_prev: 'Önceki Şarkı', tip_shuf: 'Listeyi Karışık Çal', tip_rep: 'Sürekli Tekrarla', eq_btn:'🎵 EQ Modu', video_btn:'📺 Video', sleep_btn:'🌙 Uyku', settings_btn:'⚙️ Ayarlar', lists_lbl:'LİSTELER', add_content_btn:'+ İçerik Ekle', cc_btn:'💬 CC', fs_btn:'Tam Ekran', fs_btn_exit:'Küçült', sub_sel_btn:'📥 Altyazı Seç (.srt/.vtt)', sub_off_btn:'❌ Altyazıyı Kapat', yt_ext_btn:'⚠️ YouTube\'da İzle', not_selected:'Seçilmedi', set_title:'Ayarlar', set_lang_lbl:'Dil / Language:', set_eq_lbl:'Ses Dengeleyici:', set_comp_off:'Standart (Kapalı)', set_comp_on:'Kompresör (Açık)', set_comp_desc:'<strong>Kompresör Nedir?</strong> Düşük sesleri otomatik yükseltir, aniden patlayan yüksek sesleri bastırarak tüm medyayı eşit ve rahat bir seviyede duymanı sağlar.', set_theme_lbl:'Genel Görünüm Modu:', set_day:'☀️ Gündüz', set_night:'🌙 Gece', set_color:'🎨 Renk Temasını Değiştir', set_export:'⬇️ Listeleri İndir', set_import:'⬆️ İçe Aktar', close_btn:'Kapat', cancel_btn:'Vazgeç', save_btn:'Kaydet', delete_btn:'Sil ✕', new_list_title:'Yeni Liste', edit_list_title:'Düzenle', add_file_btn:'Cihazdan Dosya Seç', or_link:'— VEYA LINK —', target_list:'HEDEF LİSTE:', add_link_btn:'Link Ekle', sleep_title:'Uyku Zamanlayıcısı', sleep_15:'15 Dakika', sleep_30:'30 Dakika', sleep_60:'1 Saat', sleep_cancel:'İptal Et', sure:'Emin misin?', del_sure:'Silmek istediğine emin misin?', empty_list:'Boş Liste', loading:'Yükleniyor...', file_err:'Hatalı dosya!', file_ok:'Dışa aktarılan liste yüklendi!', toast_theme:'Tema:', toast_day:'☀️ Gündüz Modu Açıldı', toast_night:'🌙 Gece Modu Açıldı', toast_comp_on:'Kompresör Açık', toast_comp_off:'Kompresör Kapalı', toast_sub:'Altyazı Yüklendi', local_warn:'Yerel dosyalar güvenlik gereği dışa aktarılamaz, sadece isimler ve linkler yedeklenir.' },
+    'en': { export_mo_title:'Lists to Export', export_mo_desc:'Only lists with links or YouTube videos are shown below. You can uncheck the ones you do not want.', export_mo_empty:'No lists with links/videos to export. Local files on your device cannot be exported.', export_mo_btn:'Download Selected', export_mo_alert:'Please select at least one list.', add_thumb: '🖼 Add Image', edit_thumb: '🖼 Change Image', thumb_ok: 'Image Selected ✓', thumb_rem: 'Will be removed 🗑', remove_thumb_btn: 'Remove Image', ph_url: 'Site / Lesson Link...', ph_title: 'Title', tip_eq: 'Change EQ Mode', tip_vid: 'Toggle Video Screen', tip_sleep: 'Set Sleep Timer', tip_set: 'Settings & Themes', tip_add_list: 'Create New List', tip_add_c: 'Add file or link', tip_cc: 'Subtitle Menu', tip_fs: 'Fullscreen Settings', tip_start: 'Restart', tip_m5: 'Rewind 5s', tip_pp: 'Play / Pause', tip_p5: 'Forward 5s', tip_next: 'Next Track/Video', tip_vol: 'Volume Control', tip_prev: 'Previous Track', tip_shuf: 'Shuffle List', tip_rep: 'Repeat', eq_btn:'🎵 EQ Mode', video_btn:'📺 Video', sleep_btn:'🌙 Sleep', settings_btn:'⚙️ Settings', lists_lbl:'LISTS', add_content_btn:'+ Add Content', cc_btn:'💬 CC', fs_btn:'Fullscreen', fs_btn_exit:'Exit FS', sub_sel_btn:'📥 Select Sub (.srt/.vtt)', sub_off_btn:'❌ Subs Off', yt_ext_btn:'⚠️ Watch on YouTube', not_selected:'Not Selected', set_title:'Settings', set_lang_lbl:'Language:', set_eq_lbl:'Audio Equalizer:', set_comp_off:'Standard (Off)', set_comp_on:'Compressor (On)', set_comp_desc:'<strong>What is Compressor?</strong> Automatically boosts low sounds and suppresses sudden loud noises for comfortable listening.', set_theme_lbl:'Appearance:', set_day:'☀️ Day', set_night:'🌙 Night', set_color:'🎨 Change Theme', set_export:'⬇️ Export Lists', set_import:'⬆️ Import', close_btn:'Close', cancel_btn:'Cancel', save_btn:'Save', delete_btn:'Delete ✕', new_list_title:'New List', edit_list_title:'Edit', add_file_btn:'Select Local File', or_link:'— OR LINK —', target_list:'TARGET LIST:', add_link_btn:'Add Link', sleep_title:'Sleep Timer', sleep_15:'15 Mins', sleep_30:'30 Mins', sleep_60:'1 Hour', sleep_cancel:'Cancel Timer', sure:'Are you sure?', del_sure:'Are you sure you want to delete?', empty_list:'Empty List', loading:'Loading...', file_err:'Invalid file!', file_ok:'Exported list loaded!', toast_theme:'Theme:', toast_day:'☀️ Day Mode On', toast_night:'🌙 Night Mode On', toast_comp_on:'Compressor On', toast_comp_off:'Compressor Off', toast_sub:'Subtitle Loaded', local_warn:'Local files cannot be exported due to security, only names and links are backed up.' },
+    'ja': { export_mo_title:'エクスポートするリスト', export_mo_desc:'リンクまたはYouTube動画を含むリストのみが表示されます。不要なリストのチェックを外すことができます。', export_mo_empty:'エクスポートするリンク/動画を含むリストはありません。ローカルファイルはエクスポートできません。', export_mo_btn:'選択項目をダウンロード', export_mo_alert:'少なくとも1つのリストを選択してください。', add_thumb: '🖼 画像追加', edit_thumb: '🖼 画像変更', thumb_ok: '画像選択済 ✓', thumb_rem: '削除されます 🗑', remove_thumb_btn: '画像を削除', ph_url: 'サイト/レッスンのリンク...', ph_title: 'タイトル', tip_eq: 'EQモード変更', tip_vid: 'ビデオ画面切替', tip_sleep: 'スリープタイマー設定', tip_set: '設定とテーマ', tip_add_list: '新規リスト作成', tip_add_c: 'ファイル・リンク追加', tip_cc: '字幕メニュー', tip_fs: '全画面設定', tip_start: '最初から', tip_m5: '5秒戻る', tip_pp: '再生/一時停止', tip_p5: '5秒進む', tip_next: '次の曲/動画', tip_vol: '音量調節', tip_prev: '前の曲', tip_shuf: 'シャッフル再生', tip_rep: 'リピート再生', eq_btn:'🎵 EQモード', video_btn:'📺 ビデオ', sleep_btn:'🌙 スリープ', settings_btn:'⚙️ 設定', lists_lbl:'リスト', add_content_btn:'+ 追加', cc_btn:'💬 字幕', fs_btn:'全画面', fs_btn_exit:'縮小', sub_sel_btn:'📥 字幕選択 (.srt/.vtt)', sub_off_btn:'❌ 字幕オフ', yt_ext_btn:'⚠️ YouTubeで見る', not_selected:'未選択', set_title:'設定', set_lang_lbl:'言語 / Language:', set_eq_lbl:'イコライザー:', set_comp_off:'標準 (オフ)', set_comp_on:'コンプ (オン)', set_comp_desc:'<strong>コンプレッサーとは？</strong> 低音を自動的に上げ、突然の大音量を抑えて快適な音量に保ちます。', set_theme_lbl:'外観:', set_day:'☀️ ライト', set_night:'🌙 ダーク', set_color:'🎨 テーマ変更', set_export:'⬇️ エクスポート', set_import:'⬆️ インポート', close_btn:'閉じる', cancel_btn:'キャンセル', save_btn:'保存', delete_btn:'削除 ✕', new_list_title:'新規リスト', edit_list_title:'編集', add_file_btn:'ファイルを選択', or_link:'— またはリンク —', target_list:'追加先:', add_link_btn:'リンク追加', sleep_title:'スリープタイマー', sleep_15:'15分', sleep_30:'30分', sleep_60:'1時間', sleep_cancel:'キャンセル', sure:'本当によろしいですか？', del_sure:'本当に削除しますか？', empty_list:'空のリスト', loading:'読込中...', file_err:'無効なファイルです！', file_ok:'リストを読み込みました！', toast_theme:'テーマ:', toast_day:'☀️ ライトモードON', toast_night:'🌙 ダークモードON', toast_comp_on:'コンプON', toast_comp_off:'コンプOFF', toast_sub:'字幕ロード完了', local_warn:'ローカルファイルはセキュリティ上の理由でエクスポートされません。' },
+    'ko': { export_mo_title:'내보낼 리스트', export_mo_desc:'링크나 YouTube 비디오가 포함된 리스트만 아래에 표시됩니다. 원하지 않는 리스트는 선택 해제할 수 있습니다.', export_mo_empty:'내보낼 링크/비디오가 포함된 리스트가 없습니다. 로컬 파일은 내보낼 수 없습니다.', export_mo_btn:'선택 항목 다운로드', export_mo_alert:'최소 하나 이상의 리스트를 선택해주세요.', add_thumb: '🖼 이미지 추가', edit_thumb: '🖼 이미지 변경', thumb_ok: '이미지 선택됨 ✓', thumb_rem: '삭제됩니다 🗑', remove_thumb_btn: '이미지 제거', ph_url: '사이트/수업 링크...', ph_title: '제목', tip_eq: 'EQ 모드 변경', tip_vid: '비디오 화면 전환', tip_sleep: '수면 타이머 설정', tip_set: '설정 및 테마', tip_add_list: '새 리스트 만들기', tip_add_c: '파일/링크 추가', tip_cc: '자막 메뉴', tip_fs: '전체 화면 설정', tip_start: '처음부터', tip_m5: '5초 뒤로', tip_pp: '재생/일시정지', tip_p5: '5초 앞으로', tip_next: '다음 곡/비디오', tip_vol: '볼륨 조절', tip_prev: '이전 곡', tip_shuf: '셔플 재생', tip_rep: '반복 재생', eq_btn:'🎵 EQ 모드', video_btn:'📺 비디오', sleep_btn:'🌙 수면', settings_btn:'⚙️ 설정', lists_lbl:'리스트', add_content_btn:'+ 추가', cc_btn:'💬 자막', fs_btn:'전체 화면', fs_btn_exit:'축소', sub_sel_btn:'📥 자막 선택 (.srt/.vtt)', sub_off_btn:'❌ 자막 끄기', yt_ext_btn:'⚠️ YouTube에서 보기', not_selected:'선택 안 됨', set_title:'설정', set_lang_lbl:'언어 / Language:', set_eq_lbl:'이퀄라이저:', set_comp_off:'표준 (꺼짐)', set_comp_on:'컴프레서 (켜짐)', set_comp_desc:'<strong>컴프레서란?</strong> 낮은 소리를 자동으로 높이고 갑작스러운 큰 소리를 억제합니다.', set_theme_lbl:'테마:', set_day:'☀️ 라이트', set_night:'🌙 다크', set_color:'🎨 테마 변경', set_export:'⬇️ 내보내기', set_import:'⬆️ 가져오기', close_btn:'닫기', cancel_btn:'취소', save_btn:'저장', delete_btn:'삭제 ✕', new_list_title:'새 리스트', edit_list_title:'편집', add_file_btn:'파일 선택', or_link:'— 또는 링크 —', target_list:'대상 목록:', add_link_btn:'링크 추가', sleep_title:'수면 타이머', sleep_15:'15분', sleep_30:'30분', sleep_60:'1시간', sleep_cancel:'취소', sure:'확실합니까?', del_sure:'정말 삭제하시겠습니까?', empty_list:'빈 리스트', loading:'로딩 중...', file_err:'잘못된 파일!', file_ok:'목록을 불러왔습니다!', toast_theme:'테마:', toast_day:'☀️ 라이트 모드 켜짐', toast_night:'🌙 다크 모드 켜짐', toast_comp_on:'컴프레서 켜짐', toast_comp_off:'컴프레서 꺼짐', toast_sub:'자막 로드됨', local_warn:'로컬 파일은 보안상 내보낼 수 없습니다.' },
+    'de': { export_mo_title:'Listen zum Exportieren', export_mo_desc:'Nur Listen mit Links oder YouTube-Videos werden angezeigt. Sie können die Auswahl für unerwünschte Listen aufheben.', export_mo_empty:'Keine Listen mit Links/Videos zum Exportieren. Lokale Dateien können nicht exportiert werden.', export_mo_btn:'Ausgewählte herunterladen', export_mo_alert:'Bitte wählen Sie mindestens eine Liste aus.', add_thumb: '🖼 Bild hinzu', edit_thumb: '🖼 Bild ändern', thumb_ok: 'Bild ausgewählt ✓', thumb_rem: 'Wird entfernt 🗑', remove_thumb_btn: 'Bild entfernen', ph_url: 'Web-/Unterrichtslink...', ph_title: 'Titel', tip_eq: 'EQ ändern', tip_vid: 'Video umschalten', tip_sleep: 'Sleep-Timer', tip_set: 'Einstellungen & Themen', tip_add_list: 'Neue Liste', tip_add_c: 'Datei/Link hinzufügen', tip_cc: 'Untertitel', tip_fs: 'Vollbild', tip_start: 'Neustart', tip_m5: '5s zurück', tip_pp: 'Play/Pause', tip_p5: '5s vor', tip_next: 'Nächster Titel', tip_vol: 'Lautstärke', tip_prev: 'Vorheriger Titel', tip_shuf: 'Zufallswiedergabe', tip_rep: 'Wiederholen', eq_btn:'🎵 EQ-Modus', video_btn:'📺 Video', sleep_btn:'🌙 Schlaf', settings_btn:'⚙️ Einst.', lists_lbl:'LISTEN', add_content_btn:'+ Inhalt', cc_btn:'💬 CC', fs_btn:'Vollbild', fs_btn_exit:'Verkleinern', sub_sel_btn:'📥 Untertitel wählen', sub_off_btn:'❌ UT Aus', yt_ext_btn:'⚠️ Auf YouTube ansehen', not_selected:'Nichts gewählt', set_title:'Einstellungen', set_lang_lbl:'Sprache:', set_eq_lbl:'Equalizer:', set_comp_off:'Standard (Aus)', set_comp_on:'Kompressor (Ein)', set_comp_desc:'<strong>Was ist ein Kompressor?</strong> Erhöht automatisch leise Töne.', set_theme_lbl:'Design:', set_day:'☀️ Tag', set_night:'🌙 Nacht', set_color:'🎨 Thema ändern', set_export:'⬇️ Exportieren', set_import:'⬆️ Importieren', close_btn:'Schließen', cancel_btn:'Abbrechen', save_btn:'Speichern', delete_btn:'Löschen ✕', new_list_title:'Neue Liste', edit_list_title:'Bearbeiten', add_file_btn:'Datei wählen', or_link:'— ODER LINK —', target_list:'ZIEL:', add_link_btn:'Link hinzufügen', sleep_title:'Sleep Timer', sleep_15:'15 Min', sleep_30:'30 Min', sleep_60:'1 Std', sleep_cancel:'Abbrechen', sure:'Sicher?', del_sure:'Wirklich löschen?', empty_list:'Leere Liste', loading:'Lädt...', file_err:'Ungültige Datei!', file_ok:'Liste importiert.', toast_theme:'Thema:', toast_day:'☀️ Tag-Modus', toast_night:'🌙 Nacht-Modus', toast_comp_on:'Komp Ein', toast_comp_off:'Komp Aus', toast_sub:'Untertitel geladen', local_warn:'Lokale Dateien werden nicht exportiert.' },
+    'fr': { export_mo_title:'Listes à exporter', export_mo_desc:'Seules les listes contenant des liens ou des vidéos YouTube sont affichées. Vous pouvez décocher celles que vous ne voulez pas.', export_mo_empty:'Aucune liste avec des liens/vidéos à exporter. Les fichiers locaux ne peuvent pas être exportés.', export_mo_btn:'Télécharger la sélection', export_mo_alert:'Veuillez sélectionner au moins une liste.', add_thumb: '🖼 Ajouter Image', edit_thumb: '🖼 Changer Image', thumb_ok: 'Image choisie ✓', thumb_rem: 'Sera supprimé 🗑', remove_thumb_btn: 'Supprimer Image', ph_url: 'Lien du site/cours...', ph_title: 'Titre', tip_eq: 'Changer EQ', tip_vid: 'Basculer la vidéo', tip_sleep: 'Minuterie', tip_set: 'Paramètres & Thèmes', tip_add_list: 'Nouvelle liste', tip_add_c: 'Ajouter fichier/lien', tip_cc: 'Sous-titres', tip_fs: 'Plein écran', tip_start: 'Recommencer', tip_m5: 'Reculer 5s', tip_pp: 'Lecture/Pause', tip_p5: 'Avancer 5s', tip_next: 'Suivant', tip_vol: 'Volume', tip_prev: 'Précédent', tip_shuf: 'Aléatoire', tip_rep: 'Répéter', eq_btn:'🎵 Mode EQ', video_btn:'📺 Vidéo', sleep_btn:'🌙 Veille', settings_btn:'⚙️ Paramètres', lists_lbl:'LISTES', add_content_btn:'+ Ajouter', cc_btn:'💬 CC', fs_btn:'Plein écran', fs_btn_exit:'Réduire', sub_sel_btn:'📥 Choisir Sous-titre', sub_off_btn:'❌ ST Désactivé', yt_ext_btn:'⚠️ Voir sur YouTube', not_selected:'Non sélectionné', set_title:'Paramètres', set_lang_lbl:'Langue:', set_eq_lbl:'Égaliseur:', set_comp_off:'Standard (Dés)', set_comp_on:'Compresseur (Act)', set_comp_desc:'<strong>Compresseur ?</strong> Augmente les sons faibles.', set_theme_lbl:'Apparence:', set_day:'☀️ Jour', set_night:'🌙 Nuit', set_color:'🎨 Changer Thème', set_export:'⬇️ Exporter', set_import:'⬆️ Importer', close_btn:'Fermer', cancel_btn:'Annuler', save_btn:'Enregistrer', delete_btn:'Supprimer ✕', new_list_title:'Nouv. Liste', edit_list_title:'Éditer', add_file_btn:'Choisir fichier', or_link:'— OU LIEN —', target_list:'CIBLE:', add_link_btn:'Ajouter lien', sleep_title:'Minuteur veille', sleep_15:'15 Min', sleep_30:'30 Min', sleep_60:'1 Heure', sleep_cancel:'Annuler', sure:'Êtes-vous sûr ?', del_sure:'Vraiment supprimer ?', empty_list:'Liste vide', loading:'Chargement...', file_err:'Fichier invalide !', file_ok:'Liste importée.', toast_theme:'Thème:', toast_day:'☀️ Mode Jour', toast_night:'🌙 Mode Nuit', toast_comp_on:'Comp. Actif', toast_comp_off:'Comp. Désactif', toast_sub:'ST Chargé', local_warn:'Fichiers locaux non exportés.' },
+    'es': { export_mo_title:'Listas para exportar', export_mo_desc:'Solo se muestran las listas con enlaces o videos de YouTube. Puede desmarcar las que no desee.', export_mo_empty:'No hay listas con enlaces/videos para exportar. Los archivos locales no se pueden exportar.', export_mo_btn:'Descargar selección', export_mo_alert:'Por favor, seleccione al menos una lista.', add_thumb: '🖼 Añadir Imagen', edit_thumb: '🖼 Cambiar Imagen', thumb_ok: 'Imagen elegida ✓', thumb_rem: 'Se eliminará 🗑', remove_thumb_btn: 'Quitar Imagen', ph_url: 'Enlace del sitio/curso...', ph_title: 'Título', tip_eq: 'Cambiar EQ', tip_vid: 'Alternar video', tip_sleep: 'Temporizador', tip_set: 'Ajustes y temas', tip_add_list: 'Nueva lista', tip_add_c: 'Añadir archivo/enlace', tip_cc: 'Subtítulos', tip_fs: 'Pantalla completa', tip_start: 'Reiniciar', tip_m5: 'Retroceder 5s', tip_pp: 'Reproducir/Pausa', tip_p5: 'Avanzar 5s', tip_next: 'Siguiente', tip_vol: 'Volumen', tip_prev: 'Anterior', tip_shuf: 'Aleatorio', tip_rep: 'Repetir', eq_btn:'🎵 Modo EQ', video_btn:'📺 Video', sleep_btn:'🌙 Sueño', settings_btn:'⚙️ Ajustes', lists_lbl:'LISTAS', add_content_btn:'+ Añadir', cc_btn:'💬 CC', fs_btn:'Pantalla completa', fs_btn_exit:'Reducir', sub_sel_btn:'📥 Elegir Subtítulo', sub_off_btn:'❌ Sub. Apagado', yt_ext_btn:'⚠️ Ver en YouTube', not_selected:'No seleccionado', set_title:'Ajustes', set_lang_lbl:'Idioma:', set_eq_lbl:'Ecualizador:', set_comp_off:'Estándar (Apagado)', set_comp_on:'Compresor (Encendido)', set_comp_desc:'<strong>¿Compresor?</strong> Aumenta sonidos bajos.', set_theme_lbl:'Apariencia:', set_day:'☀️ Día', set_night:'🌙 Noche', set_color:'🎨 Cambiar Tema', set_export:'⬇️ Exportar', set_import:'⬆️ Importar', close_btn:'Cerrar', cancel_btn:'Cancelar', save_btn:'Guardar', delete_btn:'Borrar ✕', new_list_title:'Nueva Lista', edit_list_title:'Editar', add_file_btn:'Elegir Archivo', or_link:'— O ENLACE —', target_list:'DESTINO:', add_link_btn:'Añadir Enlace', sleep_title:'Temporizador', sleep_15:'15 Min', sleep_30:'30 Min', sleep_60:'1 Hora', sleep_cancel:'Cancelar', sure:'¿Seguro?', del_sure:'¿Realmente borrar?', empty_list:'Lista vacía', loading:'Cargando...', file_err:'¡Archivo inválido!', file_ok:'Lista importada.', toast_theme:'Tema:', toast_day:'☀️ Modo Día', toast_night:'🌙 Modo Noche', toast_comp_on:'Comp. On', toast_comp_off:'Comp. Off', toast_sub:'Sub. Cargado', local_warn:'Archivos locales no se exportan.' },
+    'ru': { export_mo_title:'Списки для экспорта', export_mo_desc:'Ниже показаны только списки со ссылками или видео YouTube. Вы можете снять галочки с ненужных.', export_mo_empty:'Нет списков со ссылками/видео для экспорта. Локальные файлы не могут быть экспортированы.', export_mo_btn:'Скачать выбранное', export_mo_alert:'Пожалуйста, выберите хотя бы один список.', add_thumb: '🖼 Добавить фото', edit_thumb: '🖼 Изменить фото', thumb_ok: 'Фото выбрано ✓', thumb_rem: 'Будет удалено 🗑', remove_thumb_btn: 'Удалить фото', ph_url: 'Ссылка на сайт/урок...', ph_title: 'Заголовок', tip_eq: 'Сменить EQ', tip_vid: 'Переключить видео', tip_sleep: 'Таймер сна', tip_set: 'Настройки и темы', tip_add_list: 'Новый список', tip_add_c: 'Добавить файл/ссылку', tip_cc: 'Субтитры', tip_fs: 'Полный экран', tip_start: 'Заново', tip_m5: 'Назад 5с', tip_pp: 'Воспроизведение/Пауза', tip_p5: 'Вперед 5с', tip_next: 'Следующий', tip_vol: 'Громкость', tip_prev: 'Предыдущий', tip_shuf: 'Случайный порядок', tip_rep: 'Повторять', eq_btn:'🎵 Эквалайзер', video_btn:'📺 Видео', sleep_btn:'🌙 Сон', settings_btn:'⚙️ Настройки', lists_lbl:'СПИСКИ', add_content_btn:'+ Добавить', cc_btn:'💬 CC', fs_btn:'Полный экран', fs_btn_exit:'Свернуть', sub_sel_btn:'📥 Выбрать субтитры', sub_off_btn:'❌ Выкл. субтитры', yt_ext_btn:'⚠️ Смотреть на YouTube', not_selected:'Не выбрано', set_title:'Настройки', set_lang_lbl:'Язык:', set_eq_lbl:'Эквалайзер:', set_comp_off:'Стандартно (Выкл)', set_comp_on:'Компрессор (Вкл)', set_comp_desc:'<strong>Что это?</strong> Увеличивает тихие звуки.', set_theme_lbl:'Оформление:', set_day:'☀️ День', set_night:'🌙 Ночь', set_color:'🎨 Сменить тему', set_export:'⬇️ Экспорт', set_import:'⬆️ Импорт', close_btn:'Закрыть', cancel_btn:'Отмена', save_btn:'Сохранить', delete_btn:'Удалить ✕', new_list_title:'Новый список', edit_list_title:'Изменить', add_file_btn:'Выбрать файл', or_link:'— ИЛИ ССЫЛКА —', target_list:'ЦЕЛЬ:', add_link_btn:'Добавить ссылку', sleep_title:'Таймер сна', sleep_15:'15 мин', sleep_30:'30 мин', sleep_60:'1 час', sleep_cancel:'Отмена', sure:'Уверены?', del_sure:'Точно удалить?', empty_list:'Пусто', loading:'Загрузка...', file_err:'Неверный файл!', file_ok:'Список импортирован.', toast_theme:'Тема:', toast_day:'☀️ День', toast_night:'🌙 Ночь', toast_comp_on:'Комп Вкл', toast_comp_off:'Комп Выкл', toast_sub:'Субтитры загружены', local_warn:'Локальные файлы не экспортируются.' }
 };
 
-let curLang = localStorage.getItem('nm_lang') || 'tr';
+let tempAddThumb = null; let tempEditThumb = null;
 
-function applyLang() {
-    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = i18n[curLang][el.getAttribute('data-i18n')]; });
-    document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = i18n[curLang][el.getAttribute('data-i18n-ph')]; });
-    document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = i18n[curLang][el.getAttribute('data-i18n-title')]; });
-    renderSongs();
-    if (!isPlay && playI === -1) { document.getElementById('npT').textContent = i18n[curLang].selNotSelected; }
+function compressImage(file, cb) {
+    let r = new FileReader();
+    r.onload = function(e) {
+        let img = new Image();
+        img.onload = function() {
+            let c = document.createElement('canvas'); let ctx = c.getContext('2d');
+            let max = 150, w = max, h = max, ratio = img.width/img.height;
+            if(img.width>img.height) h = max/ratio; else w = max*ratio;
+            c.width=w; c.height=h; ctx.drawImage(img,0,0,w,h);
+            cb(c.toDataURL('image/jpeg', 0.8)); // Hem çok küçük hem de kaliteli Base64 yapar
+        };
+        img.src = e.target.result;
+    };
+    r.readAsDataURL(file);
 }
 
-const AUTH_CONFIG = { user: "Hattie", pass: "1234" };
-let db, lists = JSON.parse(localStorage.getItem('nm_data')) || [{id:'l1', name:'Anime OST', icon:'🎌', songs:[]},{id:'l2', name:'J-Pop', icon:'🌸', songs:[]},{id:'l3', name:'Favoriler', icon:'⭐', songs:[]}];
+function handleThumbSel(e, type) {
+    let file = e.target.files[0];
+    if(file) {
+        compressImage(file, (b64) => {
+            if(type === 'add') { tempAddThumb = b64; document.getElementById('addThumbStatus').style.display='block'; document.getElementById('addThumbStatus').textContent = t('thumb_ok');}
+            if(type === 'edit') { tempEditThumb = b64; document.getElementById('editThumbStatus').style.display='block'; document.getElementById('editThumbStatus').textContent = t('thumb_ok');}
+        });
+    }
+}
+function removeEditThumb() { tempEditThumb = 'REMOVE'; document.getElementById('editThumbStatus').textContent = t('thumb_rem'); document.getElementById('editThumbStatus').style.display='block'; }
 
-const themes = ['sakura', 'lavender', 'ocean', 'sage', 'mocha', 'berry', 'sunset'];
-const themeNames = {
-    'sakura': { tr: 'Sakura', en: 'Sakura', ja: '桜 (Sakura)', es: 'Sakura', fr: 'Sakura', de: 'Sakura', zh: '樱花 (Sakura)', ru: 'Сакура', pt: 'Sakura', ar: 'ساكورا' },
-    'lavender': { tr: 'Lavanta', en: 'Lavender', ja: 'ラベンダー', es: 'Lavanda', fr: 'Lavande', de: 'Lavendel', zh: '薰衣草', ru: 'Лаванда', pt: 'Lavanda', ar: 'لافندر' },
-    'ocean': { tr: 'Okyanus', en: 'Ocean', ja: '海 (Ocean)', es: 'Océano', fr: 'Océan', de: 'Ozean', zh: '海洋', ru: 'Океан', pt: 'Oceano', ar: 'محيط' },
-    'sage': { tr: 'Adaçayı', en: 'Sage', ja: 'セージ', es: 'Salvia', fr: 'Sauge', de: 'Salbei', zh: '鼠尾草', ru: 'Шалфей', pt: 'Sálvia', ar: 'مريمية' },
-    'mocha': { tr: 'Kahve', en: 'Mocha', ja: 'モカ', es: 'Moca', fr: 'Moka', de: 'Mokka', zh: '摩卡', ru: 'Мокко', pt: 'Mocha', ar: 'موكا' },
-    'berry': { tr: 'Böğürtlen', en: 'Berry', ja: 'ベリー', es: 'Baya', fr: 'Baie', de: 'Beere', zh: '浆果', ru: 'Ягода', pt: 'Baga', ar: 'توت' },
-    'sunset': { tr: 'Günbatımı', en: 'Sunset', ja: '夕日 (Sunset)', es: 'Atardecer', fr: 'Coucher', de: 'Sonnenuntergang', zh: '日落', ru: 'Закат', pt: 'Pôr do sol', ar: 'غروب' }
-};
+let currentLang = localStorage.getItem('fowa_lang') || 'tr';
+function t(key) { return dict[currentLang][key] || dict['tr'][key] || key; }
 
-let savedTheme = localStorage.getItem('nm_theme') || 'sakura';
-let curThemeIdx = themes.indexOf(savedTheme);
-if (curThemeIdx < 0) curThemeIdx = 0;
-let tempThemeIdx = curThemeIdx; 
-document.body.className = 'theme-' + themes[curThemeIdx];
+function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('fowa_lang', lang);
+    document.getElementById('langSel').value = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        let key = el.getAttribute('data-i18n');
+        if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) el.placeholder = t(key);
+        else el.innerHTML = t(key);
+    });
+    
+    // YENİ EKLENDİ: Buton İpuçları (Titles) Çevirisi
+    document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        let key = el.getAttribute('data-i18n-title');
+        el.title = t(key);
+    });
 
-let toastTimer;
-function showThemeToast(name) {
-    const t = document.getElementById('themeToast');
-    t.textContent = i18n[curLang].themeToast + name;
-    t.classList.remove('hid');
-    setTimeout(() => t.classList.add('show'), 10);
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => {
-        t.classList.remove('show');
-        setTimeout(() => t.classList.add('hid'), 300);
-    }, 2500);
+    let cBtn = document.getElementById('compBtn');
+    if(cBtn) cBtn.textContent = isCompressorOn ? t('set_comp_on') : t('set_comp_off');
+    let fsTxt = document.getElementById('fsBtnText');
+    let isFS = !!document.fullscreenElement || !!document.webkitFullscreenElement;
+    if(fsTxt) fsTxt.textContent = isFS ? t('fs_btn_exit') : t('fs_btn');
+    renderSB(); renderSongs();
 }
 
-function previewTheme() {
-    tempThemeIdx = (tempThemeIdx + 1) % themes.length;
-    document.body.className = 'theme-' + themes[tempThemeIdx];
-    showThemeToast(themeNames[themes[tempThemeIdx]][curLang] || themeNames[themes[tempThemeIdx]]['en']);
-}
-function openSettingsMo() {
-    document.getElementById('langSel').value = curLang;
-    tempThemeIdx = curThemeIdx; 
-    document.getElementById('settingsMo').classList.remove('hid');
-}
-function saveSettings() {
-    curThemeIdx = tempThemeIdx;
-    localStorage.setItem('nm_theme', themes[curThemeIdx]);
-    curLang = document.getElementById('langSel').value;
-    localStorage.setItem('nm_lang', curLang);
-    applyLang();
-    closeMo('settingsMo');
-}
-function cancelSettings() {
-    tempThemeIdx = curThemeIdx;
-    document.body.className = 'theme-' + themes[curThemeIdx];
-    closeMo('settingsMo');
-}
+// Play ve Pause İkonlarının SVG Kodları
+const svgPlay = `<svg class="btn-svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
+const svgPause = `<svg class="btn-svg" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
 
-let curL = 'l1'; 
-let playL = null, playI = -1;
-let isPlay = false, vidPanelOpen = false, currentVolume = 0.7;
-let idleTimer = null, volTimeout = null, isHovering = false;
-let customVpHeight = null; 
+// --- VERİTABANI VE STATE YÖNETİMİ ---
+let db;
+let lists = JSON.parse(localStorage.getItem('nm_data')) || [{id:'l1', name:'Favoriler', icon:'', songs:[]}];
 
+// UYGULAMA KAPATILDIĞINDA SON AYARLARIN HATIRLANMASI
+let curL = localStorage.getItem('fowa_curL');
+if(!lists.find(l=>l.id===curL)) curL = lists[0]?.id || 'l1'; 
+let playL = localStorage.getItem('fowa_playL') || curL;
+let playI = parseInt(localStorage.getItem('fowa_playI')) || -1;
+let currentVolume = parseFloat(localStorage.getItem('fowa_vol'));
+if(isNaN(currentVolume)) currentVolume = 0.7;
+
+let isPlay = false, vidPanelOpen = false;
+let idleTimer = null, isHovering = false, customVpHeight = null; 
 let isShuffle = localStorage.getItem('nm_shuffle') === 'true';
 let isRepeatOne = localStorage.getItem('nm_repeat') === 'true';
 
-let AUDIO = null;
-let VIDEO = null;
-let ytPlayer = null, draggingIdx = null, draggingSource = null;
-let userWantsToPlay = false; 
+let AUDIO = null, VIDEO = null;
+let ytPlayer = null, draggingIdx = null, draggingSource = null, userWantsToPlay = false; 
 
-// AKILLI OS DEDEKTÖRÜ (İKİLİ MOTOR MİMARİSİ)
-const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-const isAndroid = /Android/i.test(navigator.userAgent);
+// --- GÜNDÜZ / GECE MODU VE TEMA YÖNETİMİ ---
+const themes = ['sakura', 'lavender', 'ocean', 'sage', 'mocha'];
+let savedTheme = localStorage.getItem('nm_theme') || 'sakura';
+let curThemeIdx = themes.indexOf(savedTheme) > -1 ? themes.indexOf(savedTheme) : 0;
+let isLightMode = localStorage.getItem('fowa_lightMode') === 'true';
 
-if (isShuffle) document.getElementById('shufBtn').classList.add('act');
-if (isRepeatOne) document.getElementById('repBtn').classList.add('act');
+function applyThemeBase() { document.body.className = `theme-${themes[curThemeIdx]} ${isLightMode ? 'light-mode' : ''}`; }
+applyThemeBase();
 
-function syncSession(title) {
-    if ('mediaSession' in navigator) {
-        navigator.mediaSession.metadata = new MediaMetadata({ title: title, artist: 'Fowalink', artwork: [{ src: 'https://cdn-icons-png.flaticon.com/512/2402/2402461.png', sizes: '512x512', type: 'image/png' }] });
-    }
+function showToast(msg) {
+    const tEl = document.getElementById('themeToast');
+    tEl.textContent = msg;
+    tEl.classList.remove('hid'); setTimeout(() => tEl.classList.add('show'), 10);
+    setTimeout(() => { tEl.classList.remove('show'); setTimeout(() => tEl.classList.add('hid'), 300); }, 2000);
 }
 
-if ('mediaSession' in navigator) {
-    navigator.mediaSession.setActionHandler('play', togglePlay);
-    navigator.mediaSession.setActionHandler('pause', togglePlay);
-    navigator.mediaSession.setActionHandler('previoustrack', prev);
-    navigator.mediaSession.setActionHandler('nexttrack', () => next(false));
-    navigator.mediaSession.setActionHandler('seekbackward', () => seekRelative(-5));
-    navigator.mediaSession.setActionHandler('seekforward', () => seekRelative(5));
+function previewTheme() {
+    curThemeIdx = (curThemeIdx + 1) % themes.length;
+    applyThemeBase();
+    localStorage.setItem('nm_theme', themes[curThemeIdx]);
+    showToast(t('toast_theme') + " " + themes[curThemeIdx].toUpperCase());
 }
 
-function checkAuth() { if(document.getElementById('username').value === AUTH_CONFIG.user && document.getElementById('password').value === AUTH_CONFIG.pass) { localStorage.setItem('nihon_music_auth', 'true'); startApp(); } }
-function logout() { localStorage.removeItem('nihon_music_auth'); location.reload(); }
+function setLightMode(light) {
+    isLightMode = light;
+    localStorage.setItem('fowa_lightMode', light);
+    applyThemeBase();
+    showToast(light ? t('toast_day') : t('toast_night'));
+}
 
+// --- SES MODLARI (EQ VE KOMPRESÖR) ---
+const eqModes = ['standart', 'sinema', 'uyku', 'anime', 'akustik', 'vokal', 'bas'];
+let savedEQ = localStorage.getItem('fowa_eq') || 'standart';
+let curEqIdx = eqModes.indexOf(savedEQ) > -1 ? eqModes.indexOf(savedEQ) : 0;
+let isCompressorOn = localStorage.getItem('fowa_comp') === 'true';
+
+let audioCtx, compressor, sourceA, sourceV, audioInit = false;
+let eqBands = [];
+
+function initAudioCompressor() {
+    if(audioInit) return;
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+        compressor = audioCtx.createDynamicsCompressor();
+        compressor.knee.value = 30; compressor.attack.value = 0.003; compressor.release.value = 0.25;
+        
+        sourceA = audioCtx.createMediaElementSource(AUDIO);
+        sourceV = audioCtx.createMediaElementSource(VIDEO);
+        let inputNode = audioCtx.createGain();
+        sourceA.connect(inputNode); sourceV.connect(inputNode);
+        
+        const frequencies = [60, 250, 1000, 4000, 12000]; let prevNode = inputNode;
+        frequencies.forEach(freq => {
+            let filter = audioCtx.createBiquadFilter();
+            if(freq === 60) filter.type = 'lowshelf'; else if(freq === 12000) filter.type = 'highshelf'; else filter.type = 'peaking';
+            filter.frequency.value = freq; filter.Q.value = 1.2; filter.gain.value = 0;
+            eqBands.push(filter); prevNode.connect(filter); prevNode = filter;
+        });
+        
+        prevNode.connect(compressor); compressor.connect(audioCtx.destination);
+        audioInit = true; applyCompressorState(); applyEQNode(savedEQ);
+    } catch(e) { console.log("Audio API Error:", e); }
+}
+
+function applyCompressorState() {
+    if(!audioInit) return;
+    if(isCompressorOn) { compressor.threshold.value = -30; compressor.ratio.value = 15; } 
+    else { compressor.threshold.value = 0; compressor.ratio.value = 1; }
+}
+
+function toggleCompressorMode() {
+    isCompressorOn = !isCompressorOn; localStorage.setItem('fowa_comp', isCompressorOn); applyCompressorState();
+    let cBtn = document.getElementById('compBtn');
+    if(cBtn) { cBtn.textContent = isCompressorOn ? t('set_comp_on') : t('set_comp_off'); cBtn.style.borderColor = isCompressorOn ? "var(--pk)" : "var(--bs)"; cBtn.style.color = isCompressorOn ? "var(--pk)" : "var(--tx)"; }
+    showToast(isCompressorOn ? t('toast_comp_on') : t('toast_comp_off'));
+}
+
+function applyEQNode(mode) {
+    if(!audioInit) return; eqBands.forEach(f => f.gain.value = 0); 
+    if(mode === 'sinema') { eqBands[0].gain.value = 8; eqBands[2].gain.value = -2; eqBands[4].gain.value = 6; } 
+    else if(mode === 'uyku') { eqBands[0].gain.value = -10; eqBands[1].gain.value = -6; eqBands[4].gain.value = -8; } 
+    else if(mode === 'anime') { eqBands[1].gain.value = 3; eqBands[2].gain.value = 6; eqBands[3].gain.value = 5; }
+    else if(mode === 'akustik') { eqBands[2].gain.value = 4; eqBands[3].gain.value = 5; eqBands[4].gain.value = 3; }
+    else if(mode === 'vokal') { eqBands[0].gain.value = -3; eqBands[2].gain.value = 8; eqBands[3].gain.value = 6; }
+    else if(mode === 'bas') { eqBands[0].gain.value = 10; eqBands[1].gain.value = 6; }
+}
+
+function cycleEQ() { curEqIdx = (curEqIdx + 1) % eqModes.length; savedEQ = eqModes[curEqIdx]; localStorage.setItem('fowa_eq', savedEQ); applyEQNode(savedEQ); showToast("🎵 EQ: " + savedEQ.toUpperCase()); }
+
+// --- ALTYAZI ---
+function toggleCCMenu() { document.getElementById('ccMenu').classList.toggle('show'); }
+function setCCTrack(show) { let v = document.getElementById('vEl'); if(v.textTracks && v.textTracks[0]) v.textTracks[0].mode = show ? 'showing' : 'hidden'; }
+document.getElementById('subIn').onchange = function(e) {
+    let file = e.target.files[0]; if(!file) return; let reader = new FileReader();
+    reader.onload = function(evt) { let text = evt.target.result; if(file.name.toLowerCase().endsWith('.srt')) { text = "WEBVTT\n\n" + text.replace(/([0-9]{2}:[0-9]{2}:[0-9]{2}),([0-9]{3})/g, '$1.$2'); }
+        let blob = new Blob([text], {type: 'text/vtt'}); let track = document.getElementById('vTrack'); track.src = URL.createObjectURL(blob); track.default = true; setCCTrack(true); showToast(t('toast_sub'));
+    }; reader.readAsText(file);
+};
+
+// --- BAŞLATMA ---
 function startApp() { 
-    applyLang();
-    document.getElementById('auth-screen').classList.add('hid'); 
+    setLanguage(currentLang);
     document.getElementById('app').classList.remove('hid'); 
+    document.getElementById('shufImg').classList.toggle('active', isShuffle); document.getElementById('repImg').classList.toggle('active', isRepeatOne); document.getElementById('vSlider').value = currentVolume; updateVolIcon();
     
-    AUDIO = document.getElementById('aEl');
-    VIDEO = document.getElementById('vEl');
+    let cBtn = document.getElementById('compBtn');
+    if(cBtn) { cBtn.textContent = isCompressorOn ? t('set_comp_on') : t('set_comp_off'); cBtn.style.borderColor = isCompressorOn ? "var(--pk)" : "var(--bs)"; cBtn.style.color = isCompressorOn ? "var(--pk)" : "var(--tx)"; }
     
-    const syncPlay = () => { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; isPlay=true; userWantsToPlay=true; syncB(); wakeUpControls();};
+    AUDIO = document.getElementById('aEl'); VIDEO = document.getElementById('vEl'); AUDIO.volume = currentVolume; VIDEO.volume = currentVolume;
+    const syncPlay = () => { isPlay=true; userWantsToPlay=true; syncB(); wakeUpControls();};
+    const syncPause = (e) => { if (e && e.target && e.target.ended) return; isPlay=false; syncB(); };
     
-    const syncPause = (e) => { 
-        if (e && e.target && e.target.ended) return; 
-
-        // ANDROID ARKA PLAN SES KALKANI (iPad'i asla etkilemez)
-        if (isAndroid && userWantsToPlay) {
-            setTimeout(() => {
-                if (userWantsToPlay && e.target && e.target.paused) {
-                    e.target.play().catch(err => console.log("Android Kalkanı:", err));
-                }
-            }, 100);
-            return;
-        }
-
-        if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused'; 
-        isPlay=false; syncB();
-    };
+    AUDIO.addEventListener('play', syncPlay); AUDIO.addEventListener('pause', syncPause); AUDIO.addEventListener('ended', () => next(true));
+    VIDEO.addEventListener('play', syncPlay); VIDEO.addEventListener('pause', syncPause); VIDEO.addEventListener('ended', () => next(true));
     
-    AUDIO.addEventListener('play', syncPlay);
-    AUDIO.addEventListener('pause', syncPause);
-    AUDIO.addEventListener('ended', () => next(true));
-
-    VIDEO.addEventListener('play', syncPlay);
-    VIDEO.addEventListener('pause', syncPause);
-    VIDEO.addEventListener('ended', () => next(true));
-    
-    initDB(); bindInteractionEvents(); 
+    initDB(); bindInteractionEvents(); initKeyboard(); syncB(); 
+    let lastS = lists.find(l=>l.id===playL)?.songs[playI];
+    if(lastS) { document.getElementById('npT').textContent = lastS.title; document.getElementById('ytExternalLink').href = `https://www.youtube.com/watch?v=${lastS.ytId}`; }
 }
-
-if(localStorage.getItem('nihon_music_auth') === 'true') { document.addEventListener('DOMContentLoaded', startApp); }
-
-// Sadece Android Telefonlar İçin Arka Plan Kilit Güvencesi
-document.addEventListener('visibilitychange', () => {
-    if (isAndroid && document.hidden && userWantsToPlay) {
-        let s = lists.find(l=>l.id===playL)?.songs[playI];
-        if (s && !s.isYt) {
-            let el = s.isVid ? VIDEO : AUDIO;
-            if(el && el.paused) el.play().catch(e=>console.log(e));
-        }
-    }
-});
+document.addEventListener('DOMContentLoaded', startApp);
 
 function initDB() {
     const request = indexedDB.open("NihonMusicDB", 1);
@@ -570,341 +623,430 @@ function initDB() {
 function storeFile(id, file) { return new Promise(res => { const tx = db.transaction(["files"], "readwrite"); tx.objectStore("files").add({ id, data: file }).onsuccess = () => res(); }); }
 function getFile(id) { return new Promise(res => { db.transaction(["files"], "readonly").objectStore("files").get(id).onsuccess = e => res(e.target.result?.data); }); }
 function deleteFileFromDB(id) { db.transaction(["files"], "readwrite").objectStore("files").delete(id); }
-function save(){ localStorage.setItem('nm_data', JSON.stringify(lists)); }
 
-function toggleShuffle() {
-    isShuffle = !isShuffle; localStorage.setItem('nm_shuffle', isShuffle); document.getElementById('shufBtn').classList.toggle('act', isShuffle);
-}
-function toggleRepeat() {
-    isRepeatOne = !isRepeatOne; localStorage.setItem('nm_repeat', isRepeatOne); document.getElementById('repBtn').classList.toggle('act', isRepeatOne);
+function save(){ localStorage.setItem('nm_data', JSON.stringify(lists)); localStorage.setItem('fowa_curL', curL); localStorage.setItem('fowa_playL', playL); localStorage.setItem('fowa_playI', playI); }
+
+function openExportMo() {
+    closeMo('settingsMo');
+    let html = '';
+    let hasExportable = false;
+    
+    lists.forEach(l => {
+        let hasLinks = l.songs.some(s => s.isLink || s.isYt);
+        if (hasLinks) {
+            hasExportable = true;
+            html += `<label style="display:flex; align-items:center; margin-bottom:10px; cursor:pointer; font-size:13px; color:var(--tx); padding-bottom:5px; border-bottom:1px solid var(--bs);">
+                <input type="checkbox" value="${l.id}" checked style="width:16px; height:16px; margin:0 10px 0 0;">
+                ${l.icon} ${l.name}
+            </label>`;
+        }
+    });
+    
+    let exportBtn = document.querySelector('#exportMo .btn-p');
+    if (!hasExportable) {
+        html = `<div style="font-size:12px; color:var(--dm); text-align:center; padding: 10px 0;">${t('export_mo_empty')}</div>`;
+        exportBtn.style.display = 'none';
+    } else {
+        exportBtn.style.display = 'block';
+    }
+    
+    document.getElementById('exportCheckboxes').innerHTML = html;
+    document.getElementById('exportMo').classList.remove('hid');
 }
 
-function toggleVolBox() {
-    const vp = document.getElementById('volPopup'); vp.classList.toggle('show'); clearTimeout(volTimeout);
-    if(vp.classList.contains('show')) volTimeout = setTimeout(() => { vp.classList.remove('show'); }, 3000);
+function executeExport() {
+    let selectedIds = Array.from(document.querySelectorAll('#exportCheckboxes input:checked')).map(cb => cb.value);
+    
+    if (selectedIds.length === 0) {
+        alert(t('export_mo_alert'));
+        return;
+    }
+    
+    let exportLists = [];
+    lists.forEach(l => {
+        if (selectedIds.includes(l.id)) {
+            exportLists.push({ ...l, songs: l.songs.filter(s => s.isLink || s.isYt) });
+        }
+    });
+    
+    let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportLists)); 
+    let dl = document.createElement('a'); 
+    dl.setAttribute("href", dataStr); 
+    dl.setAttribute("download", "fowalink_yedek.json"); 
+    dl.click(); 
+    
+    closeMo('exportMo');
 }
-function setVol(v) { 
-    currentVolume = parseFloat(v); AUDIO.volume = currentVolume; if(VIDEO) VIDEO.volume = currentVolume; if(ytPlayer?.setVolume) ytPlayer.setVolume(currentVolume*100); 
-    let icon = currentVolume === 0 ? '🔇' : (currentVolume < 0.5 ? '🔉' : '🔊');
-    document.getElementById('volIconBtn').textContent = icon;
-    clearTimeout(volTimeout); volTimeout = setTimeout(() => { document.getElementById('volPopup').classList.remove('show'); }, 3000);
+
+function importData(e) {
+    let file = e.target.files[0]; if(!file) return; 
+    let reader = new FileReader();
+    reader.onload = function(event) { 
+        try { 
+            let importedLists = JSON.parse(event.target.result); 
+            
+            importedLists.forEach(il => {
+                // Mevcut listelerde aynı isimde bir liste var mı kontrol et
+                let existingList = lists.find(l => l.name === il.name);
+                
+                if (existingList) {
+                    // Varsa, içe aktarılan şarkıları mevcut listeye ekle (çakışmayı önlemek için yeni ID ver)
+                    il.songs.forEach(s => {
+                        s.id = s.id + '_' + Math.random().toString(36).substr(2, 5);
+                        existingList.songs.push(s);
+                    });
+                } else {
+                    // Yoksa, yepyeni bir liste olarak ekle (yine ID yenilemesi yaparak)
+                    il.id = 'l_' + Date.now().toString() + Math.random().toString(36).substr(2, 5);
+                    il.songs.forEach(s => s.id = s.id + '_' + Math.random().toString(36).substr(2, 5));
+                    lists.push(il);
+                }
+            });
+            
+            save(); renderSB(); renderSongs(); closeMo('settingsMo'); alert(t('file_ok')); 
+        } catch(err) { alert(t('file_err')); } 
+    };
+    reader.readAsText(file);
+    e.target.value = ''; // Aynı dosyayı üst üste seçebilmek için input'u sıfırla
 }
+
+function initKeyboard() {
+    document.addEventListener('keydown', (e) => {
+        if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if(e.code === 'Space') { e.preventDefault(); togglePlay(); wakeUpControls(); }
+        if(e.code === 'ArrowRight') { e.preventDefault(); seekRelative(5); }
+        if(e.code === 'ArrowLeft') { e.preventDefault(); seekRelative(-5); }
+        if(e.code === 'ArrowUp') { e.preventDefault(); setVol(Math.min(1, currentVolume + 0.1)); document.getElementById('vSlider').value = currentVolume; }
+        if(e.code === 'ArrowDown') { e.preventDefault(); setVol(Math.max(0, currentVolume - 0.1)); document.getElementById('vSlider').value = currentVolume; }
+        if(e.code === 'Escape' && document.fullscreenElement) { document.exitFullscreen(); }
+    });
+}
+
+function toggleShuffle() { isShuffle = !isShuffle; localStorage.setItem('nm_shuffle', isShuffle); document.getElementById('shufImg').classList.toggle('active', isShuffle); }
+function toggleRepeat() { isRepeatOne = !isRepeatOne; localStorage.setItem('nm_repeat', isRepeatOne); document.getElementById('repImg').classList.toggle('active', isRepeatOne); }
+
+function toggleVidPanel() { 
+    vidPanelOpen = !vidPanelOpen; document.getElementById('vToggle').classList.toggle('on', vidPanelOpen);
+    const r = document.getElementById('vpResizer');
+    if(vidPanelOpen) { vpEl.classList.add('open'); r.classList.add('show'); if(customVpHeight) { vpEl.style.height = customVpHeight + 'px'; } wakeUpControls(); } 
+    else { vpEl.classList.remove('open'); r.classList.remove('show'); vpEl.style.height = ''; }
+}
+
+let isMuted = false, preMuteVol = 0.7;
+function updateVolIcon() { document.getElementById('volIconBtn').textContent = currentVolume === 0 ? '🔇' : (currentVolume < 0.5 ? '🔉' : '🔊'); }
+function setVol(v) { currentVolume = parseFloat(v); isMuted = (currentVolume === 0); localStorage.setItem('fowa_vol', currentVolume); if(AUDIO) AUDIO.volume = currentVolume; if(VIDEO) VIDEO.volume = currentVolume; if(ytPlayer?.setVolume) ytPlayer.setVolume(currentVolume*100); updateVolIcon(); }
+function toggleMute() { if(isMuted) { setVol(preMuteVol || 0.7); document.getElementById('vSlider').value = preMuteVol || 0.7; } else { preMuteVol = currentVolume; setVol(0); document.getElementById('vSlider').value = 0; } }
 
 function wakeUpControls() {
-    const app = document.getElementById('app');
-    const vp = document.getElementById('vp');
+    const app = document.getElementById('app'); const vp = document.getElementById('vp');
     app.classList.add('show-fs-ctrl'); app.classList.remove('hide-cursor'); vp.classList.add('show-ctrl');
-    
     clearTimeout(idleTimer);
     if (!isHovering && isPlay) {
         idleTimer = setTimeout(() => {
-            app.classList.remove('show-fs-ctrl'); vp.classList.remove('show-ctrl'); document.getElementById('volPopup').classList.remove('show');
-            if(document.fullscreenElement || document.webkitFullscreenElement) app.classList.add('hide-cursor');
+            if(document.fullscreenElement || document.webkitFullscreenElement) { app.classList.remove('show-fs-ctrl'); app.classList.add('hide-cursor'); }
+            vp.classList.remove('show-ctrl'); document.getElementById('ccMenu').classList.remove('show'); 
         }, 2500);
     }
 }
 
-function handleVideoClick(e) {
-    if (e.target.closest('.v-btn') || e.target.closest('.yt-external-btn') || e.target.id === 'vpResizer') return; 
-    wakeUpControls();
+function handleDoubleTap(e) {
+    if(e) e.preventDefault(); 
+    if (e.target.closest('.custom-btn') || e.target.closest('.yt-external-btn') || e.target.closest('.bottom-corner-btns') || e.target.id === 'vpResizer') return; 
+    let rect = e.currentTarget.getBoundingClientRect(); let clickX = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left; let third = rect.width / 3;
+    if (clickX < third) { seekRelative(-5); wakeUpControls(); } else if (clickX > third * 2) { seekRelative(5); wakeUpControls(); } else { toggleFullScreen(); }
+}
+
+function handleVideoClick(e) { 
+    if (e.target.closest('button') || e.target.closest('.cc-menu') || e.target.id === 'vpResizer') return; 
+    wakeUpControls(); document.getElementById('ccMenu').classList.remove('show'); 
 }
 
 function bindInteractionEvents() {
-    const p = document.getElementById('playerBar');
+    const p = document.getElementById('playerBar'); const ccM = document.getElementById('ccMenu');
     const enter = () => { isHovering = true; wakeUpControls(); }; const leave = () => { isHovering = false; wakeUpControls(); };
-    p.addEventListener('mouseenter', enter); p.addEventListener('mouseleave', leave);
-    p.addEventListener('touchstart', enter, {passive:true}); p.addEventListener('touchend', leave, {passive:true});
-    document.addEventListener('mousemove', wakeUpControls); document.addEventListener('touchstart', wakeUpControls, {passive: true});
+    p.addEventListener('mouseenter', enter); p.addEventListener('mouseleave', leave); p.addEventListener('touchstart', enter, {passive:true}); p.addEventListener('touchend', leave, {passive:true});
+    ccM.addEventListener('mouseenter', enter); ccM.addEventListener('mouseleave', leave);
+    
+    let mouseThrottle = false;
+    const smartWakeUp = () => { if (mouseThrottle) return; mouseThrottle = true; wakeUpControls(); setTimeout(() => { mouseThrottle = false; }, 150); };
+    document.addEventListener('mousemove', smartWakeUp); document.addEventListener('touchstart', smartWakeUp, {passive: true});
 }
 
-document.addEventListener('fullscreenchange', onFSChange);
-document.addEventListener('webkitfullscreenchange', onFSChange);
-function onFSChange() { document.getElementById('app').classList.toggle('fullscreen-mode', !!document.fullscreenElement); wakeUpControls(); }
+document.addEventListener('fullscreenchange', onFSChange); document.addEventListener('webkitfullscreenchange', onFSChange);
+function onFSChange() { 
+    let isFS = !!document.fullscreenElement || !!document.webkitFullscreenElement;
+    document.getElementById('app').classList.toggle('fullscreen-mode', isFS); 
+    let fsTxt = document.getElementById('fsBtnText');
+    if(fsTxt) fsTxt.textContent = isFS ? t('fs_btn_exit') : t('fs_btn');
+    wakeUpControls(); 
+}
+
 function toggleFullScreen() { let app = document.getElementById('app'); if(!document.fullscreenElement) { if(app.requestFullscreen) app.requestFullscreen(); else if(app.webkitRequestFullscreen) app.webkitRequestFullscreen(); } else { document.exitFullscreen(); } }
 
-const resizer = document.getElementById('vpResizer');
-const vpEl = document.getElementById('vp');
-let isResizing = false, startY, startHeight;
-
-resizer.addEventListener('mousedown', initResize);
-resizer.addEventListener('touchstart', initResize, {passive: false});
-
-function initResize(e) {
-    isResizing = true; startY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY; startHeight = vpEl.offsetHeight;
-    vpEl.classList.add('resizing');
-    document.addEventListener('mousemove', doResize); document.addEventListener('touchmove', doResize, {passive: false});
-    document.addEventListener('mouseup', stopResize); document.addEventListener('touchend', stopResize);
-    e.preventDefault(); e.stopPropagation();
-}
-function doResize(e) {
-    if (!isResizing) return;
-    const y = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
-    vpEl.style.maxHeight = 'none'; vpEl.style.height = Math.max(100, startHeight + (startY - y)) + 'px'; e.preventDefault();
-}
-function stopResize() {
-    isResizing = false; customVpHeight = vpEl.offsetHeight; vpEl.classList.remove('resizing');
-    document.removeEventListener('mousemove', doResize); document.removeEventListener('touchmove', doResize);
-    document.removeEventListener('mouseup', stopResize); document.removeEventListener('touchend', stopResize);
-}
+const resizer = document.getElementById('vpResizer'); const vpEl = document.getElementById('vp'); let isResizing = false, startY, startHeight;
+resizer.addEventListener('mousedown', (e) => { isResizing=true; startY=e.clientY; startHeight=vpEl.offsetHeight; document.addEventListener('mousemove', doResize); document.addEventListener('mouseup', stopResize); e.preventDefault(); });
+function doResize(e) { if(isResizing) { vpEl.style.maxHeight = 'none'; vpEl.style.height = Math.max(100, startHeight + (startY - e.clientY)) + 'px'; } }
+function stopResize() { isResizing=false; customVpHeight=vpEl.offsetHeight; document.removeEventListener('mousemove', doResize); document.removeEventListener('mouseup', stopResize); }
 
 function setStatus(lId, i, val) { let lst = lists.find(l=>l.id===lId); if(lst && lst.songs[i]) { lst.songs[i].status = val; save(); renderSongs(); } }
 
 function renderSB(){
-    let h = ''; lists.forEach((l, i) => h += `<div class="li ${l.id===curL?'act':''}" id="list-${l.id}" ontouchstart="handleTouchStart(event, 'list', ${i})" ontouchmove="handleTouchMove(event)" ontouchend="handleTouchEnd(event)" draggable="true" ondragstart="draggingSource='list'; draggingIdx=${i}" ondragover="event.preventDefault(); document.getElementById('list-${l.id}').classList.add('drag-over-list')" ondragleave="document.getElementById('list-${l.id}').classList.remove('drag-over-list')" ondrop="dropAny(event, ${i}, '${l.id}')" onclick="selL('${l.id}')">${l.icon} ${l.name}<span class="li-edit" onclick="event.stopPropagation(); openPlEdit(${i})">⚙</span></div>`);
-    document.getElementById('sbList').innerHTML = h; const opt = lists.map(l => `<option value="${l.id}">${l.name}</option>`).join('');
-    document.getElementById('pSel').innerHTML = opt; document.getElementById('editListSel').innerHTML = opt;
+    let h = ''; 
+    lists.forEach((l, i) => {
+        h += `<div class="li ${l.id===curL?'act':''}" draggable="true" ondragstart="dragStartL(event, ${i})" ondragover="dragOver(event)" ondrop="dropL(event, ${i})" ondragend="dragEnd(event)" onclick="selL('${l.id}')">${l.icon} ${l.name}<span style="margin-left:auto;" onclick="event.stopPropagation(); openPlEdit(${i})">⚙</span></div>`;
+    });
+    document.getElementById('sbList').innerHTML = h; 
+    const opt = lists.map(l => `<option value="${l.id}">${l.name}</option>`).join('');
+    document.getElementById('pSel').innerHTML = opt; 
+    document.getElementById('editListSel').innerHTML = opt;
+
+    // KESİN ÇÖZÜM: Hedef liste seçeneğini her zaman şu an içinde bulunduğun listeye sabitle
+    document.getElementById('pSel').value = curL;
 }
 
 function renderSongs(){
     let lst = lists.find(l => l.id === curL); document.getElementById('ctName').textContent = lst?.name || '';
-    let h = ''; let highlightIdx = -1;
-    if (curL === playL && playI !== -1) highlightIdx = playI; else if (lst && lst.lastI !== undefined && lst.lastI !== -1) highlightIdx = lst.lastI; 
-
+    let h = ''; let highlightIdx = -1; if (curL === playL && playI !== -1) highlightIdx = playI;
     lst?.songs.forEach((s, i) => {
         let stHTML = '';
-        if(s.isLink || s.isYt) {
-            let st = s.status || 0;
-            stHTML = `<div class="st-trk" onclick="event.stopPropagation()"><div class="st-dot un ${st===0?'act':''}" data-i18n-title="watchNot" title="${i18n[curLang].watchNot}" onclick="setStatus('${curL}', ${i}, 0)"></div><div class="st-dot pa ${st===1?'act':''}" data-i18n-title="watchStay" title="${i18n[curLang].watchStay}" onclick="setStatus('${curL}', ${i}, 1)"></div><div class="st-dot do ${st===2?'act':''}" data-i18n-title="watchDone" title="${i18n[curLang].watchDone}" onclick="setStatus('${curL}', ${i}, 2)"></div></div>`;
-        }
+        if(s.isLink || s.isYt) { let st = s.status || 0; stHTML = `<div class="st-trk" onclick="event.stopPropagation()"><div class="st-dot un ${st===0?'act':''}" onclick="setStatus('${curL}', ${i}, 0)"></div><div class="st-dot pa ${st===1?'act':''}" onclick="setStatus('${curL}', ${i}, 1)"></div><div class="st-dot do ${st===2?'act':''}" onclick="setStatus('${curL}', ${i}, 2)"></div></div>`; }
         let isNowClass = (i === highlightIdx) ? 'now' : '';
-        h += `<div class="sr ${isNowClass}" id="song-${i}" ontouchstart="handleTouchStart(event, 'song', ${i})" ontouchmove="handleTouchMove(event)" ontouchend="handleTouchEnd(event)" draggable="true" ondragstart="draggingSource='song'; draggingIdx=${i}" ondragover="event.preventDefault(); this.classList.add('drag-target')" ondragleave="this.classList.remove('drag-target')" ondrop="dropSongIn(event, ${i})" onclick="playSong('${curL}', ${i})">${stHTML}<div style="font-size:18px; margin-right:5px;">${s.isLink?'🌐':(s.isYt?'📺':(s.isVid?'🎬':'🎵'))}</div><div class="si" style="overflow:hidden;"><div class="st">${s.title}</div></div><div class="sr-more" onclick="event.stopPropagation(); openEdit(${i})">⋮</div></div>`;
+        
+        let iconHtml = s.thumb ? `<img src="${s.thumb}" style="width:100%; height:100%; object-fit:cover;">` : `<div style="font-size:18px;">${s.isLink?'🌐':(s.isYt?'📺':(s.isVid?'🎬':'🎵'))}</div>`;
+        
+        h += `<div class="sr ${isNowClass}" id="song-${i}" draggable="true" ondragstart="dragStartS(event, ${i})" ondragover="dragOver(event)" ondrop="dropS(event, ${i})" ondragend="dragEnd(event)" onclick="selectSong('${curL}', ${i})">${stHTML}<div class="s-thumb">${iconHtml}</div><div class="st">${s.title}</div><div class="sr-more" onclick="event.stopPropagation(); openEdit(${i})">⋮</div></div>`;
     });
-    document.getElementById('sw').innerHTML = h || `<div style="padding:20px; opacity:0.5; font-size:12px" data-i18n="lblEmpty">${i18n[curLang].lblEmpty}</div>`;
-    
+    document.getElementById('sw').innerHTML = h || `<div style="padding:20px; opacity:0.5; font-size:12px">${t('empty_list')}</div>`;
     if(highlightIdx !== -1) { setTimeout(() => { const el = document.getElementById(`song-${highlightIdx}`); if(el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 150); }
 }
 
-let touchTimer = null, touchDragActive = false, touchSourceType = '', touchSourceIdx = null, touchStartY = 0;
-function handleTouchStart(e, type, i) {
-    touchStartY = e.touches[0].clientY; touchSourceIdx = i; touchSourceType = type; touchDragActive = false; clearTimeout(touchTimer);
-    touchTimer = setTimeout(() => { touchDragActive = true; const el = document.getElementById(type === 'song' ? `song-${i}` : `list-${lists[i].id}`); if(el) el.style.opacity = '0.4'; }, 400);
-}
-function handleTouchMove(e) {
-    if(touchDragActive) {
-        e.preventDefault(); const t = e.touches[0]; const cEl = document.elementFromPoint(t.clientX, t.clientY);
-        document.querySelectorAll('.sr').forEach(el=>el.classList.remove('drag-target')); document.querySelectorAll('.li').forEach(el=>el.classList.remove('drag-over-list', 'drag-over-song'));
-        if(cEl) { if(touchSourceType === 'song') { const sC = cEl.closest('.sr'), lC = cEl.closest('.li'); if(sC) sC.classList.add('drag-target'); if(lC) lC.classList.add('drag-over-song'); } else { const lC = cEl.closest('.li'); if(lC) lC.classList.add('drag-over-list'); } }
-    } else if(Math.abs(e.touches[0].clientY - touchStartY) > 8) { clearTimeout(touchTimer); }
-}
-function handleTouchEnd(e) {
-    clearTimeout(touchTimer);
-    if(touchDragActive) {
-        e.preventDefault(); const t = e.changedTouches[0]; const tEl = document.elementFromPoint(t.clientX, t.clientY);
-        document.querySelectorAll('.sr').forEach(el=>{el.classList.remove('drag-target'); el.style.opacity='';}); document.querySelectorAll('.li').forEach(el=>{el.classList.remove('drag-over-list', 'drag-over-song'); el.style.opacity='';});
-        if(tEl) {
-            if(touchSourceType === 'song') { const sC = tEl.closest('.sr'), lC = tEl.closest('.li'); if(sC) reorderSong(touchSourceIdx, parseInt(sC.id.replace('song-',''))); else if(lC) moveSongToList(touchSourceIdx, curL, lC.id.replace('list-','')); } 
-            else { const lC = tEl.closest('.li'); if(lC) { const idx = lists.findIndex(l => l.id === lC.id.replace('list-','')); if(idx !== -1) reorderList(touchSourceIdx, idx); } }
-        }
-    }
-    touchDragActive = false;
-}
-function dropAny(e, i, id) { e.preventDefault(); document.getElementById(`list-${id}`).classList.remove('drag-over-list'); if(draggingSource==='list') reorderList(draggingIdx, i); else if(draggingSource==='song') moveSongToList(draggingIdx, curL, id); }
-function dropSongIn(e, i) { e.preventDefault(); document.querySelectorAll('.sr').forEach(el=>el.classList.remove('drag-target')); if(draggingSource==='song') reorderSong(draggingIdx, i); }
+function selL(id){ curL = id; save(); renderSB(); renderSongs(); }
 
-function updatePlayIdxOnMove(fromId, toId, oldIdx, newIdx) {
-    if(playL === fromId && playI === oldIdx) { playL = toId; playI = newIdx; }
-    else if(playL === fromId && oldIdx < playI) { playI--; }
-    else if(playL === toId && newIdx <= playI) { playI++; }
+let currentBlobUrl = null; let lastTap = 0;
+function selectSong(lId, i) {
+    let now = new Date().getTime();
+    if (now - lastTap < 400 && now - lastTap > 0) playSong(lId, i);
+    else { playL = lId; playI = i; let s = lists.find(l => l.id === playL)?.songs[playI]; if(s) document.getElementById('npT').textContent = s.title; save(); renderSongs(); }
+    lastTap = new Date().getTime();
 }
-function reorderList(from, to) { let item = lists.splice(from, 1)[0]; lists.splice(to, 0, item); save(); renderSB(); }
-function reorderSong(from, to) { 
-    let lst = lists.find(l=>l.id===curL); let item = lst.songs.splice(from, 1)[0]; lst.songs.splice(to, 0, item); 
-    if (playL === curL) { if (playI === from) playI = to; else if (from < playI && to >= playI) playI--; else if (from > playI && to <= playI) playI++; }
-    if (lst.lastI === from) lst.lastI = to; else if (from < lst.lastI && to >= lst.lastI) lst.lastI--; else if (from > lst.lastI && to <= lst.lastI) lst.lastI++;
-    save(); renderSongs(); 
-}
-function moveSongToList(idx, fromId, toId) { 
-    if(fromId===toId) return; let sL = lists.find(l=>l.id===fromId); let tL = lists.find(l=>l.id===toId); 
-    tL.songs.push(sL.songs.splice(idx,1)[0]); updatePlayIdxOnMove(fromId, toId, idx, tL.songs.length - 1);
-    if(sL.lastI === idx) sL.lastI = -1; save(); renderSongs(); renderSB(); 
-}
-
-function selL(id){ curL = id; renderSB(); renderSongs(); }
-
-function toggleVidPanel() { 
-    vidPanelOpen = !vidPanelOpen; document.getElementById('vToggle').classList.toggle('on', vidPanelOpen); 
-    const r = document.getElementById('vpResizer');
-    if(vidPanelOpen) {
-        vpEl.classList.add('open'); r.classList.add('show');
-        if(customVpHeight) { vpEl.style.maxHeight = 'none'; vpEl.style.height = customVpHeight + 'px'; }
-        wakeUpControls(); 
-    } else {
-        vpEl.classList.remove('open'); r.classList.remove('show'); vpEl.style.height = ''; vpEl.style.maxHeight = '';
-    }
-}
-
-let currentBlobUrl = null;
 
 async function playSong(lId, i){
-    userWantsToPlay = true; 
-    playL = lId; playI = i; let lst = lists.find(l => l.id === playL); 
-    lst.lastI = i; save(); 
+    initAudioCompressor(); if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); 
+    userWantsToPlay = true; playL = lId; playI = i; let lst = lists.find(l => l.id === playL); save(); 
     let s = lst?.songs[playI]; if(!s) return;
-    
-    document.getElementById('npT').textContent = s.title; 
-    document.getElementById('ytExternalLink').classList.remove('show'); 
-    syncSession(s.title);
-
-    VIDEO.classList.remove('show');
-    document.getElementById('yt-player').classList.remove('show');
+    document.getElementById('npT').textContent = s.title; document.getElementById('ytExternalLink').classList.remove('show'); 
+    VIDEO.classList.remove('show'); document.getElementById('yt-player').classList.remove('show');
 
     if(s.isLink) { window.open(s.url, '_blank'); AUDIO.pause(); isPlay = false; userWantsToPlay = false; syncB(); renderSongs(); return; }
-    
     if(s.isYt) {
-        AUDIO.pause();
-        if(!vidPanelOpen) toggleVidPanel(); 
-        document.getElementById('ytExternalLink').classList.add('show'); 
-        document.getElementById('ytExternalLink').href = `https://www.youtube.com/watch?v=${s.ytId}`;
-        document.getElementById('yt-player').classList.add('show');
-        
-        if(!ytPlayer) {
-            ytPlayer = new YT.Player('yt-player', { height:'100%', width:'100%', videoId:s.ytId, playerVars:{'autoplay':1, 'playsinline':1}, events:{'onReady':e=>e.target.setVolume(currentVolume*100), 'onStateChange':e=> { if(e.data===0) next(true); else if(e.data===1) { isPlay=true; userWantsToPlay=true; syncB(); wakeUpControls(); } else if(e.data===2) { isPlay=false; userWantsToPlay=false; syncB(); } } } });
-        } else {
-            if(typeof ytPlayer.loadVideoById === 'function') ytPlayer.loadVideoById(s.ytId);
-        }
+        AUDIO.pause(); if(!vidPanelOpen) toggleVidPanel(); 
+        document.getElementById('ytExternalLink').classList.add('show'); document.getElementById('ytExternalLink').href = `https://www.youtube.com/watch?v=${s.ytId}`; document.getElementById('yt-player').classList.add('show');
+        if(!ytPlayer) { ytPlayer = new YT.Player('yt-player', { height:'100%', width:'100%', videoId:s.ytId, playerVars:{'autoplay':1, 'playsinline':1}, events:{'onReady':e=>e.target.setVolume(currentVolume*100), 'onStateChange':e=> { if(e.data===0) next(true); else if(e.data===1) { isPlay=true; userWantsToPlay=true; syncB(); wakeUpControls(); } else if(e.data===2) { isPlay=false; userWantsToPlay=false; syncB(); } } } }); } 
+        else { if(typeof ytPlayer.loadVideoById === 'function') ytPlayer.loadVideoById(s.ytId); }
     } else {
         if(s.isVid && !vidPanelOpen) toggleVidPanel(); 
         let data = await getFile(s.id); if(!data) return; 
-        
         if(ytPlayer && typeof ytPlayer.stopVideo === 'function') try { ytPlayer.stopVideo(); } catch(e){}
-        
-        let oldBlob = currentBlobUrl;
-        currentBlobUrl = URL.createObjectURL(data);
-        
-        if(s.isVid) { 
-            AUDIO.pause();
-            VIDEO.classList.add('show'); VIDEO.src = currentBlobUrl; VIDEO.volume = currentVolume; VIDEO.play().catch(e=>console.log(e));
-        } else { 
-            VIDEO.pause();
-            AUDIO.src = currentBlobUrl; AUDIO.volume = currentVolume; AUDIO.play().catch(e=>console.log(e));
-        }
-        if(oldBlob && oldBlob.startsWith('blob:')) URL.revokeObjectURL(oldBlob);
+        let oldBlob = currentBlobUrl; currentBlobUrl = URL.createObjectURL(data);
+        if(s.isVid) { AUDIO.pause(); VIDEO.classList.add('show'); VIDEO.src = currentBlobUrl; VIDEO.volume = currentVolume; VIDEO.play().catch(e=>console.log(e)); } 
+        else { VIDEO.pause(); AUDIO.src = currentBlobUrl; AUDIO.volume = currentVolume; AUDIO.play().catch(e=>console.log(e)); }
+        if(oldBlob) URL.revokeObjectURL(oldBlob);
     }
     isPlay = true; syncB(); renderSongs(); wakeUpControls();
 }
 
-function togglePlay(){
-    let s = lists.find(l => l.id === playL)?.songs[playI]; if(!s || s.isLink) { let curLst = lists.find(l=>l.id===curL); if(curLst && curLst.songs.length > 0) return playSong(curL, 0); return; }
-    
-    if(isPlay) {
-        userWantsToPlay = false; 
-        if(s.isYt && ytPlayer && typeof ytPlayer.getPlayerState === 'function') ytPlayer.pauseVideo();
-        else { let el = s.isVid?VIDEO:AUDIO; el.pause(); }
-    } else {
-        userWantsToPlay = true; 
-        if(s.isYt && ytPlayer && typeof ytPlayer.getPlayerState === 'function') ytPlayer.playVideo();
-        else { let el = s.isVid?VIDEO:AUDIO; el.play().catch(e=>console.log(e)); }
-    }
+function togglePlay() {
+    initAudioCompressor(); if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    let s = lists.find(l => l.id === playL)?.songs[playI]; 
+    if(!s || s.isLink) { let curLst = lists.find(l=>l.id===curL); if(curLst && curLst.songs.length > 0) return playSong(curL, 0); return; }
+    let el = s.isVid ? VIDEO : AUDIO;
+    if(s.isYt) { if(ytPlayer && ytPlayer.getPlayerState && ytPlayer.getPlayerState() === 1) ytPlayer.pauseVideo(); else if(ytPlayer && ytPlayer.playVideo) ytPlayer.playVideo(); else playSong(playL, playI); } 
+    else { if(el.paused || !isPlay) { if(!el.src) playSong(playL, playI); else { el.play().catch(e=>console.log(e)); isPlay = true; userWantsToPlay = true; syncB(); } } else { el.pause(); isPlay = false; userWantsToPlay = false; syncB(); } }
     wakeUpControls();
 }
 
-// --- ZİNCİRLEME OYNATMA (PLAY-CHAIN) ---
 function next(isAuto = false) { 
     let lst = lists.find(l=>l.id===playL); if(!lst || !lst.songs.length) return; 
-    
-    // Sistem ekran kapalıyken bile cihazı uyanık tutmaya zorlanır
-    if (isAuto && 'mediaSession' in navigator) {
-        navigator.mediaSession.playbackState = 'playing';
-    }
-
-    if (isAuto && isRepeatOne) { 
-        playSong(playL, playI); 
-        return; 
-    }
-    
+    if (isAuto && isRepeatOne) { playSong(playL, playI); return; }
     let nextIdx = playI;
-    if (isShuffle) {
-        nextIdx = Math.floor(Math.random() * lst.songs.length);
-        if (lst.songs.length > 1 && nextIdx === playI) nextIdx = (nextIdx + 1) % lst.songs.length;
-    } else { 
-        nextIdx = (playI + 1) % lst.songs.length; 
-    }
-
-    // Android'in hızı kesmemesi için Async köprü iptal edildi, doğrudan komut verildi.
+    if (isShuffle) { nextIdx = Math.floor(Math.random() * lst.songs.length); if (lst.songs.length > 1 && nextIdx === playI) nextIdx = (nextIdx + 1) % lst.songs.length; } 
+    else { nextIdx = (playI + 1) % lst.songs.length; }
     playSong(playL, nextIdx); 
 }
-
 function prev() { let lst = lists.find(l=>l.id===playL); if(lst && lst.songs.length > 0) playSong(playL, (playI-1+lst.songs.length)%lst.songs.length); }
 function seekRelative(sec) { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s.isLink) return; if(s.isYt) ytPlayer.seekTo(ytPlayer.getCurrentTime()+sec, true); else { let el=s.isVid?VIDEO:AUDIO; el.currentTime+=sec; } wakeUpControls(); }
-function syncB() { document.getElementById('playB').textContent = isPlay ? '⏸' : '▶'; document.getElementById('vpPlayB').textContent = isPlay ? '⏸' : '▶'; }
+function seekToStart() { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s.isLink) return; if(s.isYt) ytPlayer.seekTo(0, true); else { let el=s.isVid?VIDEO:AUDIO; el.currentTime=0; } wakeUpControls(); }
+
+function syncB() { 
+    let pBtn = document.getElementById('playBImg'); let vpPBtn = document.getElementById('vpPlayBImg');
+    if(pBtn) pBtn.innerHTML = isPlay ? svgPause : svgPlay; if(vpPBtn) vpPBtn.innerHTML = isPlay ? svgPause : svgPlay; 
+}
 
 setInterval(() => {
-    let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s.isLink) return;
-    let dur, cur;
-    if(s.isYt && ytPlayer?.getCurrentTime) { dur = ytPlayer.getDuration(); cur = ytPlayer.getCurrentTime(); }
-    else { let el = s.isVid?VIDEO:AUDIO; dur = el?.duration; cur = el?.currentTime; }
-    if(dur>0) {
-        document.getElementById('pf').style.width = (cur/dur*100)+'%';
-        document.getElementById('timeCur').textContent = formatTime(cur);
-        document.getElementById('timeRem').textContent = "-" + formatTime(dur - cur);
-    }
+    if (!isPlay) return; 
+    let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s.isLink) return; let dur, cur;
+    if(s.isYt && ytPlayer?.getCurrentTime) { dur = ytPlayer.getDuration(); cur = ytPlayer.getCurrentTime(); } else { let el = s.isVid?VIDEO:AUDIO; dur = el?.duration; cur = el?.currentTime; }
+    if(dur>0) { document.getElementById('pf').style.width = (cur/dur*100)+'%'; document.getElementById('timeCur').textContent = formatTime(cur); document.getElementById('timeRem').textContent = "-" + formatTime(dur - cur); }
 }, 500);
+
 function formatTime(s) { if(!s||isNaN(s)) return "0:00"; let m=Math.floor(s/60); let sec=Math.floor(s%60); return `${m}:${sec<10?'0':''}${sec}`; }
-function seek(e) { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s.isLink) return; let r = e.currentTarget.getBoundingClientRect(); let clientX = e.clientX || (e.touches && e.touches[0].clientX) || (e.changedTouches && e.changedTouches[0].clientX); let pct = Math.max(0, Math.min(1, (clientX - r.left)/r.width)); if(s.isYt) ytPlayer.seekTo(pct*ytPlayer.getDuration()); else { let el=s.isVid?VIDEO:AUDIO; el.currentTime=pct*el.duration; } wakeUpControls(); }
+function seek(e) { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s.isLink) return; let r = e.currentTarget.getBoundingClientRect(); let clientX = e.clientX || (e.touches && e.touches[0].clientX); let pct = Math.max(0, Math.min(1, (clientX - r.left)/r.width)); if(s.isYt) ytPlayer.seekTo(pct*ytPlayer.getDuration()); else { let el=s.isVid?VIDEO:AUDIO; el.currentTime=pct*el.duration; } wakeUpControls(); }
 
 function openPlEdit(i) { editPlIdx = i; document.getElementById('plEditIn').value = lists[i].name; document.getElementById('plEditMo').classList.remove('hid'); }
 function savePlEdit() { lists[editPlIdx].name = document.getElementById('plEditIn').value; save(); renderSB(); closeMo('plEditMo'); }
-function deletePl() { if(confirm(i18n[curLang].btnDeleteList)) { lists[editPlIdx].songs.forEach(s => { if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); }); lists.splice(editPlIdx, 1); if(lists.length===0) lists=[{id:'l1',name:'Yeni',icon:'🌸',songs:[]}]; curL=lists[0].id; if(playL===lists[editPlIdx]?.id) { playL=null; playI=-1; AUDIO.pause(); VIDEO.pause(); isPlay=false; userWantsToPlay=false; syncB(); } save(); renderSB(); renderSongs(); closeMo('plEditMo'); } }
-
+function deletePl() { if(confirm(t('sure'))) { lists[editPlIdx].songs.forEach(s => { if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); }); lists.splice(editPlIdx, 1); if(lists.length===0) lists=[{id:'l1',name:t('pl_fav')||'Favoriler',icon:'',songs:[]}]; curL=lists[0].id; if(playL===lists[editPlIdx]?.id) { playL=null; playI=-1; AUDIO.pause(); VIDEO.pause(); isPlay=false; syncB(); } save(); renderSB(); renderSongs(); closeMo('plEditMo'); } }
 let editIdx = null;
-function openEdit(i) { editIdx = i; let s = lists.find(l=>l.id===curL).songs[i]; document.getElementById('editTitle').value=s.title; document.getElementById('editListSel').value=curL; document.getElementById('editMo').classList.remove('hid'); }
-function saveEdit() { let lst = lists.find(l => l.id === curL); lst.songs[editIdx].title = document.getElementById('editTitle').value; let tid = document.getElementById('editListSel').value; if(tid!==curL) moveSongToList(editIdx, curL, tid); save(); renderSB(); renderSongs(); closeMo('editMo'); }
-function confirmDelete() { if(confirm(i18n[curLang].btnDelete)) { let lst = lists.find(l => l.id === curL); let s = lst.songs[editIdx]; if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); lst.songs.splice(editIdx,1); if(playL===curL && playI===editIdx){ playI=-1; isPlay=false; userWantsToPlay=false; AUDIO.pause(); VIDEO.pause(); syncB(); } else if(playL===curL && editIdx<playI) { playI--; } save(); renderSongs(); closeMo('editMo'); } }
+function openEdit(i) { 
+    editIdx = i; let s = lists.find(l=>l.id===curL).songs[i]; 
+    document.getElementById('editTitle').value=s.title; 
+    document.getElementById('editListSel').value=curL; 
+    tempEditThumb = null; 
+    if (document.getElementById('editThumbStatus')) document.getElementById('editThumbStatus').style.display='none';
+    document.getElementById('editMo').classList.remove('hid'); 
+}
 
-function makePl() { let n = document.getElementById('plIn').value; if(n) { lists.push({id:Date.now().toString(), name:n, icon:'🌸', songs:[]}); save(); renderSB(); closeMo('plMo'); } }
+function saveEdit() { 
+    let lst = lists.find(l => l.id === curL); 
+    lst.songs[editIdx].title = document.getElementById('editTitle').value; 
+    if(tempEditThumb === 'REMOVE') { delete lst.songs[editIdx].thumb; }
+    else if(tempEditThumb) { lst.songs[editIdx].thumb = tempEditThumb; }
+    let tid = document.getElementById('editListSel').value; 
+    if(tid!==curL) moveSongToList(editIdx, curL, tid); 
+    tempEditThumb = null; document.getElementById('editThumbStatus').style.display='none';
+    save(); renderSB(); renderSongs(); closeMo('editMo'); 
+}function confirmDelete() { if(confirm(t('del_sure'))) { let lst = lists.find(l => l.id === curL); let s = lst.songs[editIdx]; if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); lst.songs.splice(editIdx,1); if(playL===curL && playI===editIdx){ playI=-1; isPlay=false; AUDIO.pause(); VIDEO.pause(); syncB(); } else if(playL===curL && editIdx<playI) { playI--; } save(); renderSongs(); closeMo('editMo'); } }
+function moveSongToList(idx, fromId, toId) { if(fromId===toId) return; let sL = lists.find(l=>l.id===fromId); let tL = lists.find(l=>l.id===toId); tL.songs.push(sL.songs.splice(idx,1)[0]); if(playL===fromId && playI===idx) { playL=toId; playI=tL.songs.length-1; } else if(playL===fromId && playI>idx) { playI--; } save(); renderSongs(); renderSB(); }
+
+function openSettingsMo() { document.getElementById('settingsMo').classList.remove('hid'); }
+function makePl() { let n = document.getElementById('plIn').value; if(n) { lists.push({id:Date.now().toString(), name:n, icon:'', songs:[]}); save(); renderSB(); closeMo('plMo'); } }
 function openPl() { document.getElementById('plMo').classList.remove('hid'); }
 function openAddMo() { document.getElementById('sMo').classList.remove('hid'); }
-function closeMo(id) { document.getElementById(id).classList.add('hid'); }
+function closeMo(id) { 
+    // 1. Pencereyi her halükarda gizle
+    let modal = document.getElementById(id);
+    if (modal) modal.classList.add('hid'); 
+    
+    // 2. İçerik temizleme (Hata korumalı - Element yoksa bile çökmez)
+    try {
+        if(id === 'sMo') { 
+            tempAddThumb = null; 
+            let aStatus = document.getElementById('addThumbStatus'); 
+            if(aStatus) aStatus.style.display = 'none'; 
+            let aIn = document.getElementById('addThumbIn'); 
+            if(aIn) aIn.value = ''; 
+        }
+        if(id === 'editMo') { 
+            tempEditThumb = null; 
+            let eStatus = document.getElementById('editThumbStatus'); 
+            if(eStatus) eStatus.style.display = 'none'; 
+            let eIn = document.getElementById('editThumbIn'); 
+            if(eIn) eIn.value = ''; 
+        }
+    } catch(err) {
+        console.log("Kapatma temizliği atlandı:", err);
+    }
+}
 
 document.getElementById('fIn').onchange = async e => {
-    let files = Array.from(e.target.files), tid = document.getElementById('pSel').value, lst = lists.find(l=>l.id===tid);
-    document.querySelector('.add-s').textContent = "Yükleniyor...";
-    for(let f of files) { let id = "f_"+Math.random().toString(36).substr(2,9); await storeFile(id, f); lst.songs.push({id, title:f.name, isVid:f.type.includes('video'), isYt:false, isLink:false, status:0}); }
-    document.querySelector('.add-s').textContent = i18n[curLang].btnAdd; save(); renderSongs(); renderSB(); closeMo('sMo');
+    let files = Array.from(e.target.files), tid = document.getElementById('pSel').value, lst = lists.find(l=>l.id===tid); document.querySelector('.add-s').textContent = t('loading');
+    for(let f of files) { let id = "f_"+Math.random().toString(36).substr(2,9); await storeFile(id, f); lst.songs.push({id, title:f.name, isVid:f.type.includes('video'), isYt:false, isLink:false, status:0, thumb: tempAddThumb}); }
+    document.querySelector('.add-s').textContent = t('add_content_btn'); tempAddThumb = null; document.getElementById('addThumbStatus').style.display='none'; save(); renderSongs(); renderSB(); closeMo('sMo');
 };
 
 function addAnyLink() {
     let url = document.getElementById('ytUrl').value, title = document.getElementById('ytTitle').value || "Link";
-    let ytId = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/)?.[1];
-    let lst = lists.find(l=>l.id===document.getElementById('pSel').value);
-    if(ytId) lst.songs.push({id:"yt_"+Date.now(), title, isYt:true, ytId, isLink:false, status:0}); else if(url.startsWith('http')) lst.songs.push({id:"lk_"+Date.now(), title, isLink:true, url, status:0});
+    let ytId = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/)?.[1]; let lst = lists.find(l=>l.id===document.getElementById('pSel').value);
+    if(ytId) lst.songs.push({id:"yt_"+Date.now(), title, isYt:true, ytId, isLink:false, status:0, thumb: tempAddThumb}); 
+    else if(url.startsWith('http')) lst.songs.push({id:"lk_"+Date.now(), title, isLink:true, url, status:0, thumb: tempAddThumb});
+    tempAddThumb = null; document.getElementById('addThumbStatus').style.display='none';
     save(); renderSongs(); renderSB(); closeMo('sMo');
 }
 
 let sleepInterval;
-function setSleep(min) {
-    clearInterval(sleepInterval);
-    if(min===0) {
-        document.getElementById('timerBadge').classList.add('hid');
-        return closeMo('sleepMo');
-    }
-    let s=min*60;
-    document.getElementById('timerBadge').classList.remove('hid');
-    document.getElementById('timerBadge').textContent=formatTime(s);
-    sleepInterval=setInterval(()=>{
-        s--;
-        if(s<=0){
-            clearInterval(sleepInterval);
-            document.getElementById('timerBadge').classList.add('hid');
-            
-            // KALKAN DEVRE DIŞI BIRAKILIYOR (Önce bayraklar iniyor)
-            isPlay=false;
-            userWantsToPlay=false;
-            
-            // SONRA MEDYA DURDURULUYOR
-            if(AUDIO) AUDIO.pause();
-            if(VIDEO) VIDEO.pause();
-            try{ if(ytPlayer && typeof ytPlayer.pauseVideo === 'function') ytPlayer.pauseVideo(); }catch(e){}
-            
-            syncB();
-            wakeUpControls();
-        } else {
-            document.getElementById('timerBadge').textContent=formatTime(s);
-        }
-    },1000);
-    closeMo('sleepMo');
-}
+function setSleep(min) { clearInterval(sleepInterval); if(min===0) { document.getElementById('timerBadge')?.classList.add('hid'); return closeMo('sleepMo'); } let s=min*60; document.getElementById('timerBadge')?.classList.remove('hid'); if(document.getElementById('timerBadge')) document.getElementById('timerBadge').textContent=formatTime(s); sleepInterval=setInterval(()=>{ s--; if(s<=0){ clearInterval(sleepInterval); document.getElementById('timerBadge')?.classList.add('hid'); isPlay=false; userWantsToPlay=false; if(AUDIO) AUDIO.pause(); if(VIDEO) VIDEO.pause(); try{ if(ytPlayer?.pauseVideo) ytPlayer.pauseVideo(); }catch(e){} syncB(); wakeUpControls(); } else { if(document.getElementById('timerBadge')) document.getElementById('timerBadge').textContent=formatTime(s); } },1000); closeMo('sleepMo'); }
 function openSleepMo() { document.getElementById('sleepMo').classList.remove('hid'); }
+
+// Ekranda herhangi bir yere çift tıklamada seçimi (mavi kutuyu) iptal et. Sadece inputlar hariç.
+document.addEventListener('dblclick', function(e) {
+    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+        window.getSelection().removeAllRanges();
+    }
+});
+
+document.addEventListener('mousedown', function(e) {
+    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.detail > 1) {
+        e.preventDefault(); 
+    }
+}, false);
+
+// --- SÜRÜKLE BIRAK (DRAG & DROP) MOTORU ---
+let dragSrcIdx = null;
+
+function dragStartL(e, i) { dragSrcIdx = i; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; }
+function dragStartS(e, i) { dragSrcIdx = i; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; }
+function dragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+function dragEnd(e) { e.currentTarget.classList.remove('dragging'); }
+
+function dropL(e, destIdx) {
+    e.stopPropagation();
+    if (dragSrcIdx !== null && dragSrcIdx !== destIdx) {
+        let movedList = lists.splice(dragSrcIdx, 1)[0];
+        lists.splice(destIdx, 0, movedList);
+        save(); renderSB(); renderSongs();
+    }
+    dragSrcIdx = null;
+}
+
+function dropS(e, destIdx) {
+    e.stopPropagation();
+    if (dragSrcIdx !== null && dragSrcIdx !== destIdx) {
+        let lst = lists.find(l => l.id === curL);
+        let movedSong = lst.songs.splice(dragSrcIdx, 1)[0];
+        lst.songs.splice(destIdx, 0, movedSong);
+        
+        // Eğer çalan şarkı taşındıysa, çalan şarkının sırasını (playI) kaybetmemek için düzelt
+        if (playL === curL) {
+            if (playI === dragSrcIdx) { playI = destIdx; }
+            else if (dragSrcIdx < playI && destIdx >= playI) { playI--; }
+            else if (dragSrcIdx > playI && destIdx <= playI) { playI++; }
+        }
+        save(); renderSongs();
+    }
+    dragSrcIdx = null;
+}
+
+// --- SOL SÜTUN BOYUTLANDIRMA (RESIZER) MOTORU ---
+const sbResizerHandle = document.getElementById('sbResizer');
+const sbElement = document.getElementById('sbEle');
+let isResizingSB = false;
+
+sbResizerHandle.addEventListener('mousedown', function(e) {
+    isResizingSB = true;
+    sbResizerHandle.classList.add('active');
+    document.addEventListener('mousemove', handleMouseMoveSB);
+    document.addEventListener('mouseup', handleMouseUpSB);
+    e.preventDefault();
+});
+
+function handleMouseMoveSB(e) {
+    if (!isResizingSB) return;
+    // Maksimum genişlik ekranın yarısı (window.innerWidth / 2) olsun
+    let newWidth = e.clientX;
+    let maxWidth = window.innerWidth / 2;
+    if (newWidth >= 120 && newWidth <= maxWidth) {
+        sbElement.style.width = newWidth + 'px';
+    }
+}
+
+function handleMouseUpSB() {
+    if(isResizingSB) {
+        isResizingSB = false;
+        sbResizerHandle.classList.remove('active');
+        document.removeEventListener('mousemove', handleMouseMoveSB);
+        document.removeEventListener('mouseup', handleMouseUpSB);
+    }
+}
+
 </script>
 </body>
 </html>
