@@ -7,6 +7,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Fowalink — Media Player</title>
+<!-- v1.1.0 -->
+
 
 <link rel="icon" href="assets/icon.ico" type="image/x-icon">
 <link rel="apple-touch-icon" href="assets/logo.png">
@@ -72,7 +74,13 @@ body.light-mode .tbtn.on { color: #fff; }
 .sr:hover{background:var(--s2)}
 .sr.now{background:var(--pkd); border:1px solid var(--br); font-weight: 600; color: var(--pkl);}
 .st{font-size:13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;}
-.sr-more{color: var(--dm); font-size: 18px; padding: 5px;}
+.sr-more{color: var(--dm); font-size: 22px; padding: 12px 16px; margin: -8px -6px -8px 0; border-radius: 10px; line-height: 1; flex-shrink: 0;}
+.sr-more:hover{ color: var(--pk); background: rgba(255,255,255,0.08); }
+
+/* FAVORİ YILDIZI */
+.st-star { color: var(--dm); font-size: 18px; padding: 4px 6px; cursor: pointer; flex-shrink: 0; transition: 0.2s; line-height: 1; }
+.st-star:hover { transform: scale(1.25); color: #ffd24a; }
+.st-star.on { color: #ffd24a; text-shadow: 0 0 8px rgba(255,210,74,0.5); }
 
 /* TRACKING DOTS */
 .st-trk { display:flex; gap:6px; margin-right:8px; align-items:center; }
@@ -167,6 +175,26 @@ body.light-mode #app.fullscreen-mode .player { background: rgba(255,255,255,0.95
 .mo h3{color:var(--pkl); margin-bottom:15px; font-family:'Outfit', sans-serif; font-size: 18px; font-weight: 700;}
 .mo input, .mo select{width:100%; background:var(--bg); border:1px solid var(--bs); color:var(--tx); padding:14px; border-radius:12px; margin-bottom:12px; font-family: 'Inter', sans-serif; font-size: 13px; transition: 0.2s;}
 .mo input:focus, .mo select:focus { border-color: var(--pk); }
+.lang-b{background:var(--bg); border:1px solid var(--bs); color:var(--tx); padding:9px 13px; border-radius:10px; font-size:12px; font-weight:600; cursor:pointer; transition:0.15s; font-family:'Inter',sans-serif;}
+.lang-b:hover{border-color:var(--pk);}
+.lang-b.active{background:var(--pk); color:#fff; border-color:var(--pk);}
+.ved-num{ width:48px !important; padding:8px 4px !important; margin-bottom:0 !important; text-align:center; }
+.ved-lbl{ font-size:11px; color:var(--dm); }
+/* Özel dil açılır menüsü (native select Electron'da açılmadığı için) */
+.lang-dd{ position:relative; margin-bottom:12px; }
+.lang-dd-cur{ background:var(--bg); border:1px solid var(--bs); color:var(--tx); padding:14px; border-radius:12px; font-size:13px; font-weight:600; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:0.2s; }
+.lang-dd-cur:hover{ border-color:var(--pk); }
+.lang-dd-arrow{ color:var(--dm); transition:0.2s; }
+.lang-dd.open .lang-dd-arrow{ transform:rotate(180deg); }
+.lang-dd-list{ display:none; position:absolute; top:100%; left:0; right:0; margin-top:4px; background:var(--sur); border:1px solid var(--bs); border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.45); z-index:100; max-height:240px; overflow-y:auto; }
+.lang-dd.open .lang-dd-list{ display:block; }
+.lang-dd-opt{ padding:12px 14px; font-size:13px; color:var(--tx); cursor:pointer; transition:0.12s; }
+.lang-dd-opt:hover{ background:var(--pk); color:#fff; }
+#dropOverlay{ position:fixed; inset:0; z-index:20000; display:none; align-items:center; justify-content:center; background:rgba(10,10,15,0.82); backdrop-filter:blur(2px); padding:24px; pointer-events:none; }
+#dropOverlay.show{ display:flex; }
+#dropOverlay .drop-box{ border:3px dashed var(--pk); border-radius:24px; padding:40px 34px; text-align:center; color:var(--tx); background:var(--sur); max-width:420px; box-shadow:0 12px 40px rgba(0,0,0,0.5); }
+#dropOverlay .drop-ico{ font-size:52px; margin-bottom:12px; }
+#dropOverlay #dropMsg{ font-size:15px; font-weight:600; line-height:1.5; }
 .btn{width:100%; padding:14px; border-radius:12px; border:none; font-weight:600; cursor:pointer; margin-top:5px; font-size: 13px; transition: 0.2s;}
 .btn-p { background: var(--pk); color: #111; }
 body.light-mode .btn-p { color: #fff; }
@@ -190,14 +218,23 @@ body.light-mode .btn-p { color: #fff; }
     -webkit-touch-callout: none !important;
 }
 
-::selection { background: transparent !important; color: inherit !important; }
-::-moz-selection { background: transparent !important; color: inherit !important; }
+/* Metin seçimi artık GÖRÜNÜR (seçilen kısım net biçimde renklenir) */
+::selection { background: var(--pk) !important; color: #fff !important; }
+::-moz-selection { background: var(--pk) !important; color: #fff !important; }
 
 input, textarea, select {
     -webkit-user-select: auto !important;
     -moz-user-select: auto !important;
     -ms-user-select: auto !important;
     user-select: auto !important;
+}
+
+/* Metin içeren alanlarda (şarkı adı, başlıklar, modal metinleri) seçim yapılabilsin */
+.st, #npT, .ct-name, .sb-lbl, .mo p, .mo label, .mo h3, .info-box {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
 }
 
 /* YAN SÜTUN BOYUTLANDIRICI */
@@ -213,10 +250,11 @@ input, textarea, select {
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <div id="themeToast" class="theme-toast hid">Bilgi</div>
+<div id="dropOverlay"><div class="drop-box"><div class="drop-ico">📥</div><div id="dropMsg" data-i18n="drop_hint">Dosyaları bırak — listeye eklenecek</div></div></div>
 
 <div id="app">
     <audio id="aEl" playsinline webkit-playsinline style="display:none;"></audio>
-    <input type="file" id="fIn" multiple style="display:none">
+    <input type="file" id="fIn" multiple accept="audio/*,video/*,.mp3,.m4a,.aac,.wav,.ogg,.opus,.flac,.mp4,.webm,.mkv,.mov" style="display:none">
     <input type="file" id="subIn" accept=".srt,.vtt" style="display:none">
     
     <div class="topbar">
@@ -331,6 +369,9 @@ input, textarea, select {
             </button>
           </div>
           <div class="side-ctr">
+              <button class="btn-icon" id="speedBtn" onclick="cycleSpeed()" title="Oynatma Hızı" data-i18n-title="tip_speed">
+                  <span class="btn-sec-text" id="speedTxt">1x</span>
+              </button>
               <button class="btn-icon toggle-btn" id="shufImg" onclick="toggleShuffle()" title="Listeyi Karışık Çal" data-i18n-title="tip_shuf">
                   <svg class="btn-svg" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
               </button>
@@ -342,24 +383,75 @@ input, textarea, select {
     </div>
 </div>
 
-<div class="ov hid" id="plEditMo"><div class="mo"><h3 data-i18n="edit_list_title">Düzenle</h3><input id="plEditIn"><button class="btn btn-p" onclick="savePlEdit()" data-i18n="save_btn">Kaydet</button><button class="btn" style="background:var(--s3); color:var(--pk)" onclick="deletePl()" data-i18n="delete_btn">Listeyi Sil ✕</button><button class="btn btn-s" onclick="closeMo('plEditMo')" data-i18n="cancel_btn">İptal</button></div></div>
+<div class="ov hid" id="plEditMo"><div class="mo"><h3 data-i18n="edit_list_title">Düzenle</h3><input id="plEditIn"><button class="btn btn-p" onclick="savePlEdit()" data-i18n="save_btn">Kaydet</button><button class="btn btn-s" style="border:1px solid var(--br); color:var(--pk);" onclick="clearPlSongs()" data-i18n="clear_list_btn">🗑 Tüm İçeriği Kaldır</button><button class="btn" style="background:var(--s3); color:var(--pk)" onclick="deletePl()" data-i18n="delete_btn">Listeyi Sil ✕</button><button class="btn btn-s" onclick="closeMo('plEditMo')" data-i18n="cancel_btn">İptal</button></div></div>
 <div class="ov hid" id="plMo"><div class="mo"><h3 data-i18n="new_list_title">Yeni Liste</h3><input id="plIn" placeholder="Adı..." data-i18n="new_list_title"><button class="btn btn-p" onclick="makePl()">Tamam</button><button class="btn btn-s" onclick="closeMo('plMo')" data-i18n="cancel_btn">Vazgeç</button></div></div>
-<div class="ov hid" id="sMo"><div class="mo"><h3 data-i18n="add_content_btn">İçerik Ekle</h3><button class="btn btn-p" onclick="document.getElementById('fIn').click()" data-i18n="add_file_btn">Cihazdan Dosya Seç</button><div style="margin: 10px 0; font-size: 11px; text-align: center; color:var(--dm);" data-i18n="or_link">— VEYA LINK —</div><input id="ytUrl" placeholder="Site / Ders Linki..." data-i18n="ph_url"><input id="ytTitle" placeholder="Başlık" data-i18n="ph_title"><div style="margin-bottom:10px;"><button class="btn btn-s" style="background:transparent; border:1px solid var(--bs); color:var(--tx);" onclick="document.getElementById('addThumbIn').click()" data-i18n="add_thumb">🖼 Görsel Ekle (İsteğe Bağlı)</button><input type="file" id="addThumbIn" accept="image/*" style="display:none" onchange="handleThumbSel(event, 'add')"><div id="addThumbStatus" style="font-size:11px; color:var(--pk); text-align:center; margin-top:5px; display:none;" data-i18n="thumb_ok">Görsel Seçildi ✓</div></div><label style="font-size: 10px; color: var(--dm);" data-i18n="target_list">HEDEF LİSTE:</label><select id="pSel"></select><button class="btn btn-p" style="background:var(--teal); color:#000;" onclick="addAnyLink()" data-i18n="add_link_btn">Link Ekle</button><button class="btn btn-s" onclick="closeMo('sMo')" data-i18n="close_btn">Kapat</button></div></div>
+<div class="ov hid" id="sMo"><div class="mo"><h3 data-i18n="add_content_btn">İçerik Ekle</h3><label style="font-size: 10px; color: var(--dm);" data-i18n="fmt_lbl">DOSYA TÜRÜ:</label><select id="fmtSel" onchange="setFileFilter(this.value)"><option value="media" data-i18n="fmt_all">Tüm Medya (Ses + Video)</option><option value="audio" data-i18n="fmt_audio">Sadece Ses (MP3, WAV, FLAC...)</option><option value="video" data-i18n="fmt_video">Sadece Video (MP4, MKV, WEBM...)</option></select><button class="btn btn-p" onclick="document.getElementById('fIn').click()" data-i18n="add_file_btn">Cihazdan Dosya Seç</button><div style="margin: 10px 0; font-size: 11px; text-align: center; color:var(--dm);" data-i18n="or_link">— VEYA LINK —</div><input id="ytUrl" placeholder="Site / Ders Linki..." data-i18n="ph_url"><input id="ytTitle" placeholder="Başlık" data-i18n="ph_title"><div style="margin-bottom:10px;"><button class="btn btn-s" style="background:transparent; border:1px solid var(--bs); color:var(--tx);" onclick="document.getElementById('addThumbIn').click()" data-i18n="add_thumb">🖼 Görsel Ekle (İsteğe Bağlı)</button><input type="file" id="addThumbIn" accept="image/*" style="display:none" onchange="handleThumbSel(event, 'add')"><div id="addThumbStatus" style="font-size:11px; color:var(--pk); text-align:center; margin-top:5px; display:none;" data-i18n="thumb_ok">Görsel Seçildi ✓</div></div><label style="font-size: 10px; color: var(--dm);" data-i18n="target_list">HEDEF LİSTE:</label><select id="pSel"></select><button class="btn btn-p" style="background:var(--teal); color:#000;" onclick="addAnyLink()" data-i18n="add_link_btn">Link Ekle</button><button class="btn btn-s" onclick="closeMo('sMo')" data-i18n="close_btn">Kapat</button></div></div>
 
-<div class="ov hid" id="editMo"><div class="mo"><h3 data-i18n="edit_list_title">Düzenle</h3><input id="editTitle"><div style="display:flex; gap:5px; margin-bottom:10px;"><button class="btn btn-s" style="background:transparent; border:1px solid var(--bs); flex:1; color:var(--tx);" onclick="document.getElementById('editThumbIn').click()" data-i18n="edit_thumb">🖼 Görseli Değiştir</button><button class="btn btn-s" style="background:transparent; border:1px solid var(--br); color:var(--pk); width:auto; padding: 0 10px;" onclick="removeEditThumb()" data-i18n-title="remove_thumb_btn" title="Görseli Kaldır">🗑</button></div><input type="file" id="editThumbIn" accept="image/*" style="display:none" onchange="handleThumbSel(event, 'edit')"><div id="editThumbStatus" style="font-size:11px; color:var(--pk); text-align:center; margin-bottom:10px; display:none;" data-i18n="thumb_ok">Görsel Seçildi ✓</div><label style="font-size: 10px;" data-i18n="target_list">TAŞI / HEDEF:</label><select id="editListSel"></select><button class="btn btn-p" onclick="saveEdit()" data-i18n="save_btn">Kaydet</button><button class="btn" style="background:var(--s3); color:var(--pk);" onclick="confirmDelete()" data-i18n="delete_btn">Sil ✕</button><button class="btn btn-s" onclick="closeMo('editMo')" data-i18n="close_btn">Kapat</button></div></div>
+<!-- NOT: Daha önce burada aynı id'li (editMo) İKİ modal vardı; çift ID hatası giderildi -->
+<div class="ov hid" id="editMo"><div class="mo"><h3 data-i18n="edit_list_title">Düzenle</h3><input id="editTitle"><div style="display:flex; gap:5px; margin-bottom:10px;"><button class="btn btn-s" style="background:transparent; border:1px solid var(--bs); flex:1; color:var(--tx);" onclick="document.getElementById('editThumbIn').click()" data-i18n="edit_thumb">🖼 Görseli Değiştir</button><button class="btn btn-s" style="background:transparent; border:1px solid var(--br); color:var(--pk); width:auto; padding: 0 10px;" onclick="removeEditThumb()" data-i18n-title="remove_thumb_btn" title="Görseli Kaldır">🗑</button></div><input type="file" id="editThumbIn" accept="image/*" style="display:none" onchange="handleThumbSel(event, 'edit')"><div id="editThumbStatus" style="font-size:11px; color:var(--pk); text-align:center; margin-bottom:10px; display:none;" data-i18n="thumb_ok">Görsel Seçildi ✓</div>
+<label style="font-size: 10px;" data-i18n="target_list">TAŞI / HEDEF:</label><select id="editListSel"></select>
+<button class="btn btn-p" style="background:var(--teal); color:#000; margin-top:6px;" onclick="openAdvEditorFromEdit()" data-i18n="edit_adv_btn">🎬 Gelişmiş Video/Ses Düzenle</button>
+<button class="btn btn-s" style="border:1px solid var(--bs);" onclick="downloadCurrentEdit()" data-i18n="ved_download_btn">⬇️ İndir</button>
+<button class="btn btn-p" onclick="saveEdit()" data-i18n="save_btn">Kaydet</button><button class="btn" style="background:var(--s3); color:var(--pk);" onclick="confirmDelete()" data-i18n="delete_btn">Sil ✕</button><button class="btn btn-s" onclick="closeMo('editMo')" data-i18n="close_btn">Kapat</button></div></div>
 
-<div class="ov hid" id="editMo"><div class="mo"><h3 data-i18n="edit_list_title">Düzenle</h3><input id="editTitle"><div style="display:flex; gap:5px; margin-bottom:10px;"><button class="btn btn-s" style="background:transparent; border:1px solid var(--bs); flex:1;" onclick="document.getElementById('editThumbIn').click()" data-i18n="edit_thumb">🖼 Görseli Değiştir</button><button class="btn btn-s" style="background:transparent; border:1px solid var(--br); color:var(--pk); width:auto; padding: 0 10px;" onclick="removeEditThumb()" data-i18n-title="remove_thumb_btn" title="Görseli Kaldır">🗑</button></div><input type="file" id="editThumbIn" accept="image/*" style="display:none" onchange="handleThumbSel(event, 'edit')"><div id="editThumbStatus" style="font-size:11px; color:var(--pk); text-align:center; margin-bottom:10px; display:none;" data-i18n="thumb_ok">Görsel Seçildi ✓</div><label style="font-size: 10px;" data-i18n="target_list">TAŞI / HEDEF:</label><select id="editListSel"></select><button class="btn btn-p" onclick="saveEdit()" data-i18n="save_btn">Kaydet</button><button class="btn" style="color:var(--pk);" onclick="confirmDelete()" data-i18n="delete_btn">Sil ✕</button><button class="btn btn-s" onclick="closeMo('editMo')" data-i18n="close_btn">Kapat</button></div></div>
-<div class="ov hid" id="sleepMo"><div class="mo"><h3 data-i18n="sleep_title">Uyku Zamanlayıcısı</h3><button class="btn btn-s" onclick="setSleep(15)" data-i18n="sleep_15">15 Dakika</button><button class="btn btn-s" onclick="setSleep(30)" data-i18n="sleep_30">30 Dakika</button><button class="btn btn-s" onclick="setSleep(60)" data-i18n="sleep_60">1 Saat</button><button class="btn btn-p" style="margin-top:10px;" onclick="setSleep(0)" data-i18n="sleep_cancel">İptal Et</button><button class="btn btn-s" style="background:transparent; border:1px solid var(--bs);" onclick="closeMo('sleepMo')" data-i18n="close_btn">Kapat</button></div></div>
+<!-- GELİŞMİŞ DÜZENLEYİCİ PENCERESİ (Görev 3) -->
+<div class="ov hid" id="vedMo"><div class="mo" style="max-width:540px; width:94%; max-height:92vh; overflow-y:auto;">
+  <h3 data-i18n="ved_title">Gelişmiş Düzenleyici</h3>
+  <div style="background:#000; border-radius:12px; overflow:hidden; margin-bottom:12px; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;">
+    <canvas id="edCanvas" width="640" height="360" style="width:100%; height:100%; object-fit:contain; background:#000;"></canvas>
+  </div>
+  <label style="font-size:10px; color:var(--dm);" data-i18n="ved_effect_lbl">EFEKT:</label>
+  <select id="vedFx" onchange="vedUpdateUI()">
+    <option value="trim" data-i18n="ved_fx_trim">✂️ Kırp / Döngü</option>
+    <option value="slow" data-i18n="ved_fx_slow">🐢 Yavaş Çekim</option>
+    <option value="fast" data-i18n="ved_fx_fast">⚡ Hızlı / Zaman Atlamalı</option>
+    <option value="reverse" data-i18n="ved_fx_reverse">◀️ Ters Oynatma</option>
+    <option value="freeze" data-i18n="ved_fx_freeze">⏸️ Kare Dondurma</option>
+    <option value="ramp" data-i18n="ved_fx_ramp">📈 Hız Rampası</option>
+  </select>
+  <label style="font-size:10px; color:var(--dm);"><span data-i18n="ved_trim_lbl">✂️ Kırpma (dk : sn)</span> — <span id="vedDurLbl" style="color:var(--pk);"></span></label>
+  <div style="display:flex; flex-wrap:wrap; gap:6px 14px; align-items:center; margin-bottom:8px;">
+    <span class="ved-lbl" data-i18n="ved_start_lbl">Başlangıç</span>
+    <span style="display:flex; align-items:center; gap:3px;"><input class="ved-num" id="vedStartMin" type="number" min="0" step="1" value="0" inputmode="numeric" onchange="vedClampTimes()"><b style="color:var(--dm);">:</b><input class="ved-num" id="vedStartSec" type="number" min="0" max="59" step="1" value="0" inputmode="numeric" onchange="vedClampTimes()"></span>
+    <span class="ved-lbl" data-i18n="ved_end_lbl">Bitiş</span>
+    <span style="display:flex; align-items:center; gap:3px;"><input class="ved-num" id="vedEndMin" type="number" min="0" step="1" value="0" inputmode="numeric" onchange="vedClampTimes()"><b style="color:var(--dm);">:</b><input class="ved-num" id="vedEndSec" type="number" min="0" max="59" step="1" value="0" inputmode="numeric" onchange="vedClampTimes()"></span>
+  </div>
+  <div id="vedSpeedRow" style="display:none;"><label style="font-size:10px; color:var(--dm);" data-i18n="ved_speed_lbl">Hız (kat):</label><input id="vedSpeed" type="number" min="0.25" max="8" step="0.25" value="2" inputmode="decimal"></div>
+  <div id="vedFreezeRow" style="display:none;"><label style="font-size:10px; color:var(--dm);" data-i18n="ved_freeze_lbl">Dondurma anı (saniye) ve süre (sn):</label><div style="display:flex; gap:5px;"><input id="vedFreezeAt" type="number" min="0" step="1" value="1" inputmode="numeric" placeholder="An (sn)" data-i18n="ved_freeze_at_ph" style="flex:1; text-align:center;"><input id="vedFreezeDur" type="number" min="0.5" max="10" step="0.5" value="2" inputmode="decimal" style="flex:1; text-align:center;"></div></div>
+  <div id="vedRepeatRow" style="display:none; align-items:center; gap:8px; margin-bottom:8px;"><label style="font-size:11px; color:var(--dm); margin:0;">🔁 Tekrar (döngü):</label><input class="ved-num" id="vedRepeat" type="number" min="1" max="5" step="1" value="1" inputmode="numeric"></div>
+  <label style="font-size:10px; color:var(--dm);" data-i18n="ved_name_lbl">Yeni dosya adı:</label>
+  <input id="vedName" placeholder="video (Düzenlendi)">
+  <p id="vedHint" style="font-size:10px; color:var(--mu); line-height:1.5; margin:6px 0 10px;" data-i18n="ved_hint">İpucu: Efekti seç, istersen kırp, sonra "Oluştur & Kaydet"e bas. Orijinal dosyan listede kalır; düzenlenmiş kopya ayrı kaydedilir.</p>
+  <div id="vedProg" style="display:none; margin:8px 0;"><div style="height:9px; background:var(--s2); border-radius:6px; overflow:hidden;"><div id="vedProgBar" style="height:100%; width:0; background:var(--pk); transition:width .2s;"></div></div><div id="vedProgTxt" style="font-size:11px; color:var(--pk); text-align:center; margin-top:5px;"></div></div>
+  <button class="btn btn-p" id="vedRenderBtn" onclick="vedRender()" data-i18n="ved_render_btn">🎬 Oluştur & Kaydet</button>
+  <button class="btn btn-p" id="vedDlBtn" style="display:none; background:var(--teal); color:#000;" onclick="vedDownloadLast()" data-i18n="ved_download_btn">⬇️ İndir</button>
+  <button class="btn btn-s" onclick="vedClose()" data-i18n="ved_close_btn">Kapat</button>
+</div></div>
+<div class="ov hid" id="sleepMo"><div class="mo"><h3 data-i18n="sleep_title">Uyku Zamanlayıcısı</h3><button class="btn btn-s" onclick="setSleep(15)" data-i18n="sleep_15">15 Dakika</button><button class="btn btn-s" onclick="setSleep(30)" data-i18n="sleep_30">30 Dakika</button><button class="btn btn-s" onclick="setSleep(60)" data-i18n="sleep_60">1 Saat</button>
+<div style="margin-top:14px; border-top:1px solid var(--bs); padding-top:12px;">
+<label style="font-size:11px; color:var(--dm); display:block; margin-bottom:6px;" data-i18n="sleep_custom_lbl">⏱ Manuel Süre (dakika, en fazla 12 saat = 720 dk):</label>
+<div style="display:flex; gap:6px;"><input id="sleepCustomIn" type="number" min="1" max="720" step="1" inputmode="numeric" placeholder="Örn: 90" data-i18n="sleep_custom_ph" style="flex:1;" onkeydown="if(event.key==='Enter'){setSleepCustom();}"><button class="btn btn-p" style="width:auto; padding:0 18px; margin:0;" onclick="setSleepCustom()" data-i18n="sleep_start_btn">Başlat</button></div>
+</div>
+<button class="btn btn-p" style="margin-top:14px; background:var(--s3); color:var(--pk);" onclick="setSleep(0)" data-i18n="sleep_cancel">İptal Et</button><button class="btn btn-s" style="background:transparent; border:1px solid var(--bs);" onclick="closeMo('sleepMo')" data-i18n="close_btn">Kapat</button></div></div>
 
 <div class="ov hid" id="settingsMo">
   <div class="mo">
     <h3 data-i18n="set_title">Ayarlar</h3>
     
     <label style="font-size: 12px; color: var(--tx); font-weight:700; margin-top:5px; display:block;" data-i18n="set_lang_lbl">Dil / Language:</label>
-    <select id="langSel" onchange="setLanguage(this.value)" style="margin-top: 5px; font-weight:600;">
-        <option value="tr">Türkçe</option><option value="en">English</option><option value="ja">日本語</option><option value="ko">한국어</option>
-        <option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="ru">Русский</option>
-    </select>
+    <div class="lang-dd" id="langDD" style="margin-top:5px;">
+        <div class="lang-dd-cur" onclick="toggleLangDD(event)"><span id="langCurLabel">Türkçe</span><span class="lang-dd-arrow">▾</span></div>
+        <div class="lang-dd-list" id="langDDList">
+            <div class="lang-dd-opt" onclick="pickLang('tr')">Türkçe</div>
+            <div class="lang-dd-opt" onclick="pickLang('en')">English</div>
+            <div class="lang-dd-opt" onclick="pickLang('ja')">日本語</div>
+            <div class="lang-dd-opt" onclick="pickLang('ko')">한국어</div>
+            <div class="lang-dd-opt" onclick="pickLang('de')">Deutsch</div>
+            <div class="lang-dd-opt" onclick="pickLang('fr')">Français</div>
+            <div class="lang-dd-opt" onclick="pickLang('es')">Español</div>
+            <div class="lang-dd-opt" onclick="pickLang('ru')">Русский</div>
+        </div>
+    </div>
 
     <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px; margin-bottom:10px;">
         <label style="font-size: 12px; color: var(--tx); font-weight:700;" data-i18n="set_eq_lbl">Ses Dengeleyici:</label>
@@ -403,14 +495,14 @@ input, textarea, select {
 <script>
 // ÇEVİRİ ALTYAPISI (İÇERİK VE İPUÇLARI / TOOLTIPS DAHİL)
 const dict = {
-    'tr': { export_mo_title:'Dışa Aktarılacak Listeler', export_mo_desc:'Sadece içinde link veya YouTube videosu olan listeler aşağıda görünür. İstemediğin listelerin işaretini kaldırabilirsin.', export_mo_empty:'Dışa aktarılacak link/video barındıran liste yok. Cihazındaki yerel dosyalar aktarılamaz.', export_mo_btn:'Seçilenleri İndir', export_mo_alert:'Lütfen en az bir liste seçin.', add_thumb: '🖼 Görsel Ekle (İsteğe Bağlı)', edit_thumb: '🖼 Görseli Değiştir', thumb_ok: 'Görsel Seçildi ✓', thumb_rem: 'Kaldırılacak 🗑', remove_thumb_btn: 'Görseli Kaldır', ph_url: 'Site / Ders Linki...', ph_title: 'Başlık', tip_eq: 'Ses Modunu (EQ) Değiştir', tip_vid: 'Video Ekranını Aç/Kapat', tip_sleep: 'Uyku Zamanlayıcısı Kur', tip_set: 'Ayarlar ve Temalar', tip_add_list: 'Yeni Liste Oluştur', tip_add_c: 'Cihazdan dosya veya link ekle', tip_cc: 'Altyazı Menüsü', tip_fs: 'Tam Ekran Ayarı', tip_start: 'Başa Al', tip_m5: '5 Saniye Geri', tip_pp: 'Oynat / Duraklat', tip_p5: '5 Saniye İleri', tip_next: 'Sonraki Şarkı/Video', tip_vol: 'Ses Ayarı', tip_prev: 'Önceki Şarkı', tip_shuf: 'Listeyi Karışık Çal', tip_rep: 'Sürekli Tekrarla', eq_btn:'🎵 EQ Modu', video_btn:'📺 Video', sleep_btn:'🌙 Uyku', settings_btn:'⚙️ Ayarlar', lists_lbl:'LİSTELER', add_content_btn:'+ İçerik Ekle', cc_btn:'💬 CC', fs_btn:'Tam Ekran', fs_btn_exit:'Küçült', sub_sel_btn:'📥 Altyazı Seç (.srt/.vtt)', sub_off_btn:'❌ Altyazıyı Kapat', yt_ext_btn:'⚠️ YouTube\'da İzle', not_selected:'Seçilmedi', set_title:'Ayarlar', set_lang_lbl:'Dil / Language:', set_eq_lbl:'Ses Dengeleyici:', set_comp_off:'Standart (Kapalı)', set_comp_on:'Kompresör (Açık)', set_comp_desc:'<strong>Kompresör Nedir?</strong> Düşük sesleri otomatik yükseltir, aniden patlayan yüksek sesleri bastırarak tüm medyayı eşit ve rahat bir seviyede duymanı sağlar.', set_theme_lbl:'Genel Görünüm Modu:', set_day:'☀️ Gündüz', set_night:'🌙 Gece', set_color:'🎨 Renk Temasını Değiştir', set_export:'⬇️ Listeleri İndir', set_import:'⬆️ İçe Aktar', close_btn:'Kapat', cancel_btn:'Vazgeç', save_btn:'Kaydet', delete_btn:'Sil ✕', new_list_title:'Yeni Liste', edit_list_title:'Düzenle', add_file_btn:'Cihazdan Dosya Seç', or_link:'— VEYA LINK —', target_list:'HEDEF LİSTE:', add_link_btn:'Link Ekle', sleep_title:'Uyku Zamanlayıcısı', sleep_15:'15 Dakika', sleep_30:'30 Dakika', sleep_60:'1 Saat', sleep_cancel:'İptal Et', sure:'Emin misin?', del_sure:'Silmek istediğine emin misin?', empty_list:'Boş Liste', loading:'Yükleniyor...', file_err:'Hatalı dosya!', file_ok:'Dışa aktarılan liste yüklendi!', toast_theme:'Tema:', toast_day:'☀️ Gündüz Modu Açıldı', toast_night:'🌙 Gece Modu Açıldı', toast_comp_on:'Kompresör Açık', toast_comp_off:'Kompresör Kapalı', toast_sub:'Altyazı Yüklendi', local_warn:'Yerel dosyalar güvenlik gereği dışa aktarılamaz, sadece isimler ve linkler yedeklenir.' },
-    'en': { export_mo_title:'Lists to Export', export_mo_desc:'Only lists with links or YouTube videos are shown below. You can uncheck the ones you do not want.', export_mo_empty:'No lists with links/videos to export. Local files on your device cannot be exported.', export_mo_btn:'Download Selected', export_mo_alert:'Please select at least one list.', add_thumb: '🖼 Add Image', edit_thumb: '🖼 Change Image', thumb_ok: 'Image Selected ✓', thumb_rem: 'Will be removed 🗑', remove_thumb_btn: 'Remove Image', ph_url: 'Site / Lesson Link...', ph_title: 'Title', tip_eq: 'Change EQ Mode', tip_vid: 'Toggle Video Screen', tip_sleep: 'Set Sleep Timer', tip_set: 'Settings & Themes', tip_add_list: 'Create New List', tip_add_c: 'Add file or link', tip_cc: 'Subtitle Menu', tip_fs: 'Fullscreen Settings', tip_start: 'Restart', tip_m5: 'Rewind 5s', tip_pp: 'Play / Pause', tip_p5: 'Forward 5s', tip_next: 'Next Track/Video', tip_vol: 'Volume Control', tip_prev: 'Previous Track', tip_shuf: 'Shuffle List', tip_rep: 'Repeat', eq_btn:'🎵 EQ Mode', video_btn:'📺 Video', sleep_btn:'🌙 Sleep', settings_btn:'⚙️ Settings', lists_lbl:'LISTS', add_content_btn:'+ Add Content', cc_btn:'💬 CC', fs_btn:'Fullscreen', fs_btn_exit:'Exit FS', sub_sel_btn:'📥 Select Sub (.srt/.vtt)', sub_off_btn:'❌ Subs Off', yt_ext_btn:'⚠️ Watch on YouTube', not_selected:'Not Selected', set_title:'Settings', set_lang_lbl:'Language:', set_eq_lbl:'Audio Equalizer:', set_comp_off:'Standard (Off)', set_comp_on:'Compressor (On)', set_comp_desc:'<strong>What is Compressor?</strong> Automatically boosts low sounds and suppresses sudden loud noises for comfortable listening.', set_theme_lbl:'Appearance:', set_day:'☀️ Day', set_night:'🌙 Night', set_color:'🎨 Change Theme', set_export:'⬇️ Export Lists', set_import:'⬆️ Import', close_btn:'Close', cancel_btn:'Cancel', save_btn:'Save', delete_btn:'Delete ✕', new_list_title:'New List', edit_list_title:'Edit', add_file_btn:'Select Local File', or_link:'— OR LINK —', target_list:'TARGET LIST:', add_link_btn:'Add Link', sleep_title:'Sleep Timer', sleep_15:'15 Mins', sleep_30:'30 Mins', sleep_60:'1 Hour', sleep_cancel:'Cancel Timer', sure:'Are you sure?', del_sure:'Are you sure you want to delete?', empty_list:'Empty List', loading:'Loading...', file_err:'Invalid file!', file_ok:'Exported list loaded!', toast_theme:'Theme:', toast_day:'☀️ Day Mode On', toast_night:'🌙 Night Mode On', toast_comp_on:'Compressor On', toast_comp_off:'Compressor Off', toast_sub:'Subtitle Loaded', local_warn:'Local files cannot be exported due to security, only names and links are backed up.' },
-    'ja': { export_mo_title:'エクスポートするリスト', export_mo_desc:'リンクまたはYouTube動画を含むリストのみが表示されます。不要なリストのチェックを外すことができます。', export_mo_empty:'エクスポートするリンク/動画を含むリストはありません。ローカルファイルはエクスポートできません。', export_mo_btn:'選択項目をダウンロード', export_mo_alert:'少なくとも1つのリストを選択してください。', add_thumb: '🖼 画像追加', edit_thumb: '🖼 画像変更', thumb_ok: '画像選択済 ✓', thumb_rem: '削除されます 🗑', remove_thumb_btn: '画像を削除', ph_url: 'サイト/レッスンのリンク...', ph_title: 'タイトル', tip_eq: 'EQモード変更', tip_vid: 'ビデオ画面切替', tip_sleep: 'スリープタイマー設定', tip_set: '設定とテーマ', tip_add_list: '新規リスト作成', tip_add_c: 'ファイル・リンク追加', tip_cc: '字幕メニュー', tip_fs: '全画面設定', tip_start: '最初から', tip_m5: '5秒戻る', tip_pp: '再生/一時停止', tip_p5: '5秒進む', tip_next: '次の曲/動画', tip_vol: '音量調節', tip_prev: '前の曲', tip_shuf: 'シャッフル再生', tip_rep: 'リピート再生', eq_btn:'🎵 EQモード', video_btn:'📺 ビデオ', sleep_btn:'🌙 スリープ', settings_btn:'⚙️ 設定', lists_lbl:'リスト', add_content_btn:'+ 追加', cc_btn:'💬 字幕', fs_btn:'全画面', fs_btn_exit:'縮小', sub_sel_btn:'📥 字幕選択 (.srt/.vtt)', sub_off_btn:'❌ 字幕オフ', yt_ext_btn:'⚠️ YouTubeで見る', not_selected:'未選択', set_title:'設定', set_lang_lbl:'言語 / Language:', set_eq_lbl:'イコライザー:', set_comp_off:'標準 (オフ)', set_comp_on:'コンプ (オン)', set_comp_desc:'<strong>コンプレッサーとは？</strong> 低音を自動的に上げ、突然の大音量を抑えて快適な音量に保ちます。', set_theme_lbl:'外観:', set_day:'☀️ ライト', set_night:'🌙 ダーク', set_color:'🎨 テーマ変更', set_export:'⬇️ エクスポート', set_import:'⬆️ インポート', close_btn:'閉じる', cancel_btn:'キャンセル', save_btn:'保存', delete_btn:'削除 ✕', new_list_title:'新規リスト', edit_list_title:'編集', add_file_btn:'ファイルを選択', or_link:'— またはリンク —', target_list:'追加先:', add_link_btn:'リンク追加', sleep_title:'スリープタイマー', sleep_15:'15分', sleep_30:'30分', sleep_60:'1時間', sleep_cancel:'キャンセル', sure:'本当によろしいですか？', del_sure:'本当に削除しますか？', empty_list:'空のリスト', loading:'読込中...', file_err:'無効なファイルです！', file_ok:'リストを読み込みました！', toast_theme:'テーマ:', toast_day:'☀️ ライトモードON', toast_night:'🌙 ダークモードON', toast_comp_on:'コンプON', toast_comp_off:'コンプOFF', toast_sub:'字幕ロード完了', local_warn:'ローカルファイルはセキュリティ上の理由でエクスポートされません。' },
-    'ko': { export_mo_title:'내보낼 리스트', export_mo_desc:'링크나 YouTube 비디오가 포함된 리스트만 아래에 표시됩니다. 원하지 않는 리스트는 선택 해제할 수 있습니다.', export_mo_empty:'내보낼 링크/비디오가 포함된 리스트가 없습니다. 로컬 파일은 내보낼 수 없습니다.', export_mo_btn:'선택 항목 다운로드', export_mo_alert:'최소 하나 이상의 리스트를 선택해주세요.', add_thumb: '🖼 이미지 추가', edit_thumb: '🖼 이미지 변경', thumb_ok: '이미지 선택됨 ✓', thumb_rem: '삭제됩니다 🗑', remove_thumb_btn: '이미지 제거', ph_url: '사이트/수업 링크...', ph_title: '제목', tip_eq: 'EQ 모드 변경', tip_vid: '비디오 화면 전환', tip_sleep: '수면 타이머 설정', tip_set: '설정 및 테마', tip_add_list: '새 리스트 만들기', tip_add_c: '파일/링크 추가', tip_cc: '자막 메뉴', tip_fs: '전체 화면 설정', tip_start: '처음부터', tip_m5: '5초 뒤로', tip_pp: '재생/일시정지', tip_p5: '5초 앞으로', tip_next: '다음 곡/비디오', tip_vol: '볼륨 조절', tip_prev: '이전 곡', tip_shuf: '셔플 재생', tip_rep: '반복 재생', eq_btn:'🎵 EQ 모드', video_btn:'📺 비디오', sleep_btn:'🌙 수면', settings_btn:'⚙️ 설정', lists_lbl:'리스트', add_content_btn:'+ 추가', cc_btn:'💬 자막', fs_btn:'전체 화면', fs_btn_exit:'축소', sub_sel_btn:'📥 자막 선택 (.srt/.vtt)', sub_off_btn:'❌ 자막 끄기', yt_ext_btn:'⚠️ YouTube에서 보기', not_selected:'선택 안 됨', set_title:'설정', set_lang_lbl:'언어 / Language:', set_eq_lbl:'이퀄라이저:', set_comp_off:'표준 (꺼짐)', set_comp_on:'컴프레서 (켜짐)', set_comp_desc:'<strong>컴프레서란?</strong> 낮은 소리를 자동으로 높이고 갑작스러운 큰 소리를 억제합니다.', set_theme_lbl:'테마:', set_day:'☀️ 라이트', set_night:'🌙 다크', set_color:'🎨 테마 변경', set_export:'⬇️ 내보내기', set_import:'⬆️ 가져오기', close_btn:'닫기', cancel_btn:'취소', save_btn:'저장', delete_btn:'삭제 ✕', new_list_title:'새 리스트', edit_list_title:'편집', add_file_btn:'파일 선택', or_link:'— 또는 링크 —', target_list:'대상 목록:', add_link_btn:'링크 추가', sleep_title:'수면 타이머', sleep_15:'15분', sleep_30:'30분', sleep_60:'1시간', sleep_cancel:'취소', sure:'확실합니까?', del_sure:'정말 삭제하시겠습니까?', empty_list:'빈 리스트', loading:'로딩 중...', file_err:'잘못된 파일!', file_ok:'목록을 불러왔습니다!', toast_theme:'테마:', toast_day:'☀️ 라이트 모드 켜짐', toast_night:'🌙 다크 모드 켜짐', toast_comp_on:'컴프레서 켜짐', toast_comp_off:'컴프레서 꺼짐', toast_sub:'자막 로드됨', local_warn:'로컬 파일은 보안상 내보낼 수 없습니다.' },
-    'de': { export_mo_title:'Listen zum Exportieren', export_mo_desc:'Nur Listen mit Links oder YouTube-Videos werden angezeigt. Sie können die Auswahl für unerwünschte Listen aufheben.', export_mo_empty:'Keine Listen mit Links/Videos zum Exportieren. Lokale Dateien können nicht exportiert werden.', export_mo_btn:'Ausgewählte herunterladen', export_mo_alert:'Bitte wählen Sie mindestens eine Liste aus.', add_thumb: '🖼 Bild hinzu', edit_thumb: '🖼 Bild ändern', thumb_ok: 'Bild ausgewählt ✓', thumb_rem: 'Wird entfernt 🗑', remove_thumb_btn: 'Bild entfernen', ph_url: 'Web-/Unterrichtslink...', ph_title: 'Titel', tip_eq: 'EQ ändern', tip_vid: 'Video umschalten', tip_sleep: 'Sleep-Timer', tip_set: 'Einstellungen & Themen', tip_add_list: 'Neue Liste', tip_add_c: 'Datei/Link hinzufügen', tip_cc: 'Untertitel', tip_fs: 'Vollbild', tip_start: 'Neustart', tip_m5: '5s zurück', tip_pp: 'Play/Pause', tip_p5: '5s vor', tip_next: 'Nächster Titel', tip_vol: 'Lautstärke', tip_prev: 'Vorheriger Titel', tip_shuf: 'Zufallswiedergabe', tip_rep: 'Wiederholen', eq_btn:'🎵 EQ-Modus', video_btn:'📺 Video', sleep_btn:'🌙 Schlaf', settings_btn:'⚙️ Einst.', lists_lbl:'LISTEN', add_content_btn:'+ Inhalt', cc_btn:'💬 CC', fs_btn:'Vollbild', fs_btn_exit:'Verkleinern', sub_sel_btn:'📥 Untertitel wählen', sub_off_btn:'❌ UT Aus', yt_ext_btn:'⚠️ Auf YouTube ansehen', not_selected:'Nichts gewählt', set_title:'Einstellungen', set_lang_lbl:'Sprache:', set_eq_lbl:'Equalizer:', set_comp_off:'Standard (Aus)', set_comp_on:'Kompressor (Ein)', set_comp_desc:'<strong>Was ist ein Kompressor?</strong> Erhöht automatisch leise Töne.', set_theme_lbl:'Design:', set_day:'☀️ Tag', set_night:'🌙 Nacht', set_color:'🎨 Thema ändern', set_export:'⬇️ Exportieren', set_import:'⬆️ Importieren', close_btn:'Schließen', cancel_btn:'Abbrechen', save_btn:'Speichern', delete_btn:'Löschen ✕', new_list_title:'Neue Liste', edit_list_title:'Bearbeiten', add_file_btn:'Datei wählen', or_link:'— ODER LINK —', target_list:'ZIEL:', add_link_btn:'Link hinzufügen', sleep_title:'Sleep Timer', sleep_15:'15 Min', sleep_30:'30 Min', sleep_60:'1 Std', sleep_cancel:'Abbrechen', sure:'Sicher?', del_sure:'Wirklich löschen?', empty_list:'Leere Liste', loading:'Lädt...', file_err:'Ungültige Datei!', file_ok:'Liste importiert.', toast_theme:'Thema:', toast_day:'☀️ Tag-Modus', toast_night:'🌙 Nacht-Modus', toast_comp_on:'Komp Ein', toast_comp_off:'Komp Aus', toast_sub:'Untertitel geladen', local_warn:'Lokale Dateien werden nicht exportiert.' },
-    'fr': { export_mo_title:'Listes à exporter', export_mo_desc:'Seules les listes contenant des liens ou des vidéos YouTube sont affichées. Vous pouvez décocher celles que vous ne voulez pas.', export_mo_empty:'Aucune liste avec des liens/vidéos à exporter. Les fichiers locaux ne peuvent pas être exportés.', export_mo_btn:'Télécharger la sélection', export_mo_alert:'Veuillez sélectionner au moins une liste.', add_thumb: '🖼 Ajouter Image', edit_thumb: '🖼 Changer Image', thumb_ok: 'Image choisie ✓', thumb_rem: 'Sera supprimé 🗑', remove_thumb_btn: 'Supprimer Image', ph_url: 'Lien du site/cours...', ph_title: 'Titre', tip_eq: 'Changer EQ', tip_vid: 'Basculer la vidéo', tip_sleep: 'Minuterie', tip_set: 'Paramètres & Thèmes', tip_add_list: 'Nouvelle liste', tip_add_c: 'Ajouter fichier/lien', tip_cc: 'Sous-titres', tip_fs: 'Plein écran', tip_start: 'Recommencer', tip_m5: 'Reculer 5s', tip_pp: 'Lecture/Pause', tip_p5: 'Avancer 5s', tip_next: 'Suivant', tip_vol: 'Volume', tip_prev: 'Précédent', tip_shuf: 'Aléatoire', tip_rep: 'Répéter', eq_btn:'🎵 Mode EQ', video_btn:'📺 Vidéo', sleep_btn:'🌙 Veille', settings_btn:'⚙️ Paramètres', lists_lbl:'LISTES', add_content_btn:'+ Ajouter', cc_btn:'💬 CC', fs_btn:'Plein écran', fs_btn_exit:'Réduire', sub_sel_btn:'📥 Choisir Sous-titre', sub_off_btn:'❌ ST Désactivé', yt_ext_btn:'⚠️ Voir sur YouTube', not_selected:'Non sélectionné', set_title:'Paramètres', set_lang_lbl:'Langue:', set_eq_lbl:'Égaliseur:', set_comp_off:'Standard (Dés)', set_comp_on:'Compresseur (Act)', set_comp_desc:'<strong>Compresseur ?</strong> Augmente les sons faibles.', set_theme_lbl:'Apparence:', set_day:'☀️ Jour', set_night:'🌙 Nuit', set_color:'🎨 Changer Thème', set_export:'⬇️ Exporter', set_import:'⬆️ Importer', close_btn:'Fermer', cancel_btn:'Annuler', save_btn:'Enregistrer', delete_btn:'Supprimer ✕', new_list_title:'Nouv. Liste', edit_list_title:'Éditer', add_file_btn:'Choisir fichier', or_link:'— OU LIEN —', target_list:'CIBLE:', add_link_btn:'Ajouter lien', sleep_title:'Minuteur veille', sleep_15:'15 Min', sleep_30:'30 Min', sleep_60:'1 Heure', sleep_cancel:'Annuler', sure:'Êtes-vous sûr ?', del_sure:'Vraiment supprimer ?', empty_list:'Liste vide', loading:'Chargement...', file_err:'Fichier invalide !', file_ok:'Liste importée.', toast_theme:'Thème:', toast_day:'☀️ Mode Jour', toast_night:'🌙 Mode Nuit', toast_comp_on:'Comp. Actif', toast_comp_off:'Comp. Désactif', toast_sub:'ST Chargé', local_warn:'Fichiers locaux non exportés.' },
-    'es': { export_mo_title:'Listas para exportar', export_mo_desc:'Solo se muestran las listas con enlaces o videos de YouTube. Puede desmarcar las que no desee.', export_mo_empty:'No hay listas con enlaces/videos para exportar. Los archivos locales no se pueden exportar.', export_mo_btn:'Descargar selección', export_mo_alert:'Por favor, seleccione al menos una lista.', add_thumb: '🖼 Añadir Imagen', edit_thumb: '🖼 Cambiar Imagen', thumb_ok: 'Imagen elegida ✓', thumb_rem: 'Se eliminará 🗑', remove_thumb_btn: 'Quitar Imagen', ph_url: 'Enlace del sitio/curso...', ph_title: 'Título', tip_eq: 'Cambiar EQ', tip_vid: 'Alternar video', tip_sleep: 'Temporizador', tip_set: 'Ajustes y temas', tip_add_list: 'Nueva lista', tip_add_c: 'Añadir archivo/enlace', tip_cc: 'Subtítulos', tip_fs: 'Pantalla completa', tip_start: 'Reiniciar', tip_m5: 'Retroceder 5s', tip_pp: 'Reproducir/Pausa', tip_p5: 'Avanzar 5s', tip_next: 'Siguiente', tip_vol: 'Volumen', tip_prev: 'Anterior', tip_shuf: 'Aleatorio', tip_rep: 'Repetir', eq_btn:'🎵 Modo EQ', video_btn:'📺 Video', sleep_btn:'🌙 Sueño', settings_btn:'⚙️ Ajustes', lists_lbl:'LISTAS', add_content_btn:'+ Añadir', cc_btn:'💬 CC', fs_btn:'Pantalla completa', fs_btn_exit:'Reducir', sub_sel_btn:'📥 Elegir Subtítulo', sub_off_btn:'❌ Sub. Apagado', yt_ext_btn:'⚠️ Ver en YouTube', not_selected:'No seleccionado', set_title:'Ajustes', set_lang_lbl:'Idioma:', set_eq_lbl:'Ecualizador:', set_comp_off:'Estándar (Apagado)', set_comp_on:'Compresor (Encendido)', set_comp_desc:'<strong>¿Compresor?</strong> Aumenta sonidos bajos.', set_theme_lbl:'Apariencia:', set_day:'☀️ Día', set_night:'🌙 Noche', set_color:'🎨 Cambiar Tema', set_export:'⬇️ Exportar', set_import:'⬆️ Importar', close_btn:'Cerrar', cancel_btn:'Cancelar', save_btn:'Guardar', delete_btn:'Borrar ✕', new_list_title:'Nueva Lista', edit_list_title:'Editar', add_file_btn:'Elegir Archivo', or_link:'— O ENLACE —', target_list:'DESTINO:', add_link_btn:'Añadir Enlace', sleep_title:'Temporizador', sleep_15:'15 Min', sleep_30:'30 Min', sleep_60:'1 Hora', sleep_cancel:'Cancelar', sure:'¿Seguro?', del_sure:'¿Realmente borrar?', empty_list:'Lista vacía', loading:'Cargando...', file_err:'¡Archivo inválido!', file_ok:'Lista importada.', toast_theme:'Tema:', toast_day:'☀️ Modo Día', toast_night:'🌙 Modo Noche', toast_comp_on:'Comp. On', toast_comp_off:'Comp. Off', toast_sub:'Sub. Cargado', local_warn:'Archivos locales no se exportan.' },
-    'ru': { export_mo_title:'Списки для экспорта', export_mo_desc:'Ниже показаны только списки со ссылками или видео YouTube. Вы можете снять галочки с ненужных.', export_mo_empty:'Нет списков со ссылками/видео для экспорта. Локальные файлы не могут быть экспортированы.', export_mo_btn:'Скачать выбранное', export_mo_alert:'Пожалуйста, выберите хотя бы один список.', add_thumb: '🖼 Добавить фото', edit_thumb: '🖼 Изменить фото', thumb_ok: 'Фото выбрано ✓', thumb_rem: 'Будет удалено 🗑', remove_thumb_btn: 'Удалить фото', ph_url: 'Ссылка на сайт/урок...', ph_title: 'Заголовок', tip_eq: 'Сменить EQ', tip_vid: 'Переключить видео', tip_sleep: 'Таймер сна', tip_set: 'Настройки и темы', tip_add_list: 'Новый список', tip_add_c: 'Добавить файл/ссылку', tip_cc: 'Субтитры', tip_fs: 'Полный экран', tip_start: 'Заново', tip_m5: 'Назад 5с', tip_pp: 'Воспроизведение/Пауза', tip_p5: 'Вперед 5с', tip_next: 'Следующий', tip_vol: 'Громкость', tip_prev: 'Предыдущий', tip_shuf: 'Случайный порядок', tip_rep: 'Повторять', eq_btn:'🎵 Эквалайзер', video_btn:'📺 Видео', sleep_btn:'🌙 Сон', settings_btn:'⚙️ Настройки', lists_lbl:'СПИСКИ', add_content_btn:'+ Добавить', cc_btn:'💬 CC', fs_btn:'Полный экран', fs_btn_exit:'Свернуть', sub_sel_btn:'📥 Выбрать субтитры', sub_off_btn:'❌ Выкл. субтитры', yt_ext_btn:'⚠️ Смотреть на YouTube', not_selected:'Не выбрано', set_title:'Настройки', set_lang_lbl:'Язык:', set_eq_lbl:'Эквалайзер:', set_comp_off:'Стандартно (Выкл)', set_comp_on:'Компрессор (Вкл)', set_comp_desc:'<strong>Что это?</strong> Увеличивает тихие звуки.', set_theme_lbl:'Оформление:', set_day:'☀️ День', set_night:'🌙 Ночь', set_color:'🎨 Сменить тему', set_export:'⬇️ Экспорт', set_import:'⬆️ Импорт', close_btn:'Закрыть', cancel_btn:'Отмена', save_btn:'Сохранить', delete_btn:'Удалить ✕', new_list_title:'Новый список', edit_list_title:'Изменить', add_file_btn:'Выбрать файл', or_link:'— ИЛИ ССЫЛКА —', target_list:'ЦЕЛЬ:', add_link_btn:'Добавить ссылку', sleep_title:'Таймер сна', sleep_15:'15 мин', sleep_30:'30 мин', sleep_60:'1 час', sleep_cancel:'Отмена', sure:'Уверены?', del_sure:'Точно удалить?', empty_list:'Пусто', loading:'Загрузка...', file_err:'Неверный файл!', file_ok:'Список импортирован.', toast_theme:'Тема:', toast_day:'☀️ День', toast_night:'🌙 Ночь', toast_comp_on:'Комп Вкл', toast_comp_off:'Комп Выкл', toast_sub:'Субтитры загружены', local_warn:'Локальные файлы не экспортируются.' }
+    'tr': { export_mo_title:'Dışa Aktarılacak Listeler', export_mo_desc:'Sadece içinde link veya YouTube videosu olan listeler aşağıda görünür. İstemediğin listelerin işaretini kaldırabilirsin.', export_mo_empty:'Dışa aktarılacak link/video barındıran liste yok. Cihazındaki yerel dosyalar aktarılamaz.', export_mo_btn:'Seçilenleri İndir', export_mo_alert:'Lütfen en az bir liste seçin.', add_thumb: '🖼 Görsel Ekle (İsteğe Bağlı)', edit_thumb: '🖼 Görseli Değiştir', thumb_ok: 'Görsel Seçildi ✓', thumb_rem: 'Kaldırılacak 🗑', remove_thumb_btn: 'Görseli Kaldır', ph_url: 'Site / Ders Linki...', ph_title: 'Başlık', tip_eq: 'Ses Modunu (EQ) Değiştir', tip_vid: 'Video Ekranını Aç/Kapat', tip_sleep: 'Uyku Zamanlayıcısı Kur', tip_set: 'Ayarlar ve Temalar', tip_add_list: 'Yeni Liste Oluştur', tip_add_c: 'Cihazdan dosya veya link ekle', tip_cc: 'Altyazı Menüsü', tip_fs: 'Tam Ekran Ayarı', tip_start: 'Başa Al', tip_m5: '5 Saniye Geri', tip_pp: 'Oynat / Duraklat', tip_p5: '5 Saniye İleri', tip_next: 'Sonraki Şarkı/Video', tip_vol: 'Ses Ayarı', tip_prev: 'Önceki Şarkı', tip_shuf: 'Listeyi Karışık Çal', tip_rep: 'Sürekli Tekrarla', eq_btn:'🎵 EQ Modu', video_btn:'📺 Video', sleep_btn:'🌙 Uyku', settings_btn:'⚙️ Ayarlar', lists_lbl:'LİSTELER', add_content_btn:'+ İçerik Ekle', cc_btn:'💬 CC', fs_btn:'Tam Ekran', fs_btn_exit:'Küçült', sub_sel_btn:'📥 Altyazı Seç (.srt/.vtt)', sub_off_btn:'❌ Altyazıyı Kapat', yt_ext_btn:'⚠️ YouTube\'da İzle', not_selected:'Seçilmedi', set_title:'Ayarlar', set_lang_lbl:'Dil / Language:', set_eq_lbl:'Ses Dengeleyici:', set_comp_off:'Standart (Kapalı)', set_comp_on:'Kompresör (Açık)', set_comp_desc:'<strong>Kompresör Nedir?</strong> Düşük sesleri otomatik yükseltir, aniden patlayan yüksek sesleri bastırarak tüm medyayı eşit ve rahat bir seviyede duymanı sağlar.', set_theme_lbl:'Genel Görünüm Modu:', set_day:'☀️ Gündüz', set_night:'🌙 Gece', set_color:'🎨 Renk Temasını Değiştir', set_export:'⬇️ Listeleri İndir', set_import:'⬆️ İçe Aktar', close_btn:'Kapat', cancel_btn:'Vazgeç', save_btn:'Kaydet', delete_btn:'Sil ✕', new_list_title:'Yeni Liste', edit_list_title:'Düzenle', add_file_btn:'Cihazdan Dosya Seç', or_link:'— VEYA LINK —', target_list:'HEDEF LİSTE:', add_link_btn:'Link Ekle', sleep_title:'Uyku Zamanlayıcısı', sleep_15:'15 Dakika', sleep_30:'30 Dakika', sleep_60:'1 Saat', sleep_cancel:'İptal Et', sure:'Emin misin?', del_sure:'Silmek istediğine emin misin?', empty_list:'Boş Liste', loading:'Yükleniyor...', file_err:'Hatalı dosya!', file_ok:'Dışa aktarılan liste yüklendi!', toast_theme:'Tema:', toast_day:'☀️ Gündüz Modu Açıldı', toast_night:'🌙 Gece Modu Açıldı', toast_comp_on:'Kompresör Açık', toast_comp_off:'Kompresör Kapalı', toast_sub:'Altyazı Yüklendi', local_warn:'Yerel dosyalar güvenlik gereği dışa aktarılamaz, sadece isimler ve linkler yedeklenir.', fav_name:'Favoriler', tip_fav:'Favorilere Ekle / Çıkar', toast_fav_on:'⭐ Favorilere eklendi', toast_fav_off:'Favorilerden çıkarıldı', fav_protect:'Favoriler listesi silinemez.', clear_list_btn:'🗑 Tüm İçeriği Kaldır', clear_sure:'Bu listedeki TÜM içerik kaldırılacak. Emin misin?', fmt_lbl:'DOSYA TÜRÜ:', fmt_all:'Tüm Medya (Ses + Video)', fmt_audio:'Sadece Ses (MP3, WAV, FLAC...)', fmt_video:'Sadece Video (MP4, MKV, WEBM...)', clip_lbl:'✂️ KIRPMA / LOOP (dk:sn):', clip_start_ph:'Başlangıç (örn: 0:30)', clip_end_ph:'Bitiş (örn: 2:45)', clip_loop_lbl:'🔁 Bu aralığı sürekli tekrarla (Loop)', tip_speed:'Oynatma Hızı', sleep_custom_lbl:'⏱ Manuel Süre (dakika, en fazla 12 saat = 720 dk):', sleep_custom_ph:'Örn: 90', sleep_start_btn:'Başlat', sleep_invalid:'Lütfen 1 ile 720 arası bir dakika gir (en fazla 12 saat).', toast_sleep_set:'🌙 Uyku zamanlayıcısı kuruldu:', toast_sleep_off:'Uyku zamanlayıcısı iptal edildi', toast_sleep_done:'🌙 Süre doldu, oynatma durduruldu', edit_adv_btn:'🎬 Gelişmiş Video/Ses Düzenle', ved_title:'Gelişmiş Düzenleyici', ved_effect_lbl:'EFEKT:', ved_fx_trim:'✂️ Kırp / Döngü', ved_fx_slow:'🐢 Yavaş Çekim', ved_fx_fast:'⚡ Hızlı / Zaman Atlamalı', ved_fx_reverse:'◀️ Ters Oynatma', ved_fx_freeze:'⏸️ Kare Dondurma', ved_fx_ramp:'📈 Hız Rampası (yavaş→hızlı)', ved_trim_lbl:'✂️ Kırpma (dk:sn) — boş bırakılırsa tümü:', ved_start_ph:'Başlangıç (örn: 0:05)', ved_end_ph:'Bitiş (örn: 0:20)', ved_speed_lbl:'Hız (kat):', ved_freeze_lbl:'Dondurma anı (dk:sn) ve süre (sn):', ved_freeze_at_ph:'An (örn: 0:03)', ved_freeze_dur_ph:'Süre sn (örn: 2)', ved_name_lbl:'Yeni dosya adı:', ved_preview_btn:'▶ Önizle', ved_render_btn:'🎬 Oluştur & Kaydet', ved_download_btn:'⬇️ İndir', ved_close_btn:'Kapat', ved_rendering:'İşleniyor… lütfen bekle', ved_done:'✅ Hazır! "Düzenlenenler" listesine eklendi', ved_only_local:'Bu özellik yalnızca cihazdan eklenen ses/video dosyaları içindir (YouTube/link hariç).', ved_err:'İşlem başarısız. Video formatı desteklenmiyor olabilir.', ved_hint:'İpucu: Efekti seç, istersen kırp, sonra "Oluştur & Kaydet"e bas. Orijinal dosyan listede kalır; düzenlenmiş kopya ayrı kaydedilir.', ved_reverse_warn:'Ters oynatma uzun videolarda yavaştır; kısa klipler (30 sn altı) önerilir.', edited_list_name:'✂️ Düzenlenenler', dl_btn_title:'Bu dosyayı indir', ved_total_lbl:'Toplam süre:', ved_start_lbl:'Başlangıç', ved_end_lbl:'Bitiş', drop_hint:'📥 Dosyaları bırak — geçerli listeye eklenecek', drop_added:'✅ %n dosya listeye eklendi', drop_none:'Geçerli ses/video dosyası bulunamadı' },
+    'en': { export_mo_title:'Lists to Export', export_mo_desc:'Only lists with links or YouTube videos are shown below. You can uncheck the ones you do not want.', export_mo_empty:'No lists with links/videos to export. Local files on your device cannot be exported.', export_mo_btn:'Download Selected', export_mo_alert:'Please select at least one list.', add_thumb: '🖼 Add Image', edit_thumb: '🖼 Change Image', thumb_ok: 'Image Selected ✓', thumb_rem: 'Will be removed 🗑', remove_thumb_btn: 'Remove Image', ph_url: 'Site / Lesson Link...', ph_title: 'Title', tip_eq: 'Change EQ Mode', tip_vid: 'Toggle Video Screen', tip_sleep: 'Set Sleep Timer', tip_set: 'Settings & Themes', tip_add_list: 'Create New List', tip_add_c: 'Add file or link', tip_cc: 'Subtitle Menu', tip_fs: 'Fullscreen Settings', tip_start: 'Restart', tip_m5: 'Rewind 5s', tip_pp: 'Play / Pause', tip_p5: 'Forward 5s', tip_next: 'Next Track/Video', tip_vol: 'Volume Control', tip_prev: 'Previous Track', tip_shuf: 'Shuffle List', tip_rep: 'Repeat', eq_btn:'🎵 EQ Mode', video_btn:'📺 Video', sleep_btn:'🌙 Sleep', settings_btn:'⚙️ Settings', lists_lbl:'LISTS', add_content_btn:'+ Add Content', cc_btn:'💬 CC', fs_btn:'Fullscreen', fs_btn_exit:'Exit FS', sub_sel_btn:'📥 Select Sub (.srt/.vtt)', sub_off_btn:'❌ Subs Off', yt_ext_btn:'⚠️ Watch on YouTube', not_selected:'Not Selected', set_title:'Settings', set_lang_lbl:'Language:', set_eq_lbl:'Audio Equalizer:', set_comp_off:'Standard (Off)', set_comp_on:'Compressor (On)', set_comp_desc:'<strong>What is Compressor?</strong> Automatically boosts low sounds and suppresses sudden loud noises for comfortable listening.', set_theme_lbl:'Appearance:', set_day:'☀️ Day', set_night:'🌙 Night', set_color:'🎨 Change Theme', set_export:'⬇️ Export Lists', set_import:'⬆️ Import', close_btn:'Close', cancel_btn:'Cancel', save_btn:'Save', delete_btn:'Delete ✕', new_list_title:'New List', edit_list_title:'Edit', add_file_btn:'Select Local File', or_link:'— OR LINK —', target_list:'TARGET LIST:', add_link_btn:'Add Link', sleep_title:'Sleep Timer', sleep_15:'15 Mins', sleep_30:'30 Mins', sleep_60:'1 Hour', sleep_cancel:'Cancel Timer', sure:'Are you sure?', del_sure:'Are you sure you want to delete?', empty_list:'Empty List', loading:'Loading...', file_err:'Invalid file!', file_ok:'Exported list loaded!', toast_theme:'Theme:', toast_day:'☀️ Day Mode On', toast_night:'🌙 Night Mode On', toast_comp_on:'Compressor On', toast_comp_off:'Compressor Off', toast_sub:'Subtitle Loaded', local_warn:'Local files cannot be exported due to security, only names and links are backed up.', fav_name:'Favorites', tip_fav:'Add to / Remove from Favorites', toast_fav_on:'⭐ Added to Favorites', toast_fav_off:'Removed from Favorites', fav_protect:'The Favorites list cannot be deleted.', clear_list_btn:'🗑 Remove All Items', clear_sure:'ALL items in this list will be removed. Are you sure?', fmt_lbl:'FILE TYPE:', fmt_all:'All Media (Audio + Video)', fmt_audio:'Audio Only (MP3, WAV, FLAC...)', fmt_video:'Video Only (MP4, MKV, WEBM...)', clip_lbl:'✂️ TRIM / LOOP (min:sec):', clip_start_ph:'Start (e.g. 0:30)', clip_end_ph:'End (e.g. 2:45)', clip_loop_lbl:'🔁 Loop this section', tip_speed:'Playback Speed', sleep_custom_lbl:'⏱ Custom time (minutes, max 12h = 720 min):', sleep_custom_ph:'e.g. 90', sleep_start_btn:'Start', sleep_invalid:'Please enter minutes between 1 and 720 (max 12 hours).', toast_sleep_set:'🌙 Sleep timer set:', toast_sleep_off:'Sleep timer cancelled', toast_sleep_done:'🌙 Time is up, playback stopped', edit_adv_btn:'🎬 Advanced Video/Audio Edit', ved_title:'Advanced Editor', ved_effect_lbl:'EFFECT:', ved_fx_trim:'✂️ Trim / Loop', ved_fx_slow:'🐢 Slow Motion', ved_fx_fast:'⚡ Fast / Time-lapse', ved_fx_reverse:'◀️ Reverse', ved_fx_freeze:'⏸️ Freeze Frame', ved_fx_ramp:'📈 Speed Ramp (slow→fast)', ved_trim_lbl:'✂️ Trim (min:sec) — leave empty for full clip:', ved_start_ph:'Start (e.g. 0:05)', ved_end_ph:'End (e.g. 0:20)', ved_speed_lbl:'Speed (x):', ved_freeze_lbl:'Freeze at (min:sec) and duration (sec):', ved_freeze_at_ph:'At (e.g. 0:03)', ved_freeze_dur_ph:'Sec (e.g. 2)', ved_name_lbl:'New file name:', ved_preview_btn:'▶ Preview', ved_render_btn:'🎬 Create & Save', ved_download_btn:'⬇️ Download', ved_close_btn:'Close', ved_rendering:'Processing… please wait', ved_done:'✅ Done! Added to "Edited" list', ved_only_local:'This feature is only for local audio/video files added from your device (not YouTube/links).', ved_err:'Processing failed. The video format may be unsupported.', ved_hint:'Tip: pick an effect, optionally trim, then press "Create & Save". Your original stays in the list; the edited copy is saved separately.', ved_reverse_warn:'Reverse is slow on long videos; short clips (under 30s) recommended.', edited_list_name:'✂️ Edited', dl_btn_title:'Download this file', ved_total_lbl:'Total length:', ved_start_lbl:'Start', ved_end_lbl:'End', drop_hint:'📥 Drop files — they will be added to the current list', drop_added:'✅ %n file(s) added to the list', drop_none:'No valid audio/video files found' },
+    'ja': { export_mo_title:'エクスポートするリスト', export_mo_desc:'リンクまたはYouTube動画を含むリストのみが表示されます。不要なリストのチェックを外すことができます。', export_mo_empty:'エクスポートするリンク/動画を含むリストはありません。ローカルファイルはエクスポートできません。', export_mo_btn:'選択項目をダウンロード', export_mo_alert:'少なくとも1つのリストを選択してください。', add_thumb: '🖼 画像追加', edit_thumb: '🖼 画像変更', thumb_ok: '画像選択済 ✓', thumb_rem: '削除されます 🗑', remove_thumb_btn: '画像を削除', ph_url: 'サイト/レッスンのリンク...', ph_title: 'タイトル', tip_eq: 'EQモード変更', tip_vid: 'ビデオ画面切替', tip_sleep: 'スリープタイマー設定', tip_set: '設定とテーマ', tip_add_list: '新規リスト作成', tip_add_c: 'ファイル・リンク追加', tip_cc: '字幕メニュー', tip_fs: '全画面設定', tip_start: '最初から', tip_m5: '5秒戻る', tip_pp: '再生/一時停止', tip_p5: '5秒進む', tip_next: '次の曲/動画', tip_vol: '音量調節', tip_prev: '前の曲', tip_shuf: 'シャッフル再生', tip_rep: 'リピート再生', eq_btn:'🎵 EQモード', video_btn:'📺 ビデオ', sleep_btn:'🌙 スリープ', settings_btn:'⚙️ 設定', lists_lbl:'リスト', add_content_btn:'+ 追加', cc_btn:'💬 字幕', fs_btn:'全画面', fs_btn_exit:'縮小', sub_sel_btn:'📥 字幕選択 (.srt/.vtt)', sub_off_btn:'❌ 字幕オフ', yt_ext_btn:'⚠️ YouTubeで見る', not_selected:'未選択', set_title:'設定', set_lang_lbl:'言語 / Language:', set_eq_lbl:'イコライザー:', set_comp_off:'標準 (オフ)', set_comp_on:'コンプ (オン)', set_comp_desc:'<strong>コンプレッサーとは？</strong> 低音を自動的に上げ、突然の大音量を抑えて快適な音量に保ちます。', set_theme_lbl:'外観:', set_day:'☀️ ライト', set_night:'🌙 ダーク', set_color:'🎨 テーマ変更', set_export:'⬇️ エクスポート', set_import:'⬆️ インポート', close_btn:'閉じる', cancel_btn:'キャンセル', save_btn:'保存', delete_btn:'削除 ✕', new_list_title:'新規リスト', edit_list_title:'編集', add_file_btn:'ファイルを選択', or_link:'— またはリンク —', target_list:'追加先:', add_link_btn:'リンク追加', sleep_title:'スリープタイマー', sleep_15:'15分', sleep_30:'30分', sleep_60:'1時間', sleep_cancel:'キャンセル', sure:'本当によろしいですか？', del_sure:'本当に削除しますか？', empty_list:'空のリスト', loading:'読込中...', file_err:'無効なファイルです！', file_ok:'リストを読み込みました！', toast_theme:'テーマ:', toast_day:'☀️ ライトモードON', toast_night:'🌙 ダークモードON', toast_comp_on:'コンプON', toast_comp_off:'コンプOFF', toast_sub:'字幕ロード完了', local_warn:'ローカルファイルはセキュリティ上の理由でエクスポートされません。', fav_name:'お気に入り', tip_fav:'お気に入りに追加/削除', toast_fav_on:'⭐ お気に入りに追加', toast_fav_off:'お気に入りから削除', fav_protect:'お気に入りリストは削除できません。', clear_list_btn:'🗑 全て削除', clear_sure:'このリストの全ての項目が削除されます。よろしいですか？', fmt_lbl:'ファイル形式:', fmt_all:'全メディア (音声+動画)', fmt_audio:'音声のみ (MP3, WAV...)', fmt_video:'動画のみ (MP4, MKV...)', clip_lbl:'✂️ トリム / ループ (分:秒):', clip_start_ph:'開始 (例: 0:30)', clip_end_ph:'終了 (例: 2:45)', clip_loop_lbl:'🔁 この区間をループ', tip_speed:'再生速度', sleep_custom_lbl:'⏱ 手動時間（分、最大12時間=720分）:', sleep_custom_ph:'例: 90', sleep_start_btn:'開始', sleep_invalid:'1〜720分で入力してください（最大12時間）。', toast_sleep_set:'🌙 スリープタイマー設定:', toast_sleep_off:'スリープタイマー解除', toast_sleep_done:'🌙 時間切れ、再生を停止しました', edit_adv_btn:'🎬 高度な動画/音声編集', ved_title:'高度なエディター', ved_effect_lbl:'エフェクト:', ved_fx_trim:'✂️ トリム / ループ', ved_fx_slow:'🐢 スローモーション', ved_fx_fast:'⚡ 高速 / タイムラプス', ved_fx_reverse:'◀️ 逆再生', ved_fx_freeze:'⏸️ フリーズフレーム', ved_fx_ramp:'📈 スピードランプ（遅→速）', ved_trim_lbl:'✂️ トリム（分 : 秒）', ved_start_ph:'開始（例: 0:05）', ved_end_ph:'終了（例: 0:20）', ved_speed_lbl:'速度（倍）:', ved_freeze_lbl:'フリーズ位置（秒）と長さ（秒）:', ved_freeze_at_ph:'位置（秒）', ved_freeze_dur_ph:'秒', ved_name_lbl:'新しいファイル名:', ved_preview_btn:'▶ プレビュー', ved_render_btn:'🎬 作成して保存', ved_download_btn:'⬇️ ダウンロード', ved_close_btn:'閉じる', ved_rendering:'処理中… お待ちください', ved_done:'✅ 完了！「編集済み」リストに追加しました', ved_only_local:'この機能はデバイスから追加した音声/動画ファイル専用です（YouTube/リンク不可）。', ved_err:'処理に失敗しました。形式が未対応の可能性があります。', ved_hint:'ヒント: エフェクトを選び、必要ならトリムして「作成して保存」を押します。元ファイルは残り、編集版は別に保存されます。', ved_reverse_warn:'逆再生は長い動画では遅くなります。短いクリップ（30秒未満）推奨。', edited_list_name:'✂️ 編集済み', dl_btn_title:'このファイルをダウンロード', ved_total_lbl:'総再生時間:', ved_start_lbl:'開始', ved_end_lbl:'終了', drop_hint:'📥 ファイルをドロップ — 現在のリストに追加されます', drop_added:'✅ %n 個のファイルを追加しました', drop_none:'有効な音声/動画ファイルが見つかりません' },
+    'ko': { export_mo_title:'내보낼 리스트', export_mo_desc:'링크나 YouTube 비디오가 포함된 리스트만 아래에 표시됩니다. 원하지 않는 리스트는 선택 해제할 수 있습니다.', export_mo_empty:'내보낼 링크/비디오가 포함된 리스트가 없습니다. 로컬 파일은 내보낼 수 없습니다.', export_mo_btn:'선택 항목 다운로드', export_mo_alert:'최소 하나 이상의 리스트를 선택해주세요.', add_thumb: '🖼 이미지 추가', edit_thumb: '🖼 이미지 변경', thumb_ok: '이미지 선택됨 ✓', thumb_rem: '삭제됩니다 🗑', remove_thumb_btn: '이미지 제거', ph_url: '사이트/수업 링크...', ph_title: '제목', tip_eq: 'EQ 모드 변경', tip_vid: '비디오 화면 전환', tip_sleep: '수면 타이머 설정', tip_set: '설정 및 테마', tip_add_list: '새 리스트 만들기', tip_add_c: '파일/링크 추가', tip_cc: '자막 메뉴', tip_fs: '전체 화면 설정', tip_start: '처음부터', tip_m5: '5초 뒤로', tip_pp: '재생/일시정지', tip_p5: '5초 앞으로', tip_next: '다음 곡/비디오', tip_vol: '볼륨 조절', tip_prev: '이전 곡', tip_shuf: '셔플 재생', tip_rep: '반복 재생', eq_btn:'🎵 EQ 모드', video_btn:'📺 비디오', sleep_btn:'🌙 수면', settings_btn:'⚙️ 설정', lists_lbl:'리스트', add_content_btn:'+ 추가', cc_btn:'💬 자막', fs_btn:'전체 화면', fs_btn_exit:'축소', sub_sel_btn:'📥 자막 선택 (.srt/.vtt)', sub_off_btn:'❌ 자막 끄기', yt_ext_btn:'⚠️ YouTube에서 보기', not_selected:'선택 안 됨', set_title:'설정', set_lang_lbl:'언어 / Language:', set_eq_lbl:'이퀄라이저:', set_comp_off:'표준 (꺼짐)', set_comp_on:'컴프레서 (켜짐)', set_comp_desc:'<strong>컴프레서란?</strong> 낮은 소리를 자동으로 높이고 갑작스러운 큰 소리를 억제합니다.', set_theme_lbl:'테마:', set_day:'☀️ 라이트', set_night:'🌙 다크', set_color:'🎨 테마 변경', set_export:'⬇️ 내보내기', set_import:'⬆️ 가져오기', close_btn:'닫기', cancel_btn:'취소', save_btn:'저장', delete_btn:'삭제 ✕', new_list_title:'새 리스트', edit_list_title:'편집', add_file_btn:'파일 선택', or_link:'— 또는 링크 —', target_list:'대상 목록:', add_link_btn:'링크 추가', sleep_title:'수면 타이머', sleep_15:'15분', sleep_30:'30분', sleep_60:'1시간', sleep_cancel:'취소', sure:'확실합니까?', del_sure:'정말 삭제하시겠습니까?', empty_list:'빈 리스트', loading:'로딩 중...', file_err:'잘못된 파일!', file_ok:'목록을 불러왔습니다!', toast_theme:'테마:', toast_day:'☀️ 라이트 모드 켜짐', toast_night:'🌙 다크 모드 켜짐', toast_comp_on:'컴프레서 켜짐', toast_comp_off:'컴프레서 꺼짐', toast_sub:'자막 로드됨', local_warn:'로컬 파일은 보안상 내보낼 수 없습니다.', fav_name:'즐겨찾기', tip_fav:'즐겨찾기 추가/제거', toast_fav_on:'⭐ 즐겨찾기에 추가됨', toast_fav_off:'즐겨찾기에서 제거됨', fav_protect:'즐겨찾기 리스트는 삭제할 수 없습니다.', clear_list_btn:'🗑 전체 삭제', clear_sure:'이 리스트의 모든 항목이 삭제됩니다. 확실합니까?', fmt_lbl:'파일 형식:', fmt_all:'전체 미디어 (오디오+비디오)', fmt_audio:'오디오만 (MP3, WAV...)', fmt_video:'비디오만 (MP4, MKV...)', clip_lbl:'✂️ 자르기 / 루프 (분:초):', clip_start_ph:'시작 (예: 0:30)', clip_end_ph:'끝 (예: 2:45)', clip_loop_lbl:'🔁 이 구간 반복', tip_speed:'재생 속도', sleep_custom_lbl:'⏱ 수동 시간(분, 최대 12시간=720분):', sleep_custom_ph:'예: 90', sleep_start_btn:'시작', sleep_invalid:'1~720분 사이로 입력하세요(최대 12시간).', toast_sleep_set:'🌙 수면 타이머 설정:', toast_sleep_off:'수면 타이머 취소됨', toast_sleep_done:'🌙 시간이 다 되어 재생을 멈췄습니다', edit_adv_btn:'🎬 고급 동영상/오디오 편집', ved_title:'고급 편집기', ved_effect_lbl:'효과:', ved_fx_trim:'✂️ 자르기 / 루프', ved_fx_slow:'🐢 슬로모션', ved_fx_fast:'⚡ 빠르게 / 타임랩스', ved_fx_reverse:'◀️ 거꾸로 재생', ved_fx_freeze:'⏸️ 프리즈 프레임', ved_fx_ramp:'📈 속도 램프(느림→빠름)', ved_trim_lbl:'✂️ 자르기(분 : 초)', ved_start_ph:'시작(예: 0:05)', ved_end_ph:'끝(예: 0:20)', ved_speed_lbl:'속도(배):', ved_freeze_lbl:'정지 시점(초)과 길이(초):', ved_freeze_at_ph:'시점(초)', ved_freeze_dur_ph:'초', ved_name_lbl:'새 파일 이름:', ved_preview_btn:'▶ 미리보기', ved_render_btn:'🎬 만들기 & 저장', ved_download_btn:'⬇️ 다운로드', ved_close_btn:'닫기', ved_rendering:'처리 중… 잠시 기다려 주세요', ved_done:'✅ 완료! "편집됨" 목록에 추가되었습니다', ved_only_local:'이 기능은 기기에서 추가한 오디오/동영상 파일 전용입니다(YouTube/링크 제외).', ved_err:'처리 실패. 형식이 지원되지 않을 수 있습니다.', ved_hint:'팁: 효과를 선택하고 필요하면 자른 뒤 "만들기 & 저장"을 누르세요. 원본은 목록에 남고 편집본은 따로 저장됩니다.', ved_reverse_warn:'거꾸로 재생은 긴 영상에서 느립니다. 짧은 클립(30초 미만) 권장.', edited_list_name:'✂️ 편집됨', dl_btn_title:'이 파일 다운로드', ved_total_lbl:'전체 길이:', ved_start_lbl:'시작', ved_end_lbl:'끝', drop_hint:'📥 파일을 놓으세요 — 현재 목록에 추가됩니다', drop_added:'✅ %n개 파일이 추가되었습니다', drop_none:'유효한 오디오/동영상 파일이 없습니다' },
+    'de': { export_mo_title:'Listen zum Exportieren', export_mo_desc:'Nur Listen mit Links oder YouTube-Videos werden angezeigt. Sie können die Auswahl für unerwünschte Listen aufheben.', export_mo_empty:'Keine Listen mit Links/Videos zum Exportieren. Lokale Dateien können nicht exportiert werden.', export_mo_btn:'Ausgewählte herunterladen', export_mo_alert:'Bitte wählen Sie mindestens eine Liste aus.', add_thumb: '🖼 Bild hinzu', edit_thumb: '🖼 Bild ändern', thumb_ok: 'Bild ausgewählt ✓', thumb_rem: 'Wird entfernt 🗑', remove_thumb_btn: 'Bild entfernen', ph_url: 'Web-/Unterrichtslink...', ph_title: 'Titel', tip_eq: 'EQ ändern', tip_vid: 'Video umschalten', tip_sleep: 'Sleep-Timer', tip_set: 'Einstellungen & Themen', tip_add_list: 'Neue Liste', tip_add_c: 'Datei/Link hinzufügen', tip_cc: 'Untertitel', tip_fs: 'Vollbild', tip_start: 'Neustart', tip_m5: '5s zurück', tip_pp: 'Play/Pause', tip_p5: '5s vor', tip_next: 'Nächster Titel', tip_vol: 'Lautstärke', tip_prev: 'Vorheriger Titel', tip_shuf: 'Zufallswiedergabe', tip_rep: 'Wiederholen', eq_btn:'🎵 EQ-Modus', video_btn:'📺 Video', sleep_btn:'🌙 Schlaf', settings_btn:'⚙️ Einst.', lists_lbl:'LISTEN', add_content_btn:'+ Inhalt', cc_btn:'💬 CC', fs_btn:'Vollbild', fs_btn_exit:'Verkleinern', sub_sel_btn:'📥 Untertitel wählen', sub_off_btn:'❌ UT Aus', yt_ext_btn:'⚠️ Auf YouTube ansehen', not_selected:'Nichts gewählt', set_title:'Einstellungen', set_lang_lbl:'Sprache:', set_eq_lbl:'Equalizer:', set_comp_off:'Standard (Aus)', set_comp_on:'Kompressor (Ein)', set_comp_desc:'<strong>Was ist ein Kompressor?</strong> Erhöht automatisch leise Töne.', set_theme_lbl:'Design:', set_day:'☀️ Tag', set_night:'🌙 Nacht', set_color:'🎨 Thema ändern', set_export:'⬇️ Exportieren', set_import:'⬆️ Importieren', close_btn:'Schließen', cancel_btn:'Abbrechen', save_btn:'Speichern', delete_btn:'Löschen ✕', new_list_title:'Neue Liste', edit_list_title:'Bearbeiten', add_file_btn:'Datei wählen', or_link:'— ODER LINK —', target_list:'ZIEL:', add_link_btn:'Link hinzufügen', sleep_title:'Sleep Timer', sleep_15:'15 Min', sleep_30:'30 Min', sleep_60:'1 Std', sleep_cancel:'Abbrechen', sure:'Sicher?', del_sure:'Wirklich löschen?', empty_list:'Leere Liste', loading:'Lädt...', file_err:'Ungültige Datei!', file_ok:'Liste importiert.', toast_theme:'Thema:', toast_day:'☀️ Tag-Modus', toast_night:'🌙 Nacht-Modus', toast_comp_on:'Komp Ein', toast_comp_off:'Komp Aus', toast_sub:'Untertitel geladen', local_warn:'Lokale Dateien werden nicht exportiert.', fav_name:'Favoriten', tip_fav:'Zu Favoriten hinzufügen/entfernen', toast_fav_on:'⭐ Zu Favoriten hinzugefügt', toast_fav_off:'Aus Favoriten entfernt', fav_protect:'Die Favoritenliste kann nicht gelöscht werden.', clear_list_btn:'🗑 Alle Inhalte entfernen', clear_sure:'ALLE Inhalte dieser Liste werden entfernt. Sicher?', fmt_lbl:'DATEITYP:', fmt_all:'Alle Medien (Audio + Video)', fmt_audio:'Nur Audio (MP3, WAV...)', fmt_video:'Nur Video (MP4, MKV...)', clip_lbl:'✂️ TRIMMEN / LOOP (Min:Sek):', clip_start_ph:'Start (z.B. 0:30)', clip_end_ph:'Ende (z.B. 2:45)', clip_loop_lbl:'🔁 Diesen Abschnitt loopen', tip_speed:'Wiedergabegeschwindigkeit', sleep_custom_lbl:'⏱ Eigene Zeit (Minuten, max. 12 Std = 720 Min):', sleep_custom_ph:'z. B. 90', sleep_start_btn:'Starten', sleep_invalid:'Bitte 1 bis 720 Minuten eingeben (max. 12 Stunden).', toast_sleep_set:'🌙 Sleep-Timer gesetzt:', toast_sleep_off:'Sleep-Timer abgebrochen', toast_sleep_done:'🌙 Zeit abgelaufen, Wiedergabe gestoppt', edit_adv_btn:'🎬 Erweiterte Video-/Audiobearbeitung', ved_title:'Erweiterter Editor', ved_effect_lbl:'EFFEKT:', ved_fx_trim:'✂️ Zuschneiden / Loop', ved_fx_slow:'🐢 Zeitlupe', ved_fx_fast:'⚡ Schnell / Zeitraffer', ved_fx_reverse:'◀️ Rückwärts', ved_fx_freeze:'⏸️ Standbild', ved_fx_ramp:'📈 Geschwindigkeitsrampe (langsam→schnell)', ved_trim_lbl:'✂️ Zuschneiden (Min : Sek)', ved_start_ph:'Start (z. B. 0:05)', ved_end_ph:'Ende (z. B. 0:20)', ved_speed_lbl:'Tempo (x):', ved_freeze_lbl:'Standbild bei (Sek) und Dauer (Sek):', ved_freeze_at_ph:'Bei (Sek)', ved_freeze_dur_ph:'Sek', ved_name_lbl:'Neuer Dateiname:', ved_preview_btn:'▶ Vorschau', ved_render_btn:'🎬 Erstellen & Speichern', ved_download_btn:'⬇️ Herunterladen', ved_close_btn:'Schließen', ved_rendering:'Wird verarbeitet… bitte warten', ved_done:'✅ Fertig! Zur Liste „Bearbeitet" hinzugefügt', ved_only_local:'Diese Funktion ist nur für lokale Audio-/Videodateien vom Gerät (nicht YouTube/Links).', ved_err:'Verarbeitung fehlgeschlagen. Format evtl. nicht unterstützt.', ved_hint:'Tipp: Effekt wählen, optional zuschneiden, dann „Erstellen & Speichern". Das Original bleibt; die bearbeitete Kopie wird separat gespeichert.', ved_reverse_warn:'Rückwärts ist bei langen Videos langsam; kurze Clips (unter 30 s) empfohlen.', edited_list_name:'✂️ Bearbeitet', dl_btn_title:'Diese Datei herunterladen', ved_total_lbl:'Gesamtlänge:', ved_start_lbl:'Start', ved_end_lbl:'Ende', drop_hint:'📥 Dateien ablegen — werden zur aktuellen Liste hinzugefügt', drop_added:'✅ %n Datei(en) hinzugefügt', drop_none:'Keine gültigen Audio-/Videodateien gefunden' },
+    'fr': { export_mo_title:'Listes à exporter', export_mo_desc:'Seules les listes contenant des liens ou des vidéos YouTube sont affichées. Vous pouvez décocher celles que vous ne voulez pas.', export_mo_empty:'Aucune liste avec des liens/vidéos à exporter. Les fichiers locaux ne peuvent pas être exportés.', export_mo_btn:'Télécharger la sélection', export_mo_alert:'Veuillez sélectionner au moins une liste.', add_thumb: '🖼 Ajouter Image', edit_thumb: '🖼 Changer Image', thumb_ok: 'Image choisie ✓', thumb_rem: 'Sera supprimé 🗑', remove_thumb_btn: 'Supprimer Image', ph_url: 'Lien du site/cours...', ph_title: 'Titre', tip_eq: 'Changer EQ', tip_vid: 'Basculer la vidéo', tip_sleep: 'Minuterie', tip_set: 'Paramètres & Thèmes', tip_add_list: 'Nouvelle liste', tip_add_c: 'Ajouter fichier/lien', tip_cc: 'Sous-titres', tip_fs: 'Plein écran', tip_start: 'Recommencer', tip_m5: 'Reculer 5s', tip_pp: 'Lecture/Pause', tip_p5: 'Avancer 5s', tip_next: 'Suivant', tip_vol: 'Volume', tip_prev: 'Précédent', tip_shuf: 'Aléatoire', tip_rep: 'Répéter', eq_btn:'🎵 Mode EQ', video_btn:'📺 Vidéo', sleep_btn:'🌙 Veille', settings_btn:'⚙️ Paramètres', lists_lbl:'LISTES', add_content_btn:'+ Ajouter', cc_btn:'💬 CC', fs_btn:'Plein écran', fs_btn_exit:'Réduire', sub_sel_btn:'📥 Choisir Sous-titre', sub_off_btn:'❌ ST Désactivé', yt_ext_btn:'⚠️ Voir sur YouTube', not_selected:'Non sélectionné', set_title:'Paramètres', set_lang_lbl:'Langue:', set_eq_lbl:'Égaliseur:', set_comp_off:'Standard (Dés)', set_comp_on:'Compresseur (Act)', set_comp_desc:'<strong>Compresseur ?</strong> Augmente les sons faibles.', set_theme_lbl:'Apparence:', set_day:'☀️ Jour', set_night:'🌙 Nuit', set_color:'🎨 Changer Thème', set_export:'⬇️ Exporter', set_import:'⬆️ Importer', close_btn:'Fermer', cancel_btn:'Annuler', save_btn:'Enregistrer', delete_btn:'Supprimer ✕', new_list_title:'Nouv. Liste', edit_list_title:'Éditer', add_file_btn:'Choisir fichier', or_link:'— OU LIEN —', target_list:'CIBLE:', add_link_btn:'Ajouter lien', sleep_title:'Minuteur veille', sleep_15:'15 Min', sleep_30:'30 Min', sleep_60:'1 Heure', sleep_cancel:'Annuler', sure:'Êtes-vous sûr ?', del_sure:'Vraiment supprimer ?', empty_list:'Liste vide', loading:'Chargement...', file_err:'Fichier invalide !', file_ok:'Liste importée.', toast_theme:'Thème:', toast_day:'☀️ Mode Jour', toast_night:'🌙 Mode Nuit', toast_comp_on:'Comp. Actif', toast_comp_off:'Comp. Désactif', toast_sub:'ST Chargé', local_warn:'Fichiers locaux non exportés.', fav_name:'Favoris', tip_fav:'Ajouter/Retirer des favoris', toast_fav_on:'⭐ Ajouté aux favoris', toast_fav_off:'Retiré des favoris', fav_protect:'La liste des favoris ne peut pas être supprimée.', clear_list_btn:'🗑 Tout supprimer', clear_sure:'TOUT le contenu de cette liste sera supprimé. Sûr ?', fmt_lbl:'TYPE DE FICHIER:', fmt_all:'Tous médias (Audio + Vidéo)', fmt_audio:'Audio seul (MP3, WAV...)', fmt_video:'Vidéo seule (MP4, MKV...)', clip_lbl:'✂️ DÉCOUPE / LOOP (min:sec):', clip_start_ph:'Début (ex: 0:30)', clip_end_ph:'Fin (ex: 2:45)', clip_loop_lbl:'🔁 Boucler cette section', tip_speed:'Vitesse de lecture', sleep_custom_lbl:'⏱ Durée manuelle (minutes, max 12 h = 720 min):', sleep_custom_ph:'ex : 90', sleep_start_btn:'Démarrer', sleep_invalid:'Entrez entre 1 et 720 minutes (max 12 heures).', toast_sleep_set:'🌙 Minuteur de veille réglé:', toast_sleep_off:'Minuteur de veille annulé', toast_sleep_done:'🌙 Temps écoulé, lecture arrêtée', edit_adv_btn:'🎬 Édition vidéo/audio avancée', ved_title:'Éditeur avancé', ved_effect_lbl:'EFFET:', ved_fx_trim:'✂️ Découper / Boucle', ved_fx_slow:'🐢 Ralenti', ved_fx_fast:'⚡ Rapide / Time-lapse', ved_fx_reverse:'◀️ Lecture inversée', ved_fx_freeze:'⏸️ Image figée', ved_fx_ramp:'📈 Rampe de vitesse (lent→rapide)', ved_trim_lbl:'✂️ Découpe (min : sec)', ved_start_ph:'Début (ex : 0:05)', ved_end_ph:'Fin (ex : 0:20)', ved_speed_lbl:'Vitesse (x):', ved_freeze_lbl:'Figer à (sec) et durée (sec):', ved_freeze_at_ph:'À (sec)', ved_freeze_dur_ph:'sec', ved_name_lbl:'Nouveau nom de fichier:', ved_preview_btn:'▶ Aperçu', ved_render_btn:'🎬 Créer & Enregistrer', ved_download_btn:'⬇️ Télécharger', ved_close_btn:'Fermer', ved_rendering:'Traitement… veuillez patienter', ved_done:'✅ Terminé ! Ajouté à la liste « Modifiés »', ved_only_local:'Fonction réservée aux fichiers audio/vidéo locaux (pas YouTube/liens).', ved_err:'Échec du traitement. Format peut-être non pris en charge.', ved_hint:'Astuce : choisissez un effet, découpez si besoin, puis « Créer & Enregistrer ». Le fichier original reste dans la liste ; la copie modifiée est enregistrée à part.', ved_reverse_warn:'La lecture inversée est lente sur les longues vidéos ; clips courts (moins de 30 s) recommandés.', edited_list_name:'✂️ Modifiés', dl_btn_title:'Télécharger ce fichier', ved_total_lbl:'Durée totale:', ved_start_lbl:'Début', ved_end_lbl:'Fin', drop_hint:'📥 Déposez les fichiers — ajoutés à la liste actuelle', drop_added:'✅ %n fichier(s) ajouté(s)', drop_none:'Aucun fichier audio/vidéo valide trouvé' },
+    'es': { export_mo_title:'Listas para exportar', export_mo_desc:'Solo se muestran las listas con enlaces o videos de YouTube. Puede desmarcar las que no desee.', export_mo_empty:'No hay listas con enlaces/videos para exportar. Los archivos locales no se pueden exportar.', export_mo_btn:'Descargar selección', export_mo_alert:'Por favor, seleccione al menos una lista.', add_thumb: '🖼 Añadir Imagen', edit_thumb: '🖼 Cambiar Imagen', thumb_ok: 'Imagen elegida ✓', thumb_rem: 'Se eliminará 🗑', remove_thumb_btn: 'Quitar Imagen', ph_url: 'Enlace del sitio/curso...', ph_title: 'Título', tip_eq: 'Cambiar EQ', tip_vid: 'Alternar video', tip_sleep: 'Temporizador', tip_set: 'Ajustes y temas', tip_add_list: 'Nueva lista', tip_add_c: 'Añadir archivo/enlace', tip_cc: 'Subtítulos', tip_fs: 'Pantalla completa', tip_start: 'Reiniciar', tip_m5: 'Retroceder 5s', tip_pp: 'Reproducir/Pausa', tip_p5: 'Avanzar 5s', tip_next: 'Siguiente', tip_vol: 'Volumen', tip_prev: 'Anterior', tip_shuf: 'Aleatorio', tip_rep: 'Repetir', eq_btn:'🎵 Modo EQ', video_btn:'📺 Video', sleep_btn:'🌙 Sueño', settings_btn:'⚙️ Ajustes', lists_lbl:'LISTAS', add_content_btn:'+ Añadir', cc_btn:'💬 CC', fs_btn:'Pantalla completa', fs_btn_exit:'Reducir', sub_sel_btn:'📥 Elegir Subtítulo', sub_off_btn:'❌ Sub. Apagado', yt_ext_btn:'⚠️ Ver en YouTube', not_selected:'No seleccionado', set_title:'Ajustes', set_lang_lbl:'Idioma:', set_eq_lbl:'Ecualizador:', set_comp_off:'Estándar (Apagado)', set_comp_on:'Compresor (Encendido)', set_comp_desc:'<strong>¿Compresor?</strong> Aumenta sonidos bajos.', set_theme_lbl:'Apariencia:', set_day:'☀️ Día', set_night:'🌙 Noche', set_color:'🎨 Cambiar Tema', set_export:'⬇️ Exportar', set_import:'⬆️ Importar', close_btn:'Cerrar', cancel_btn:'Cancelar', save_btn:'Guardar', delete_btn:'Borrar ✕', new_list_title:'Nueva Lista', edit_list_title:'Editar', add_file_btn:'Elegir Archivo', or_link:'— O ENLACE —', target_list:'DESTINO:', add_link_btn:'Añadir Enlace', sleep_title:'Temporizador', sleep_15:'15 Min', sleep_30:'30 Min', sleep_60:'1 Hora', sleep_cancel:'Cancelar', sure:'¿Seguro?', del_sure:'¿Realmente borrar?', empty_list:'Lista vacía', loading:'Cargando...', file_err:'¡Archivo inválido!', file_ok:'Lista importada.', toast_theme:'Tema:', toast_day:'☀️ Modo Día', toast_night:'🌙 Modo Noche', toast_comp_on:'Comp. On', toast_comp_off:'Comp. Off', toast_sub:'Sub. Cargado', local_warn:'Archivos locales no se exportan.', fav_name:'Favoritos', tip_fav:'Añadir/Quitar de favoritos', toast_fav_on:'⭐ Añadido a favoritos', toast_fav_off:'Quitado de favoritos', fav_protect:'La lista de favoritos no se puede eliminar.', clear_list_btn:'🗑 Quitar todo', clear_sure:'Se eliminará TODO el contenido de esta lista. ¿Seguro?', fmt_lbl:'TIPO DE ARCHIVO:', fmt_all:'Todos (Audio + Video)', fmt_audio:'Solo audio (MP3, WAV...)', fmt_video:'Solo video (MP4, MKV...)', clip_lbl:'✂️ RECORTE / LOOP (min:seg):', clip_start_ph:'Inicio (ej: 0:30)', clip_end_ph:'Fin (ej: 2:45)', clip_loop_lbl:'🔁 Repetir esta sección', tip_speed:'Velocidad de reproducción', sleep_custom_lbl:'⏱ Tiempo manual (minutos, máx 12 h = 720 min):', sleep_custom_ph:'ej: 90', sleep_start_btn:'Iniciar', sleep_invalid:'Introduce entre 1 y 720 minutos (máx 12 horas).', toast_sleep_set:'🌙 Temporizador de sueño ajustado:', toast_sleep_off:'Temporizador de sueño cancelado', toast_sleep_done:'🌙 Se acabó el tiempo, reproducción detenida', edit_adv_btn:'🎬 Edición avanzada de vídeo/audio', ved_title:'Editor avanzado', ved_effect_lbl:'EFECTO:', ved_fx_trim:'✂️ Recortar / Bucle', ved_fx_slow:'🐢 Cámara lenta', ved_fx_fast:'⚡ Rápido / Time-lapse', ved_fx_reverse:'◀️ Reversa', ved_fx_freeze:'⏸️ Congelar fotograma', ved_fx_ramp:'📈 Rampa de velocidad (lento→rápido)', ved_trim_lbl:'✂️ Recorte (min : seg)', ved_start_ph:'Inicio (ej: 0:05)', ved_end_ph:'Fin (ej: 0:20)', ved_speed_lbl:'Velocidad (x):', ved_freeze_lbl:'Congelar en (seg) y duración (seg):', ved_freeze_at_ph:'En (seg)', ved_freeze_dur_ph:'seg', ved_name_lbl:'Nuevo nombre de archivo:', ved_preview_btn:'▶ Vista previa', ved_render_btn:'🎬 Crear y Guardar', ved_download_btn:'⬇️ Descargar', ved_close_btn:'Cerrar', ved_rendering:'Procesando… espera por favor', ved_done:'✅ ¡Listo! Añadido a la lista "Editados"', ved_only_local:'Esta función es solo para archivos de audio/vídeo locales (no YouTube/enlaces).', ved_err:'Error al procesar. El formato puede no ser compatible.', ved_hint:'Consejo: elige un efecto, recorta si quieres y pulsa "Crear y Guardar". El original permanece; la copia editada se guarda aparte.', ved_reverse_warn:'La reversa es lenta en vídeos largos; se recomiendan clips cortos (menos de 30 s).', edited_list_name:'✂️ Editados', dl_btn_title:'Descargar este archivo', ved_total_lbl:'Duración total:', ved_start_lbl:'Inicio', ved_end_lbl:'Fin', drop_hint:'📥 Suelta los archivos — se añadirán a la lista actual', drop_added:'✅ %n archivo(s) añadido(s)', drop_none:'No se encontraron archivos de audio/vídeo válidos' },
+    'ru': { export_mo_title:'Списки для экспорта', export_mo_desc:'Ниже показаны только списки со ссылками или видео YouTube. Вы можете снять галочки с ненужных.', export_mo_empty:'Нет списков со ссылками/видео для экспорта. Локальные файлы не могут быть экспортированы.', export_mo_btn:'Скачать выбранное', export_mo_alert:'Пожалуйста, выберите хотя бы один список.', add_thumb: '🖼 Добавить фото', edit_thumb: '🖼 Изменить фото', thumb_ok: 'Фото выбрано ✓', thumb_rem: 'Будет удалено 🗑', remove_thumb_btn: 'Удалить фото', ph_url: 'Ссылка на сайт/урок...', ph_title: 'Заголовок', tip_eq: 'Сменить EQ', tip_vid: 'Переключить видео', tip_sleep: 'Таймер сна', tip_set: 'Настройки и темы', tip_add_list: 'Новый список', tip_add_c: 'Добавить файл/ссылку', tip_cc: 'Субтитры', tip_fs: 'Полный экран', tip_start: 'Заново', tip_m5: 'Назад 5с', tip_pp: 'Воспроизведение/Пауза', tip_p5: 'Вперед 5с', tip_next: 'Следующий', tip_vol: 'Громкость', tip_prev: 'Предыдущий', tip_shuf: 'Случайный порядок', tip_rep: 'Повторять', eq_btn:'🎵 Эквалайзер', video_btn:'📺 Видео', sleep_btn:'🌙 Сон', settings_btn:'⚙️ Настройки', lists_lbl:'СПИСКИ', add_content_btn:'+ Добавить', cc_btn:'💬 CC', fs_btn:'Полный экран', fs_btn_exit:'Свернуть', sub_sel_btn:'📥 Выбрать субтитры', sub_off_btn:'❌ Выкл. субтитры', yt_ext_btn:'⚠️ Смотреть на YouTube', not_selected:'Не выбрано', set_title:'Настройки', set_lang_lbl:'Язык:', set_eq_lbl:'Эквалайзер:', set_comp_off:'Стандартно (Выкл)', set_comp_on:'Компрессор (Вкл)', set_comp_desc:'<strong>Что это?</strong> Увеличивает тихие звуки.', set_theme_lbl:'Оформление:', set_day:'☀️ День', set_night:'🌙 Ночь', set_color:'🎨 Сменить тему', set_export:'⬇️ Экспорт', set_import:'⬆️ Импорт', close_btn:'Закрыть', cancel_btn:'Отмена', save_btn:'Сохранить', delete_btn:'Удалить ✕', new_list_title:'Новый список', edit_list_title:'Изменить', add_file_btn:'Выбрать файл', or_link:'— ИЛИ ССЫЛКА —', target_list:'ЦЕЛЬ:', add_link_btn:'Добавить ссылку', sleep_title:'Таймер сна', sleep_15:'15 мин', sleep_30:'30 мин', sleep_60:'1 час', sleep_cancel:'Отмена', sure:'Уверены?', del_sure:'Точно удалить?', empty_list:'Пусто', loading:'Загрузка...', file_err:'Неверный файл!', file_ok:'Список импортирован.', toast_theme:'Тема:', toast_day:'☀️ День', toast_night:'🌙 Ночь', toast_comp_on:'Комп Вкл', toast_comp_off:'Комп Выкл', toast_sub:'Субтитры загружены', local_warn:'Локальные файлы не экспортируются.', fav_name:'Избранное', tip_fav:'Добавить/убрать из избранного', toast_fav_on:'⭐ Добавлено в избранное', toast_fav_off:'Убрано из избранного', fav_protect:'Список избранного нельзя удалить.', clear_list_btn:'🗑 Удалить всё', clear_sure:'ВСЁ содержимое этого списка будет удалено. Уверены?', fmt_lbl:'ТИП ФАЙЛА:', fmt_all:'Все медиа (Аудио + Видео)', fmt_audio:'Только аудио (MP3, WAV...)', fmt_video:'Только видео (MP4, MKV...)', clip_lbl:'✂️ ОБРЕЗКА / LOOP (мин:сек):', clip_start_ph:'Начало (напр. 0:30)', clip_end_ph:'Конец (напр. 2:45)', clip_loop_lbl:'🔁 Зациклить этот отрезок', tip_speed:'Скорость воспроизведения', sleep_custom_lbl:'⏱ Своё время (минуты, макс 12 ч = 720 мин):', sleep_custom_ph:'напр. 90', sleep_start_btn:'Старт', sleep_invalid:'Введите от 1 до 720 минут (макс 12 часов).', toast_sleep_set:'🌙 Таймер сна установлен:', toast_sleep_off:'Таймер сна отменён', toast_sleep_done:'🌙 Время вышло, воспроизведение остановлено', edit_adv_btn:'🎬 Расширенное редактирование видео/аудио', ved_title:'Расширенный редактор', ved_effect_lbl:'ЭФФЕКТ:', ved_fx_trim:'✂️ Обрезка / Цикл', ved_fx_slow:'🐢 Замедление', ved_fx_fast:'⚡ Ускорение / Таймлапс', ved_fx_reverse:'◀️ Реверс', ved_fx_freeze:'⏸️ Стоп-кадр', ved_fx_ramp:'📈 Разгон скорости (медленно→быстро)', ved_trim_lbl:'✂️ Обрезка (мин : сек)', ved_start_ph:'Начало (напр. 0:05)', ved_end_ph:'Конец (напр. 0:20)', ved_speed_lbl:'Скорость (x):', ved_freeze_lbl:'Стоп-кадр на (сек) и длительность (сек):', ved_freeze_at_ph:'На (сек)', ved_freeze_dur_ph:'сек', ved_name_lbl:'Имя нового файла:', ved_preview_btn:'▶ Предпросмотр', ved_render_btn:'🎬 Создать и Сохранить', ved_download_btn:'⬇️ Скачать', ved_close_btn:'Закрыть', ved_rendering:'Обработка… подождите', ved_done:'✅ Готово! Добавлено в список «Изменённые»', ved_only_local:'Функция только для локальных аудио/видео файлов (не YouTube/ссылки).', ved_err:'Ошибка обработки. Формат может не поддерживаться.', ved_hint:'Совет: выберите эффект, при желании обрежьте и нажмите «Создать и Сохранить». Оригинал остаётся; изменённая копия сохраняется отдельно.', ved_reverse_warn:'Реверс медленный на длинных видео; рекомендуются короткие клипы (до 30 с).', edited_list_name:'✂️ Изменённые', dl_btn_title:'Скачать этот файл', ved_total_lbl:'Общая длина:', ved_start_lbl:'Начало', ved_end_lbl:'Конец', drop_hint:'📥 Перетащите файлы — добавятся в текущий список', drop_added:'✅ Добавлено файлов: %n', drop_none:'Подходящие аудио/видео файлы не найдены' }
 };
 
 let tempAddThumb = null; let tempEditThumb = null;
@@ -445,10 +537,17 @@ function removeEditThumb() { tempEditThumb = 'REMOVE'; document.getElementById('
 let currentLang = localStorage.getItem('fowa_lang') || 'tr';
 function t(key) { return dict[currentLang][key] || dict['tr'][key] || key; }
 
+// Özel dil açılır menüsü kontrolü
+const _langNames = { tr:'Türkçe', en:'English', ja:'日本語', ko:'한국어', de:'Deutsch', fr:'Français', es:'Español', ru:'Русский' };
+function toggleLangDD(e) { if (e) e.stopPropagation(); const dd = document.getElementById('langDD'); if (dd) dd.classList.toggle('open'); }
+function pickLang(lang) { const dd = document.getElementById('langDD'); if (dd) dd.classList.remove('open'); setLanguage(lang); }
+document.addEventListener('click', function (e) { const dd = document.getElementById('langDD'); if (dd && dd.classList.contains('open') && !dd.contains(e.target)) dd.classList.remove('open'); });
+
 function setLanguage(lang) {
     currentLang = lang;
     localStorage.setItem('fowa_lang', lang);
-    document.getElementById('langSel').value = lang;
+    const _ls = document.getElementById('langSel'); if (_ls) _ls.value = lang;
+    const _lc = document.getElementById('langCurLabel'); if (_lc) _lc.textContent = _langNames[lang] || lang;
     document.querySelectorAll('[data-i18n]').forEach(el => {
         let key = el.getAttribute('data-i18n');
         if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) el.placeholder = t(key);
@@ -475,15 +574,92 @@ const svgPause = `<svg class="btn-svg" viewBox="0 0 24 24"><path d="M6 19h4V5H6v
 
 // --- VERİTABANI VE STATE YÖNETİMİ ---
 let db;
-let lists = JSON.parse(localStorage.getItem('nm_data')) || [{id:'l1', name:'Favoriler', icon:'', songs:[]}];
+
+// ==========================================================================
+// KALICI DİSK KAYIT SİSTEMİ (VERİ KAYBI KORUMASI)
+// localStorage; çökme, kota aşımı veya profil bozulmasında silinebiliyor.
+// Bu yüzden asıl veri artık diske (userData/fowalink_data.json) atomik olarak
+// yazılıyor + bir önceki sağlam kopya .bak dosyasında tutuluyor.
+// Okuma sırası: disk → .bak yedeği → localStorage → boş varsayılan.
+// ==========================================================================
+let FS = null, PATHJOIN = null, DATA_FILE = null, BAK_FILE = null, TMP_FILE = null;
+try {
+    if (typeof require === 'function') {
+        FS = require('fs');
+        const _path = require('path');
+        const { ipcRenderer } = require('electron');
+        const dir = ipcRenderer.sendSync('get-data-path');
+        if (dir) {
+            DATA_FILE = _path.join(dir, 'fowalink_data.json');
+            BAK_FILE  = _path.join(dir, 'fowalink_data.bak.json');
+            TMP_FILE  = _path.join(dir, 'fowalink_data.tmp.json');
+        } else { FS = null; }
+    }
+} catch(e) { FS = null; console.log("Disk kayıt sistemi yok (tarayıcı modu):", e); }
+
+function diskSave(str) {
+    if (!FS || !DATA_FILE) return;
+    try {
+        FS.writeFileSync(TMP_FILE, str);                                  // 1. önce geçici dosyaya yaz
+        if (FS.existsSync(DATA_FILE)) FS.copyFileSync(DATA_FILE, BAK_FILE); // 2. eski sağlam kopyayı yedekle
+        FS.renameSync(TMP_FILE, DATA_FILE);                               // 3. atomik değişim
+    } catch(e) { console.error("Disk kaydı başarısız:", e); }
+}
+
+function diskLoad() {
+    if (!FS || !DATA_FILE) return null;
+    for (const f of [DATA_FILE, BAK_FILE]) {
+        try {
+            if (FS.existsSync(f)) {
+                const d = JSON.parse(FS.readFileSync(f, 'utf8'));
+                if (d && Array.isArray(d.lists)) return d;
+            }
+        } catch(e) { console.error("Bozuk veri dosyası atlandı:", f, e); }
+    }
+    return null;
+}
+
+function lsGet(key) { try { return localStorage.getItem(key); } catch(e) { return null; } }
+function lsSet(key, val) { try { localStorage.setItem(key, val); } catch(e) { /* kota dolu olabilir, disk kaydı esas */ } }
+
+function loadState() {
+    const d = diskLoad();
+    if (d) return d;
+    // Eski sürümden geçiş: localStorage'dan oku (bozuksa çökmeden devam et)
+    try {
+        const raw = lsGet('nm_data');
+        if (raw) {
+            const ls = JSON.parse(raw);
+            if (Array.isArray(ls)) {
+                let pi = parseInt(lsGet('fowa_playI'));
+                return { lists: ls, curL: lsGet('fowa_curL'), playL: lsGet('fowa_playL'), playI: isNaN(pi) ? -1 : pi };
+            }
+        }
+    } catch(e) { console.error("localStorage verisi bozuk, varsayılanla başlanıyor:", e); }
+    return null;
+}
+
+const _state = loadState();
+let lists = (_state && Array.isArray(_state.lists) && _state.lists.length) ? _state.lists : [{id:'favs', name:'⭐ Favoriler', icon:'', songs:[]}];
+
+// Ortak Favoriler listesi her zaman var olsun
+function ensureFavList() {
+    let f = lists.find(l => l.id === 'favs');
+    if (!f) { f = {id:'favs', name:'⭐ ' + (t('fav_name') || 'Favoriler'), icon:'', songs:[]}; lists.unshift(f); }
+    return f;
+}
+ensureFavList();
 
 // UYGULAMA KAPATILDIĞINDA SON AYARLARIN HATIRLANMASI
-let curL = localStorage.getItem('fowa_curL');
-if(!lists.find(l=>l.id===curL)) curL = lists[0]?.id || 'l1'; 
-let playL = localStorage.getItem('fowa_playL') || curL;
-let playI = parseInt(localStorage.getItem('fowa_playI')) || -1;
-let currentVolume = parseFloat(localStorage.getItem('fowa_vol'));
+let curL = _state ? _state.curL : null;
+if(!lists.find(l=>l.id===curL)) curL = lists[0]?.id || 'favs';
+let playL = (_state && _state.playL) || curL;
+let playI = (_state && typeof _state.playI === 'number' && !isNaN(_state.playI)) ? _state.playI : -1;
+let currentVolume = parseFloat(lsGet('fowa_vol'));
 if(isNaN(currentVolume)) currentVolume = 0.7;
+
+// Beklenmeyen hatalar tüm uygulamayı sessizce kilitlemesin
+window.addEventListener('error', (e) => { console.error("Yakalanan hata:", e.error || e.message); });
 
 let isPlay = false, vidPanelOpen = false;
 let idleTimer = null, isHovering = false, customVpHeight = null; 
@@ -502,11 +678,13 @@ let isLightMode = localStorage.getItem('fowa_lightMode') === 'true';
 function applyThemeBase() { document.body.className = `theme-${themes[curThemeIdx]} ${isLightMode ? 'light-mode' : ''}`; }
 applyThemeBase();
 
-function showToast(msg) {
+let _toastTimer = null;
+function showToast(msg, dur = 2000) {
     const tEl = document.getElementById('themeToast');
     tEl.textContent = msg;
+    clearTimeout(_toastTimer);
     tEl.classList.remove('hid'); setTimeout(() => tEl.classList.add('show'), 10);
-    setTimeout(() => { tEl.classList.remove('show'); setTimeout(() => tEl.classList.add('hid'), 300); }, 2000);
+    _toastTimer = setTimeout(() => { tEl.classList.remove('show'); setTimeout(() => tEl.classList.add('hid'), 300); }, dur);
 }
 
 function previewTheme() {
@@ -524,12 +702,27 @@ function setLightMode(light) {
 }
 
 // --- SES MODLARI (EQ VE KOMPRESÖR) ---
-const eqModes = ['standart', 'sinema', 'uyku', 'anime', 'akustik', 'vokal', 'bas'];
+// Bantlar: [60Hz, 250Hz, 1kHz, 4kHz, 12kHz] — dB kazanç değerleri
+// Farkların net duyulması için değerler güçlendirildi + yeni modlar eklendi
+const eqGains = {
+    standart:   [0, 0, 0, 0, 0],
+    sinema:     [9, 3, -2, 4, 8],
+    uyku:       [-12, -6, -2, -8, -12],
+    anime:      [2, 4, 7, 8, 4],
+    akustik:    [3, 2, 5, 7, 4],
+    vokal:      [-6, -2, 9, 8, 2],
+    bas:        [12, 8, 0, -2, -1],
+    rock:       [8, 4, -3, 5, 8],
+    pop:        [5, 2, 4, 6, 5],
+    elektronik: [10, 5, -4, 6, 9],
+    lofi:       [6, 3, -3, -7, -10]
+};
+const eqModes = Object.keys(eqGains);
 let savedEQ = localStorage.getItem('fowa_eq') || 'standart';
 let curEqIdx = eqModes.indexOf(savedEQ) > -1 ? eqModes.indexOf(savedEQ) : 0;
 let isCompressorOn = localStorage.getItem('fowa_comp') === 'true';
 
-let audioCtx, compressor, sourceA, sourceV, audioInit = false;
+let audioCtx, compressor, compMakeup, sourceA, sourceV, audioInit = false;
 let eqBands = [];
 
 function initAudioCompressor() {
@@ -539,12 +732,16 @@ function initAudioCompressor() {
         audioCtx = new AudioContext();
         compressor = audioCtx.createDynamicsCompressor();
         compressor.knee.value = 30; compressor.attack.value = 0.003; compressor.release.value = 0.25;
-        
+
+        // MAKYAJ KAZANCI: Kompresör açıkken sesi belirgin şekilde yükseltir (net duyulsun)
+        compMakeup = audioCtx.createGain();
+        compMakeup.gain.value = 1.0;
+
         sourceA = audioCtx.createMediaElementSource(AUDIO);
         sourceV = audioCtx.createMediaElementSource(VIDEO);
         let inputNode = audioCtx.createGain();
         sourceA.connect(inputNode); sourceV.connect(inputNode);
-        
+
         const frequencies = [60, 250, 1000, 4000, 12000]; let prevNode = inputNode;
         frequencies.forEach(freq => {
             let filter = audioCtx.createBiquadFilter();
@@ -552,16 +749,25 @@ function initAudioCompressor() {
             filter.frequency.value = freq; filter.Q.value = 1.2; filter.gain.value = 0;
             eqBands.push(filter); prevNode.connect(filter); prevNode = filter;
         });
-        
-        prevNode.connect(compressor); compressor.connect(audioCtx.destination);
+
+        prevNode.connect(compressor); compressor.connect(compMakeup); compMakeup.connect(audioCtx.destination);
         audioInit = true; applyCompressorState(); applyEQNode(savedEQ);
     } catch(e) { console.log("Audio API Error:", e); }
 }
 
 function applyCompressorState() {
     if(!audioInit) return;
-    if(isCompressorOn) { compressor.threshold.value = -30; compressor.ratio.value = 15; } 
-    else { compressor.threshold.value = 0; compressor.ratio.value = 1; }
+    const now = audioCtx ? audioCtx.currentTime : 0;
+    if(isCompressorOn) {
+        // Belirgin kompresör: alçak sesleri güçlü toplar, ani patlamaları bastırır
+        compressor.threshold.value = -45; compressor.ratio.value = 20;
+        compressor.knee.value = 25; compressor.attack.value = 0.003; compressor.release.value = 0.2;
+        // Makyaj kazancı ile toplam ses seviyesi net biçimde yükselir (~+6dB)
+        try { compMakeup.gain.setTargetAtTime(2.0, now, 0.05); } catch(e) { compMakeup.gain.value = 2.0; }
+    } else {
+        compressor.threshold.value = 0; compressor.ratio.value = 1; compressor.knee.value = 30;
+        try { compMakeup.gain.setTargetAtTime(1.0, now, 0.05); } catch(e) { compMakeup.gain.value = 1.0; }
+    }
 }
 
 function toggleCompressorMode() {
@@ -572,16 +778,13 @@ function toggleCompressorMode() {
 }
 
 function applyEQNode(mode) {
-    if(!audioInit) return; eqBands.forEach(f => f.gain.value = 0); 
-    if(mode === 'sinema') { eqBands[0].gain.value = 8; eqBands[2].gain.value = -2; eqBands[4].gain.value = 6; } 
-    else if(mode === 'uyku') { eqBands[0].gain.value = -10; eqBands[1].gain.value = -6; eqBands[4].gain.value = -8; } 
-    else if(mode === 'anime') { eqBands[1].gain.value = 3; eqBands[2].gain.value = 6; eqBands[3].gain.value = 5; }
-    else if(mode === 'akustik') { eqBands[2].gain.value = 4; eqBands[3].gain.value = 5; eqBands[4].gain.value = 3; }
-    else if(mode === 'vokal') { eqBands[0].gain.value = -3; eqBands[2].gain.value = 8; eqBands[3].gain.value = 6; }
-    else if(mode === 'bas') { eqBands[0].gain.value = 10; eqBands[1].gain.value = 6; }
+    if(!audioInit) return;
+    const g = eqGains[mode] || eqGains.standart;
+    eqBands.forEach((f, i) => f.gain.value = g[i] || 0);
 }
 
-function cycleEQ() { curEqIdx = (curEqIdx + 1) % eqModes.length; savedEQ = eqModes[curEqIdx]; localStorage.setItem('fowa_eq', savedEQ); applyEQNode(savedEQ); showToast("🎵 EQ: " + savedEQ.toUpperCase()); }
+// EQ mod adı ekranda daha uzun kalsın diye toast süresi 3500ms
+function cycleEQ() { curEqIdx = (curEqIdx + 1) % eqModes.length; savedEQ = eqModes[curEqIdx]; lsSet('fowa_eq', savedEQ); applyEQNode(savedEQ); showToast("🎵 EQ: " + savedEQ.toUpperCase(), 3500); }
 
 // --- ALTYAZI ---
 function toggleCCMenu() { document.getElementById('ccMenu').classList.toggle('show'); }
@@ -606,12 +809,15 @@ function startApp() {
     const syncPlay = () => { isPlay=true; userWantsToPlay=true; syncB(); wakeUpControls();};
     const syncPause = (e) => { if (e && e.target && e.target.ended) return; isPlay=false; syncB(); };
     
-    AUDIO.addEventListener('play', syncPlay); AUDIO.addEventListener('pause', syncPause); AUDIO.addEventListener('ended', () => next(true));
-    VIDEO.addEventListener('play', syncPlay); VIDEO.addEventListener('pause', syncPause); VIDEO.addEventListener('ended', () => next(true));
-    
-    initDB(); bindInteractionEvents(); initKeyboard(); syncB(); 
+    AUDIO.addEventListener('play', syncPlay); AUDIO.addEventListener('pause', syncPause); AUDIO.addEventListener('ended', handleEnded);
+    VIDEO.addEventListener('play', syncPlay); VIDEO.addEventListener('pause', syncPause); VIDEO.addEventListener('ended', handleEnded);
+
+    applySpeed();
+    initDB(); bindInteractionEvents(); initKeyboard(); syncB();
     let lastS = lists.find(l=>l.id===playL)?.songs[playI];
-    if(lastS) { document.getElementById('npT').textContent = lastS.title; document.getElementById('ytExternalLink').href = `https://www.youtube.com/watch?v=${lastS.ytId}`; }
+    if(lastS) { document.getElementById('npT').textContent = lastS.title; if(lastS.isYt) document.getElementById('ytExternalLink').href = `https://www.youtube.com/watch?v=${lastS.ytId}`; }
+    // Uygulama açılışında verinin diske de yazıldığından emin ol (eski sürümden geçiş)
+    save();
 }
 document.addEventListener('DOMContentLoaded', startApp);
 
@@ -624,7 +830,12 @@ function storeFile(id, file) { return new Promise(res => { const tx = db.transac
 function getFile(id) { return new Promise(res => { db.transaction(["files"], "readonly").objectStore("files").get(id).onsuccess = e => res(e.target.result?.data); }); }
 function deleteFileFromDB(id) { db.transaction(["files"], "readwrite").objectStore("files").delete(id); }
 
-function save(){ localStorage.setItem('nm_data', JSON.stringify(lists)); localStorage.setItem('fowa_curL', curL); localStorage.setItem('fowa_playL', playL); localStorage.setItem('fowa_playI', playI); }
+function save(){
+    // 1. ASIL KAYIT: Disk (atomik + yedekli, çökmeye dayanıklı)
+    diskSave(JSON.stringify({ v: 2, savedAt: Date.now(), lists, curL, playL, playI }));
+    // 2. İKİNCİL KAYIT: localStorage (kota dolarsa sessizce atlanır, uygulama kilitlenmez)
+    lsSet('nm_data', JSON.stringify(lists)); lsSet('fowa_curL', curL); lsSet('fowa_playL', playL); lsSet('fowa_playI', playI);
+}
 
 function openExportMo() {
     closeMo('settingsMo');
@@ -813,8 +1024,12 @@ function renderSongs(){
         let isNowClass = (i === highlightIdx) ? 'now' : '';
         
         let iconHtml = s.thumb ? `<img src="${s.thumb}" style="width:100%; height:100%; object-fit:cover;">` : `<div style="font-size:18px;">${s.isLink?'🌐':(s.isYt?'📺':(s.isVid?'🎬':'🎵'))}</div>`;
-        
-        h += `<div class="sr ${isNowClass}" id="song-${i}" draggable="true" ondragstart="dragStartS(event, ${i})" ondragover="dragOver(event)" ondrop="dropS(event, ${i})" ondragend="dragEnd(event)" onclick="selectSong('${curL}', ${i})">${stHTML}<div class="s-thumb">${iconHtml}</div><div class="st">${s.title}</div><div class="sr-more" onclick="event.stopPropagation(); openEdit(${i})">⋮</div></div>`;
+
+        let isFav = favHas(s.id);
+        let starHTML = `<div class="st-star ${isFav?'on':''}" title="${t('tip_fav')}" onclick="event.stopPropagation(); toggleFav('${curL}', ${i})">${isFav?'★':'☆'}</div>`;
+        let clipBadge = (s.clipStart != null || s.clipEnd != null || s.clipLoop) ? ' ✂️' : '';
+
+        h += `<div class="sr ${isNowClass}" id="song-${i}" draggable="true" ondragstart="dragStartS(event, ${i})" ondragover="dragOver(event)" ondrop="dropS(event, ${i})" ondragend="dragEnd(event)" onclick="selectSong('${curL}', ${i})">${stHTML}<div class="s-thumb">${iconHtml}</div><div class="st">${s.title}${clipBadge}</div>${starHTML}<div class="sr-more" onclick="event.stopPropagation(); openEdit(${i})">⋮</div></div>`;
     });
     document.getElementById('sw').innerHTML = h || `<div style="padding:20px; opacity:0.5; font-size:12px">${t('empty_list')}</div>`;
     if(highlightIdx !== -1) { setTimeout(() => { const el = document.getElementById(`song-${highlightIdx}`); if(el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 150); }
@@ -822,12 +1037,30 @@ function renderSongs(){
 
 function selL(id){ curL = id; save(); renderSB(); renderSongs(); }
 
-let currentBlobUrl = null; let lastTap = 0;
-function selectSong(lId, i) {
-    let now = new Date().getTime();
-    if (now - lastTap < 400 && now - lastTap > 0) playSong(lId, i);
-    else { playL = lId; playI = i; let s = lists.find(l => l.id === playL)?.songs[playI]; if(s) document.getElementById('npT').textContent = s.title; save(); renderSongs(); }
-    lastTap = new Date().getTime();
+let currentBlobUrl = null;
+// TEK TIKLA ÇALMA: Artık şarkıya bir kez tıklamak yeterli
+function selectSong(lId, i) { playSong(lId, i); }
+
+// --- FAVORİLER (YILDIZ) SİSTEMİ ---
+function favHas(id) { const f = lists.find(l => l.id === 'favs'); return !!(f && f.songs.some(x => x.id === id)); }
+
+// Bir dosya ID'si kaç listede kullanılıyor? (Favori kopyaları aynı dosyayı paylaşır,
+// dosya IndexedDB'den ancak hiçbir listede kalmayınca silinir)
+function fileRefCount(id) { let c = 0; lists.forEach(l => l.songs.forEach(s => { if (s.id === id) c++; })); return c; }
+
+function toggleFav(lId, i) {
+    const favL = ensureFavList();
+    const lst = lists.find(l => l.id === lId); const s = lst?.songs[i]; if (!s) return;
+    const idx = favL.songs.findIndex(x => x.id === s.id);
+    if (idx > -1) {
+        favL.songs.splice(idx, 1);
+        if (playL === 'favs') { if (playI === idx) playI = -1; else if (playI > idx) playI--; }
+        showToast(t('toast_fav_off'));
+    } else {
+        favL.songs.push({ ...s });
+        showToast(t('toast_fav_on'));
+    }
+    save(); renderSongs(); renderSB();
 }
 
 async function playSong(lId, i){
@@ -839,17 +1072,20 @@ async function playSong(lId, i){
 
     if(s.isLink) { window.open(s.url, '_blank'); AUDIO.pause(); isPlay = false; userWantsToPlay = false; syncB(); renderSongs(); return; }
     if(s.isYt) {
-        AUDIO.pause(); if(!vidPanelOpen) toggleVidPanel(); 
+        AUDIO.pause(); if(!vidPanelOpen) toggleVidPanel();
         document.getElementById('ytExternalLink').classList.add('show'); document.getElementById('ytExternalLink').href = `https://www.youtube.com/watch?v=${s.ytId}`; document.getElementById('yt-player').classList.add('show');
-        if(!ytPlayer) { ytPlayer = new YT.Player('yt-player', { height:'100%', width:'100%', videoId:s.ytId, playerVars:{'autoplay':1, 'playsinline':1}, events:{'onReady':e=>e.target.setVolume(currentVolume*100), 'onStateChange':e=> { if(e.data===0) next(true); else if(e.data===1) { isPlay=true; userWantsToPlay=true; syncB(); wakeUpControls(); } else if(e.data===2) { isPlay=false; userWantsToPlay=false; syncB(); } } } }); } 
-        else { if(typeof ytPlayer.loadVideoById === 'function') ytPlayer.loadVideoById(s.ytId); }
+        if(!ytPlayer) { ytPlayer = new YT.Player('yt-player', { height:'100%', width:'100%', videoId:s.ytId, playerVars:{'autoplay':1, 'playsinline':1, 'start': Math.floor(s.clipStart||0)}, events:{'onReady':e=>{ e.target.setVolume(currentVolume*100); applySpeed(); }, 'onStateChange':e=> { if(e.data===0) handleEnded(); else if(e.data===1) { isPlay=true; userWantsToPlay=true; applySpeed(); syncB(); wakeUpControls(); } else if(e.data===2) { isPlay=false; userWantsToPlay=false; syncB(); } } } }); }
+        else { if(typeof ytPlayer.loadVideoById === 'function') ytPlayer.loadVideoById({videoId: s.ytId, startSeconds: s.clipStart || 0}); }
     } else {
-        if(s.isVid && !vidPanelOpen) toggleVidPanel(); 
-        let data = await getFile(s.id); if(!data) return; 
+        if(s.isVid && !vidPanelOpen) toggleVidPanel();
+        let data = await getFile(s.id); if(!data) return;
         if(ytPlayer && typeof ytPlayer.stopVideo === 'function') try { ytPlayer.stopVideo(); } catch(e){}
         let oldBlob = currentBlobUrl; currentBlobUrl = URL.createObjectURL(data);
-        if(s.isVid) { AUDIO.pause(); VIDEO.classList.add('show'); VIDEO.src = currentBlobUrl; VIDEO.volume = currentVolume; VIDEO.play().catch(e=>console.log(e)); } 
-        else { VIDEO.pause(); AUDIO.src = currentBlobUrl; AUDIO.volume = currentVolume; AUDIO.play().catch(e=>console.log(e)); }
+        let el = s.isVid ? VIDEO : AUDIO;
+        // KIRPMA: Başlangıç noktası ayarlıysa oradan başlat
+        if(s.clipStart) { el.addEventListener('loadedmetadata', function _sk(){ try { el.currentTime = s.clipStart; } catch(e){} }, { once: true }); }
+        if(s.isVid) { AUDIO.pause(); VIDEO.classList.add('show'); VIDEO.src = currentBlobUrl; VIDEO.volume = currentVolume; VIDEO.playbackRate = curSpeed; VIDEO.play().catch(e=>console.log(e)); }
+        else { VIDEO.pause(); AUDIO.src = currentBlobUrl; AUDIO.volume = currentVolume; AUDIO.playbackRate = curSpeed; AUDIO.play().catch(e=>console.log(e)); }
         if(oldBlob) URL.revokeObjectURL(oldBlob);
     }
     isPlay = true; syncB(); renderSongs(); wakeUpControls();
@@ -865,7 +1101,35 @@ function togglePlay() {
     wakeUpControls();
 }
 
-function next(isAuto = false) { 
+// --- OYNATMA HIZI KONTROLÜ ---
+const speeds = [1, 1.25, 1.5, 2, 0.5, 0.75];
+let curSpeed = parseFloat(lsGet('fowa_speed')) || 1;
+if (!speeds.includes(curSpeed)) curSpeed = 1;
+function applySpeed() {
+    if (AUDIO) AUDIO.playbackRate = curSpeed;
+    if (VIDEO) VIDEO.playbackRate = curSpeed;
+    try { if (ytPlayer?.setPlaybackRate) ytPlayer.setPlaybackRate(curSpeed); } catch(e) {}
+    const el = document.getElementById('speedTxt'); if (el) el.textContent = curSpeed + 'x';
+}
+function cycleSpeed() {
+    curSpeed = speeds[(speeds.indexOf(curSpeed) + 1) % speeds.length];
+    lsSet('fowa_speed', curSpeed); applySpeed();
+    showToast('⏩ ' + t('tip_speed') + ': ' + curSpeed + 'x');
+}
+
+// --- PARÇA BİTİŞİ: LOOP (KIRPMA ARALIĞI) KONTROLÜ ---
+function handleEnded() {
+    const s = lists.find(l => l.id === playL)?.songs[playI];
+    if (s && s.clipLoop) {
+        const st = s.clipStart || 0;
+        if (s.isYt) { try { if (ytPlayer?.seekTo) { ytPlayer.seekTo(st, true); ytPlayer.playVideo && ytPlayer.playVideo(); } } catch(e) {} }
+        else { const el = s.isVid ? VIDEO : AUDIO; el.currentTime = st; el.play().catch(()=>{}); }
+        return;
+    }
+    next(true);
+}
+
+function next(isAuto = false) {
     let lst = lists.find(l=>l.id===playL); if(!lst || !lst.songs.length) return; 
     if (isAuto && isRepeatOne) { playSong(playL, playI); return; }
     let nextIdx = playI;
@@ -874,8 +1138,8 @@ function next(isAuto = false) {
     playSong(playL, nextIdx); 
 }
 function prev() { let lst = lists.find(l=>l.id===playL); if(lst && lst.songs.length > 0) playSong(playL, (playI-1+lst.songs.length)%lst.songs.length); }
-function seekRelative(sec) { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s.isLink) return; if(s.isYt) ytPlayer.seekTo(ytPlayer.getCurrentTime()+sec, true); else { let el=s.isVid?VIDEO:AUDIO; el.currentTime+=sec; } wakeUpControls(); }
-function seekToStart() { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s.isLink) return; if(s.isYt) ytPlayer.seekTo(0, true); else { let el=s.isVid?VIDEO:AUDIO; el.currentTime=0; } wakeUpControls(); }
+function seekRelative(sec) { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s.isLink) return; if(s.isYt) { if(ytPlayer?.seekTo && ytPlayer?.getCurrentTime) ytPlayer.seekTo(ytPlayer.getCurrentTime()+sec, true); } else { let el=s.isVid?VIDEO:AUDIO; el.currentTime+=sec; } wakeUpControls(); }
+function seekToStart() { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s.isLink) return; let st = s.clipStart || 0; if(s.isYt) { if(ytPlayer?.seekTo) ytPlayer.seekTo(st, true); } else { let el=s.isVid?VIDEO:AUDIO; el.currentTime=st; } wakeUpControls(); }
 
 function syncB() { 
     let pBtn = document.getElementById('playBImg'); let vpPBtn = document.getElementById('vpPlayBImg');
@@ -883,38 +1147,101 @@ function syncB() {
 }
 
 setInterval(() => {
-    if (!isPlay) return; 
+    if (!isPlay) return;
     let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s.isLink) return; let dur, cur;
     if(s.isYt && ytPlayer?.getCurrentTime) { dur = ytPlayer.getDuration(); cur = ytPlayer.getCurrentTime(); } else { let el = s.isVid?VIDEO:AUDIO; dur = el?.duration; cur = el?.currentTime; }
     if(dur>0) { document.getElementById('pf').style.width = (cur/dur*100)+'%'; document.getElementById('timeCur').textContent = formatTime(cur); document.getElementById('timeRem').textContent = "-" + formatTime(dur - cur); }
+    // KIRPMA BİTİŞ NOKTASI: Ayarlanan saniyeye gelince ya loop'a dön ya da sonraki parçaya geç
+    if (s.clipEnd && cur >= s.clipEnd) {
+        if (s.clipLoop) {
+            const st = s.clipStart || 0;
+            if (s.isYt) { try { ytPlayer?.seekTo && ytPlayer.seekTo(st, true); } catch(e) {} }
+            else { const el = s.isVid ? VIDEO : AUDIO; el.currentTime = st; }
+        } else next(true);
+    }
 }, 500);
 
 function formatTime(s) { if(!s||isNaN(s)) return "0:00"; let m=Math.floor(s/60); let sec=Math.floor(s%60); return `${m}:${sec<10?'0':''}${sec}`; }
-function seek(e) { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s.isLink) return; let r = e.currentTarget.getBoundingClientRect(); let clientX = e.clientX || (e.touches && e.touches[0].clientX); let pct = Math.max(0, Math.min(1, (clientX - r.left)/r.width)); if(s.isYt) ytPlayer.seekTo(pct*ytPlayer.getDuration()); else { let el=s.isVid?VIDEO:AUDIO; el.currentTime=pct*el.duration; } wakeUpControls(); }
+function seek(e) { let s = lists.find(l=>l.id===playL)?.songs[playI]; if(!s || s.isLink) return; let r = e.currentTarget.getBoundingClientRect(); let clientX = e.clientX || (e.touches && e.touches[0].clientX); let pct = Math.max(0, Math.min(1, (clientX - r.left)/r.width)); if(s.isYt) { if(ytPlayer?.seekTo && ytPlayer?.getDuration) ytPlayer.seekTo(pct*ytPlayer.getDuration()); } else { let el=s.isVid?VIDEO:AUDIO; if(el.duration) el.currentTime=pct*el.duration; } wakeUpControls(); }
 
 function openPlEdit(i) { editPlIdx = i; document.getElementById('plEditIn').value = lists[i].name; document.getElementById('plEditMo').classList.remove('hid'); }
 function savePlEdit() { lists[editPlIdx].name = document.getElementById('plEditIn').value; save(); renderSB(); closeMo('plEditMo'); }
-function deletePl() { if(confirm(t('sure'))) { lists[editPlIdx].songs.forEach(s => { if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); }); lists.splice(editPlIdx, 1); if(lists.length===0) lists=[{id:'l1',name:t('pl_fav')||'Favoriler',icon:'',songs:[]}]; curL=lists[0].id; if(playL===lists[editPlIdx]?.id) { playL=null; playI=-1; AUDIO.pause(); VIDEO.pause(); isPlay=false; syncB(); } save(); renderSB(); renderSongs(); closeMo('plEditMo'); } }
+function deletePl() {
+    const del = lists[editPlIdx]; if (!del) return;
+    if (del.id === 'favs') { alert(t('fav_protect')); return; } // Ortak favoriler listesi silinemez
+    if (!confirm(t('sure'))) return;
+    const delId = del.id;
+    // Dosyaları sadece başka listede kopyası yoksa sil
+    del.songs.forEach(s => { if (!s.isYt && !s.isLink && fileRefCount(s.id) <= 1) deleteFileFromDB(s.id); });
+    lists.splice(editPlIdx, 1);
+    if (lists.length === 0) ensureFavList();
+    if (curL === delId) curL = lists[0].id;
+    // DÜZELTME: Eski kodda bu kontrol splice SONRASI yanlış listeye bakıyordu
+    if (playL === delId) { playL = null; playI = -1; AUDIO.pause(); VIDEO.pause(); isPlay = false; syncB(); document.getElementById('npT').textContent = t('not_selected'); }
+    save(); renderSB(); renderSongs(); closeMo('plEditMo');
+}
 let editIdx = null;
-function openEdit(i) { 
-    editIdx = i; let s = lists.find(l=>l.id===curL).songs[i]; 
-    document.getElementById('editTitle').value=s.title; 
-    document.getElementById('editListSel').value=curL; 
-    tempEditThumb = null; 
-    if (document.getElementById('editThumbStatus')) document.getElementById('editThumbStatus').style.display='none';
-    document.getElementById('editMo').classList.remove('hid'); 
+// "1:30" → 90 sn, "90" → 90 sn, "1:02:03" → 3723 sn
+function parseTimeStr(v) {
+    if (v == null) return null; v = String(v).trim(); if (!v) return null;
+    const p = v.split(':').map(x => parseFloat(x));
+    if (p.some(isNaN)) return null;
+    let s = 0; p.forEach(x => s = s * 60 + x);
+    return s >= 0 ? s : null;
 }
 
-function saveEdit() { 
-    let lst = lists.find(l => l.id === curL); 
-    lst.songs[editIdx].title = document.getElementById('editTitle').value; 
-    if(tempEditThumb === 'REMOVE') { delete lst.songs[editIdx].thumb; }
-    else if(tempEditThumb) { lst.songs[editIdx].thumb = tempEditThumb; }
-    let tid = document.getElementById('editListSel').value; 
-    if(tid!==curL) moveSongToList(editIdx, curL, tid); 
+function openEdit(i) {
+    editIdx = i; let s = lists.find(l=>l.id===curL).songs[i];
+    document.getElementById('editTitle').value=s.title;
+    document.getElementById('editListSel').value=curL;
+    tempEditThumb = null;
+    if (document.getElementById('editThumbStatus')) document.getElementById('editThumbStatus').style.display='none';
+    document.getElementById('editMo').classList.remove('hid');
+}
+
+function saveEdit() {
+    let lst = lists.find(l => l.id === curL);
+    let song = lst.songs[editIdx];
+    song.title = document.getElementById('editTitle').value;
+    if(tempEditThumb === 'REMOVE') { delete song.thumb; }
+    else if(tempEditThumb) { song.thumb = tempEditThumb; }
+
+    // Favorilerdeki kopyayı da senkronize et (aynı dosya ID'si)
+    const favL = lists.find(l => l.id === 'favs');
+    if (favL && curL !== 'favs') {
+        const fi = favL.songs.findIndex(x => x.id === song.id);
+        if (fi > -1) favL.songs[fi] = { ...song };
+    }
+
+    let tid = document.getElementById('editListSel').value;
+    if(tid!==curL) moveSongToList(editIdx, curL, tid);
     tempEditThumb = null; document.getElementById('editThumbStatus').style.display='none';
-    save(); renderSB(); renderSongs(); closeMo('editMo'); 
-}function confirmDelete() { if(confirm(t('del_sure'))) { let lst = lists.find(l => l.id === curL); let s = lst.songs[editIdx]; if(!s.isYt && !s.isLink) deleteFileFromDB(s.id); lst.songs.splice(editIdx,1); if(playL===curL && playI===editIdx){ playI=-1; isPlay=false; AUDIO.pause(); VIDEO.pause(); syncB(); } else if(playL===curL && editIdx<playI) { playI--; } save(); renderSongs(); closeMo('editMo'); } }
+    save(); renderSB(); renderSongs(); closeMo('editMo');
+}
+function confirmDelete() { if(confirm(t('del_sure'))) { let lst = lists.find(l => l.id === curL); let s = lst.songs[editIdx]; if(!s.isYt && !s.isLink && fileRefCount(s.id) <= 1) deleteFileFromDB(s.id); lst.songs.splice(editIdx,1); if(playL===curL && playI===editIdx){ playI=-1; isPlay=false; AUDIO.pause(); VIDEO.pause(); syncB(); } else if(playL===curL && editIdx<playI) { playI--; } save(); renderSongs(); closeMo('editMo'); } }
+
+// LİSTEDEKİ TÜM İÇERİĞİ TEK SEFERDE KALDIRMA
+function clearPlSongs() {
+    const lst = lists[editPlIdx]; if (!lst) return;
+    if (!confirm(t('clear_sure'))) return;
+    lst.songs.forEach(s => { if (!s.isYt && !s.isLink && fileRefCount(s.id) <= 1) deleteFileFromDB(s.id); });
+    lst.songs = [];
+    if (playL === lst.id) {
+        playI = -1; isPlay = false; userWantsToPlay = false;
+        AUDIO.pause(); VIDEO.pause();
+        try { if (ytPlayer?.stopVideo) ytPlayer.stopVideo(); } catch(e) {}
+        syncB(); document.getElementById('npT').textContent = t('not_selected');
+    }
+    save(); renderSongs(); renderSB(); closeMo('plEditMo');
+}
+
+// DOSYA UZANTI FİLTRESİ
+function setFileFilter(v) {
+    const f = document.getElementById('fIn');
+    if (v === 'audio') f.accept = '.mp3,.m4a,.aac,.wav,.ogg,.opus,.flac,audio/*';
+    else if (v === 'video') f.accept = '.mp4,.webm,.mkv,.mov,.avi,video/*';
+    else f.accept = 'audio/*,video/*,.mp3,.m4a,.aac,.wav,.ogg,.opus,.flac,.mp4,.webm,.mkv,.mov';
+}
 function moveSongToList(idx, fromId, toId) { if(fromId===toId) return; let sL = lists.find(l=>l.id===fromId); let tL = lists.find(l=>l.id===toId); tL.songs.push(sL.songs.splice(idx,1)[0]); if(playL===fromId && playI===idx) { playL=toId; playI=tL.songs.length-1; } else if(playL===fromId && playI>idx) { playI--; } save(); renderSongs(); renderSB(); }
 
 function openSettingsMo() { document.getElementById('settingsMo').classList.remove('hid'); }
@@ -963,21 +1290,393 @@ function addAnyLink() {
 }
 
 let sleepInterval;
-function setSleep(min) { clearInterval(sleepInterval); if(min===0) { document.getElementById('timerBadge')?.classList.add('hid'); return closeMo('sleepMo'); } let s=min*60; document.getElementById('timerBadge')?.classList.remove('hid'); if(document.getElementById('timerBadge')) document.getElementById('timerBadge').textContent=formatTime(s); sleepInterval=setInterval(()=>{ s--; if(s<=0){ clearInterval(sleepInterval); document.getElementById('timerBadge')?.classList.add('hid'); isPlay=false; userWantsToPlay=false; if(AUDIO) AUDIO.pause(); if(VIDEO) VIDEO.pause(); try{ if(ytPlayer?.pauseVideo) ytPlayer.pauseVideo(); }catch(e){} syncB(); wakeUpControls(); } else { if(document.getElementById('timerBadge')) document.getElementById('timerBadge').textContent=formatTime(s); } },1000); closeMo('sleepMo'); }
+// Uzun süreleri de düzgün gösterir: 1:05:00 gibi (saat:dk:sn) ya da 45:00 (dk:sn)
+function formatClock(s) { s = Math.max(0, Math.floor(s)); let h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sec = s%60; let mm = (m<10 && h>0)?'0'+m:m; let ss = sec<10?'0'+sec:sec; return h>0 ? `${h}:${mm}:${ss}` : `${m}:${ss}`; }
+function setSleep(min) {
+    clearInterval(sleepInterval);
+    const badge = document.getElementById('timerBadge');
+    if(min===0) { badge?.classList.add('hid'); showToast(t('toast_sleep_off')); return closeMo('sleepMo'); }
+    let s = Math.round(min*60);
+    badge?.classList.remove('hid'); if(badge) badge.textContent = formatClock(s);
+    sleepInterval = setInterval(()=>{
+        s--;
+        if(s<=0){ clearInterval(sleepInterval); badge?.classList.add('hid'); isPlay=false; userWantsToPlay=false; if(AUDIO) AUDIO.pause(); if(VIDEO) VIDEO.pause(); try{ if(ytPlayer?.pauseVideo) ytPlayer.pauseVideo(); }catch(e){} syncB(); wakeUpControls(); showToast(t('toast_sleep_done')); }
+        else if(badge) badge.textContent = formatClock(s);
+    },1000);
+    showToast(t('toast_sleep_set') + ' ' + formatClock(s));
+    closeMo('sleepMo');
+}
+// MANUEL SÜRE: kullanıcı istediği dakikayı yazar (1–720 dk = en fazla 12 saat). Harf girişi reddedilir.
+function setSleepCustom() {
+    const inp = document.getElementById('sleepCustomIn');
+    let v = parseInt(inp.value, 10);
+    if(isNaN(v) || v < 1 || v > 720) { showToast(t('sleep_invalid')); inp.focus(); return; }
+    inp.value = '';
+    setSleep(v);
+}
+
+// ==========================================================================
+// GELİŞMİŞ VİDEO/SES DÜZENLEYİCİ (Görev 3)
+// Canvas + MediaRecorder ile YENİ bir .webm dosyası üretir. Orijinal dosyaya
+// dokunulmaz; düzenlenmiş kopya otomatik "✂️ Düzenlenenler" listesine eklenir
+// ve indirilebilir. Efektler: Kırp/Döngü, Yavaş, Hızlı/Time-lapse, Ters,
+// Kare Dondurma, Hız Rampası.
+// ==========================================================================
+let vedSrcListId = null, vedSrcIdx = null, vedLastBlob = null, vedLastName = null, vedBusy = false, vedDuration = 0;
+
+function vedSuggestName(title) { let base = (title || 'video').replace(/\.[^.]+$/, ''); return base + ' (Düzenlendi)'; }
+function vedFmtDur(sec) { sec = Math.max(0, Math.floor(sec || 0)); let m = Math.floor(sec / 60), s = sec % 60; return m + ':' + (s < 10 ? '0' : '') + s; }
+
+// Medyanın süresini yükle ve dk:sn sayaçlarını bu süreyle sınırla (bitiş = tam süre)
+async function vedLoadMeta(s) {
+    vedDuration = 0;
+    try {
+        const data = await getFile(s.id);
+        if (data) {
+            const url = URL.createObjectURL(data);
+            const el = document.createElement(s.isVid ? 'video' : 'audio');
+            el.preload = 'metadata'; el.src = url;
+            await new Promise(res => { el.onloadedmetadata = res; el.onerror = res; setTimeout(res, 5000); });
+            if (isFinite(el.duration) && el.duration > 0) vedDuration = el.duration;
+            URL.revokeObjectURL(url);
+        }
+    } catch (e) { console.log('meta err', e); }
+    const dur = vedDuration || 0;
+    const durMin = Math.floor(dur / 60);
+    document.getElementById('vedDurLbl').textContent = t('ved_total_lbl') + ' ' + vedFmtDur(dur);
+    document.getElementById('vedStartMin').value = 0; document.getElementById('vedStartSec').value = 0;
+    document.getElementById('vedEndMin').value = durMin; document.getElementById('vedEndSec').value = Math.floor(dur % 60);
+    document.getElementById('vedStartMin').max = durMin; document.getElementById('vedEndMin').max = durMin;
+    document.getElementById('vedFreezeAt').max = Math.floor(dur);
+}
+
+// dk:sn sayaçlarını sınırla: saniye 0-59, bitiş süreyi aşamaz, bitiş > başlangıç
+function vedClampTimes() {
+    const dur = vedDuration || 0;
+    const gv = id => Math.max(0, parseInt(document.getElementById(id).value) || 0);
+    let sMin = gv('vedStartMin'), sSec = Math.min(59, gv('vedStartSec'));
+    let eMin = gv('vedEndMin'), eSec = Math.min(59, gv('vedEndSec'));
+    let startT = sMin * 60 + sSec, endT = eMin * 60 + eSec;
+    if (dur > 0) { startT = Math.min(startT, Math.max(0, Math.floor(dur) - 1)); endT = Math.min(endT, Math.floor(dur)); }
+    if (endT <= startT) endT = dur > 0 ? Math.min(Math.floor(dur), startT + 1) : startT + 1;
+    document.getElementById('vedStartMin').value = Math.floor(startT / 60);
+    document.getElementById('vedStartSec').value = startT % 60;
+    document.getElementById('vedEndMin').value = Math.floor(endT / 60);
+    document.getElementById('vedEndSec').value = endT % 60;
+}
+
+// "✂️ Düzenlenenler" listesini bul ya da oluştur
+function ensureEditedList() {
+    let l = lists.find(x => x.editedBucket);
+    if (!l) { l = { id: 'edited_' + Date.now(), name: t('edited_list_name'), icon: '', songs: [], editedBucket: true }; lists.push(l); }
+    return l;
+}
+
+function openAdvEditorFromEdit() {
+    const lst = lists.find(l => l.id === curL); const s = lst?.songs[editIdx];
+    if (!s) return;
+    if (s.isYt || s.isLink) { alert(t('ved_only_local')); return; }
+    closeMo('editMo');
+    openAdvEditor(curL, editIdx);
+}
+
+function openAdvEditor(lId, i) {
+    vedSrcListId = lId; vedSrcIdx = i;
+    const s = lists.find(l => l.id === lId)?.songs[i]; if (!s) return;
+    document.getElementById('vedName').value = vedSuggestName(s.title);
+    document.getElementById('vedFx').value = 'trim';
+    document.getElementById('vedSpeed').value = 2;
+    document.getElementById('vedFreezeAt').value = 1;
+    document.getElementById('vedFreezeDur').value = 2;
+    document.getElementById('vedRepeat').value = 1;
+    vedLastBlob = null;
+    document.getElementById('vedDlBtn').style.display = 'none';
+    vedShowProg(false);
+    vedUpdateUI();
+    document.getElementById('vedMo').classList.remove('hid');
+    vedLoadPreview(s);
+    vedLoadMeta(s);
+}
+
+async function vedLoadPreview(s) {
+    try {
+        const data = await getFile(s.id); if (!data) return;
+        const url = URL.createObjectURL(data);
+        const canvas = document.getElementById('edCanvas'); const ctx = canvas.getContext('2d');
+        if (s.isVid) {
+            const v = document.createElement('video'); v.src = url; v.muted = true; v.playsInline = true;
+            v.onloadeddata = () => { canvas.width = v.videoWidth || 640; canvas.height = v.videoHeight || 360; try { v.currentTime = Math.min(0.1, (v.duration || 1) / 2); } catch (e) { } };
+            v.onseeked = () => { try { ctx.drawImage(v, 0, 0, canvas.width, canvas.height); } catch (e) { } URL.revokeObjectURL(url); };
+            v.onerror = () => URL.revokeObjectURL(url);
+        } else {
+            canvas.width = 640; canvas.height = 360;
+            ctx.fillStyle = '#141414'; ctx.fillRect(0, 0, 640, 360);
+            ctx.fillStyle = '#f6a5c0'; ctx.font = '90px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('🎵', 320, 210);
+            URL.revokeObjectURL(url);
+        }
+    } catch (e) { console.log('preview err', e); }
+}
+
+function vedUpdateUI() {
+    const fx = document.getElementById('vedFx').value;
+    document.getElementById('vedSpeedRow').style.display = (fx === 'slow' || fx === 'fast') ? 'block' : 'none';
+    document.getElementById('vedFreezeRow').style.display = (fx === 'freeze') ? 'block' : 'none';
+    document.getElementById('vedRepeatRow').style.display = (fx === 'trim') ? 'flex' : 'none';
+    const sp = document.getElementById('vedSpeed');
+    if (fx === 'slow') { sp.min = 0.25; sp.max = 1; if (parseFloat(sp.value) > 1) sp.value = 0.5; }
+    if (fx === 'fast') { sp.min = 1; sp.max = 8; if (parseFloat(sp.value) < 1) sp.value = 2; }
+    // Ters oynatma uyarısı
+    const warnEl = document.getElementById('vedHint');
+    warnEl.textContent = (fx === 'reverse') ? t('ved_reverse_warn') : t('ved_hint');
+}
+
+function vedShowProg(on) { document.getElementById('vedProg').style.display = on ? 'block' : 'none'; }
+function vedProgCb(p) { p = Math.max(0, Math.min(1, p)); document.getElementById('vedProgBar').style.width = Math.round(p * 100) + '%'; document.getElementById('vedProgTxt').textContent = t('ved_rendering') + ' ' + Math.round(p * 100) + '%'; }
+
+function vedPickMime(audioOnly) {
+    const c = audioOnly ? ['audio/webm;codecs=opus', 'audio/webm'] : ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm'];
+    for (const m of c) { try { if (window.MediaRecorder && MediaRecorder.isTypeSupported(m)) return m; } catch (e) { } }
+    return '';
+}
+
+// Girilen değer harf/geçersizse net uyarı ver (kullanıcı "belli değil" demişti)
+function vedValidTime(id) {
+    const raw = document.getElementById(id).value.trim();
+    if (!raw) return { ok: true, val: null };
+    const val = parseTimeStr(raw);
+    if (val == null) return { ok: false, val: null };
+    return { ok: true, val };
+}
+
+async function vedRender() {
+    if (vedBusy) return;
+    const s = lists.find(l => l.id === vedSrcListId)?.songs[vedSrcIdx]; if (!s) return;
+    if (s.isYt || s.isLink) { alert(t('ved_only_local')); return; }
+
+    const fx = document.getElementById('vedFx').value;
+    vedClampTimes();
+    const start = (parseInt(document.getElementById('vedStartMin').value) || 0) * 60 + (parseInt(document.getElementById('vedStartSec').value) || 0);
+    let end = (parseInt(document.getElementById('vedEndMin').value) || 0) * 60 + (parseInt(document.getElementById('vedEndSec').value) || 0);
+    if (vedDuration > 0 && (end <= start || end > vedDuration)) end = vedDuration;
+    if (end <= start) end = null; // geçersizse: tüm klip
+    const speed = parseFloat(document.getElementById('vedSpeed').value) || 1;
+    let fzAt = parseFloat(document.getElementById('vedFreezeAt').value) || 0;
+    if (vedDuration > 0) fzAt = Math.max(0, Math.min(fzAt, vedDuration));
+    const fzDur = parseFloat(document.getElementById('vedFreezeDur').value) || 2;
+    const repeat = Math.max(1, Math.min(5, parseInt(document.getElementById('vedRepeat').value) || 1));
+
+    const data = await getFile(s.id); if (!data) { alert(t('ved_err')); return; }
+
+    vedBusy = true; vedShowProg(true); vedProgCb(0);
+    const rBtn = document.getElementById('vedRenderBtn'); rBtn.disabled = true; rBtn.style.opacity = 0.6;
+    try {
+        let blob;
+        if (fx === 'reverse') blob = await vedRenderReverse(data, s, start, end, vedProgCb);
+        else blob = await vedRenderForward(data, s, { fx, start, end, speed, freezeAt: fzAt, freezeDur: fzDur, repeat }, vedProgCb);
+        if (!blob || !blob.size) throw new Error('empty');
+
+        let name = (document.getElementById('vedName').value || vedSuggestName(s.title)).trim();
+        if (!/\.(webm|mp4|mkv|mov|m4a|mp3|wav|ogg)$/i.test(name)) name += '.webm';
+        const newId = 'f_' + Math.random().toString(36).substr(2, 9);
+        const file = new File([blob], name, { type: blob.type || 'video/webm' });
+        await storeFile(newId, file);
+        const editedList = ensureEditedList();
+        editedList.songs.push({ id: newId, title: name, isVid: !!s.isVid, isYt: false, isLink: false, status: 0, edited: true, thumb: s.thumb });
+        vedLastBlob = file; vedLastName = name;
+        save(); renderSB(); renderSongs();
+        vedProgCb(1); document.getElementById('vedProgTxt').textContent = t('ved_done');
+        document.getElementById('vedDlBtn').style.display = 'block';
+        showToast(t('ved_done'));
+    } catch (e) {
+        console.error('render err', e); alert(t('ved_err')); vedShowProg(false);
+    }
+    vedBusy = false; rBtn.disabled = false; rBtn.style.opacity = 1;
+}
+
+// İLERİ YÖNLÜ EFEKTLER: kırp/döngü, yavaş, hızlı, dondurma, rampa
+function vedRenderForward(data, s, opt, onProg) {
+    return new Promise((resolve, reject) => { (async () => {
+        let ac = null, url = null, done = false, rampTimer = null, iv = null;
+        try {
+            url = URL.createObjectURL(data);
+            // ÖNEMLİ: muted=true yapılırsa Chromium, WebAudio üzerinden yakalanan sesi de
+            // susturuyor (kayıtta ses olmuyor). Sessiz kalması için elemanı ac.destination'a
+            // DEĞİL yalnızca kayıt akışına (MediaStreamDestination) bağlıyoruz.
+            const v = document.createElement('video'); v.src = url; v.muted = false; v.volume = 1; v.playsInline = true; v.preload = 'auto';
+            await new Promise((res, rej) => { v.onloadedmetadata = () => res(); v.onerror = () => rej(new Error('meta')); });
+            const dur = v.duration || 0;
+            let start = Math.max(0, Math.min(opt.start || 0, dur));
+            let end = (opt.end && opt.end > start && opt.end <= dur) ? opt.end : dur;
+            const isVid = !!s.isVid && v.videoWidth > 0;
+            const canvas = document.getElementById('edCanvas'); const ctx = canvas.getContext('2d');
+            const W = isVid ? (v.videoWidth || 640) : 640, H = isVid ? (v.videoHeight || 360) : 360;
+            canvas.width = W; canvas.height = H;
+            const audioOnly = !isVid;
+            let keepAudio = true;
+            if (opt.fx === 'fast' && opt.speed > 3) keepAudio = false;
+            let destStream = null;
+            try {
+                ac = new (window.AudioContext || window.webkitAudioContext)();
+                try { await ac.resume(); } catch (e) { }
+                const srcN = ac.createMediaElementSource(v);
+                const dest = ac.createMediaStreamDestination();
+                srcN.connect(dest); destStream = dest.stream;
+            } catch (e) { keepAudio = false; try { v.muted = true; } catch (_) { } }
+            if (audioOnly && !destStream) throw new Error('no-audio');
+
+            const fps = 30;
+            const canvasStream = canvas.captureStream(fps);
+            const out = new MediaStream();
+            if (isVid) canvasStream.getVideoTracks().forEach(tk => out.addTrack(tk));
+            if (keepAudio && destStream) destStream.getAudioTracks().forEach(tk => out.addTrack(tk));
+            const mime = vedPickMime(audioOnly);
+            const rec = new MediaRecorder(out, mime ? { mimeType: mime } : undefined);
+            const chunks = []; rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+            rec.onstop = () => { if (done) return; done = true; try { ac && ac.close(); } catch (e) { } if (url) URL.revokeObjectURL(url); resolve(new Blob(chunks, { type: mime || 'video/webm' })); };
+
+            let raf; const draw = () => { if (isVid) { try { ctx.drawImage(v, 0, 0, W, H); } catch (e) { } } raf = requestAnimationFrame(draw); };
+            const repeat = (opt.fx === 'trim') ? Math.max(1, opt.repeat || 1) : 1;
+            let loopsDone = 0, froze = false, wrapping = false;
+            const baseRate = (opt.fx === 'slow' || opt.fx === 'fast') ? opt.speed : 1;
+
+            const wrapUp = () => {
+                if (wrapping) return; wrapping = true;
+                if (iv) clearInterval(iv); if (rampTimer) clearInterval(rampTimer);
+                try { v.pause(); } catch (e) { } cancelAnimationFrame(raf);
+                setTimeout(() => { try { rec.stop(); } catch (e) { if (!done) { done = true; resolve(new Blob(chunks, { type: mime || 'video/webm' })); } } }, 250);
+            };
+            const onEnd = () => { loopsDone++; if (loopsDone >= repeat) wrapUp(); else { try { v.currentTime = start; v.play().catch(() => { }); } catch (e) { } } };
+            v.onended = onEnd;
+
+            rec.start(100); draw();
+            try { v.currentTime = start; } catch (e) { }
+            await v.play().catch(() => { });
+            try { v.playbackRate = (opt.fx === 'ramp') ? 0.5 : baseRate; } catch (e) { }
+            if (opt.fx === 'ramp') { const t0 = performance.now(); const ms = Math.max(600, (end - start) * 1000); rampTimer = setInterval(() => { const p = Math.min(1, (performance.now() - t0) / ms); try { v.playbackRate = 0.5 + p * 1.5; } catch (e) { } }, 100); }
+
+            iv = setInterval(() => {
+                const cur = v.currentTime;
+                if (onProg) { let b = (cur - start) / ((end - start) || 1); b = Math.max(0, Math.min(1, b)); onProg((loopsDone + b) / repeat); }
+                if (opt.fx === 'freeze' && !froze && cur >= Math.max(start, opt.freezeAt || 0)) { froze = true; try { v.pause(); } catch (e) { } setTimeout(() => { if (!wrapping) v.play().catch(() => { }); }, Math.max(200, (opt.freezeDur || 2) * 1000)); }
+                if (!v.paused && cur >= end - 0.04) onEnd();
+            }, 80);
+        } catch (e) { if (!done) { done = true; try { ac && ac.close(); } catch (_) { } if (url) URL.revokeObjectURL(url); reject(e); } }
+    })(); });
+}
+
+// TERS OYNATMA: kareleri geri sırada oynatır; ses de (mümkünse) tersine çevrilir
+async function vedRenderReverse(data, s, startIn, endIn, onProg) {
+    const url = URL.createObjectURL(data);
+    const v = document.createElement('video'); v.src = url; v.muted = true; v.playsInline = true;
+    await new Promise((res, rej) => { v.onloadedmetadata = () => res(); v.onerror = () => rej(new Error('meta')); });
+    const dur = v.duration || 0;
+    let start = Math.max(0, Math.min(startIn || 0, dur));
+    let end = (endIn && endIn > start && endIn <= dur) ? endIn : dur;
+    const isVid = !!s.isVid && v.videoWidth > 0;
+    const canvas = document.getElementById('edCanvas'); const ctx = canvas.getContext('2d');
+    const W = isVid ? (v.videoWidth || 640) : 640, H = isVid ? (v.videoHeight || 360) : 360;
+    canvas.width = W; canvas.height = H;
+    const fps = 15; const seg = end - start; const nFrames = Math.max(1, Math.min(Math.floor(seg * fps), fps * 30));
+
+    const seek = (tt) => new Promise(res => { const h = () => { v.removeEventListener('seeked', h); res(); }; v.addEventListener('seeked', h); try { v.currentTime = tt; } catch (e) { res(); } });
+    const frames = [];
+    if (isVid) {
+        for (let k = 0; k < nFrames; k++) {
+            await seek(start + k / fps);
+            const c = document.createElement('canvas'); c.width = W; c.height = H; c.getContext('2d').drawImage(v, 0, 0, W, H); frames.push(c);
+            if (onProg) onProg(k / nFrames * 0.55);
+        }
+    }
+
+    let ac = null, destStream = null, revSrc = null;
+    try {
+        ac = new (window.AudioContext || window.webkitAudioContext)();
+        try { await ac.resume(); } catch (e) { }
+        const buf = await ac.decodeAudioData(await data.arrayBuffer());
+        const sr = buf.sampleRate; const s0 = Math.floor(start * sr); const s1 = Math.floor(end * sr); const len = Math.max(1, s1 - s0);
+        const rbuf = ac.createBuffer(buf.numberOfChannels, len, sr);
+        for (let ch = 0; ch < buf.numberOfChannels; ch++) { const src = buf.getChannelData(ch); const dst = rbuf.getChannelData(ch); for (let i = 0; i < len; i++) dst[i] = src[s1 - 1 - i] || 0; }
+        revSrc = ac.createBufferSource(); revSrc.buffer = rbuf;
+        const dest = ac.createMediaStreamDestination(); revSrc.connect(dest); destStream = dest.stream;
+    } catch (e) { console.log('ters ses atlandı', e); }
+
+    const audioOnly = !isVid;
+    if (audioOnly && !destStream) { URL.revokeObjectURL(url); throw new Error('no-audio'); }
+    const canvasStream = canvas.captureStream(fps);
+    const out = new MediaStream();
+    if (isVid) canvasStream.getVideoTracks().forEach(tk => out.addTrack(tk));
+    if (destStream) destStream.getAudioTracks().forEach(tk => out.addTrack(tk));
+    const mime = vedPickMime(audioOnly);
+    const rec = new MediaRecorder(out, mime ? { mimeType: mime } : undefined);
+    const chunks = []; rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+    const stopped = new Promise(res => rec.onstop = res);
+    rec.start(100);
+    if (revSrc) try { revSrc.start(); } catch (e) { }
+    if (isVid) {
+        for (let k = frames.length - 1; k >= 0; k--) { ctx.drawImage(frames[k], 0, 0, W, H); if (onProg) onProg(0.55 + (1 - k / frames.length) * 0.45); await new Promise(r => setTimeout(r, 1000 / fps)); }
+    } else {
+        const total = (end - start) * 1000; const t0 = performance.now();
+        await new Promise(r => { const iv = setInterval(() => { const p = (performance.now() - t0) / total; if (onProg) onProg(Math.min(1, p)); if (p >= 1) { clearInterval(iv); r(); } }, 100); });
+    }
+    setTimeout(() => { try { rec.stop(); } catch (e) { } }, 250);
+    await stopped;
+    try { ac && ac.close(); } catch (e) { }
+    URL.revokeObjectURL(url);
+    return new Blob(chunks, { type: mime || 'video/webm' });
+}
+
+function vedDownloadBlob(blob, name) { const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = name || 'fowalink_edit.webm'; document.body.appendChild(a); a.click(); setTimeout(() => { a.remove(); URL.revokeObjectURL(url); }, 1500); }
+function vedDownloadLast() { if (vedLastBlob) vedDownloadBlob(vedLastBlob, vedLastName); }
+function vedClose() { if (vedBusy) { if (!confirm(t('ved_rendering') + '…')) return; } document.getElementById('vedMo').classList.add('hid'); }
+
+// Herhangi bir yerel/düzenlenmiş dosyayı indir (edit modalındaki ⬇ İndir butonu)
+async function downloadSong(lId, i) {
+    const s = lists.find(l => l.id === lId)?.songs[i]; if (!s) return;
+    if (s.isYt || s.isLink) { alert(t('ved_only_local')); return; }
+    const data = await getFile(s.id); if (!data) { alert(t('ved_err')); return; }
+    let name = s.title; if (data.name && !/\.[^.]+$/.test(name)) name = data.name;
+    vedDownloadBlob(data, name);
+}
+function downloadCurrentEdit() { downloadSong(curL, editIdx); }
 function openSleepMo() { document.getElementById('sleepMo').classList.remove('hid'); }
 
-// Ekranda herhangi bir yere çift tıklamada seçimi (mavi kutuyu) iptal et. Sadece inputlar hariç.
-document.addEventListener('dblclick', function(e) {
-    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-        window.getSelection().removeAllRanges();
-    }
-});
+// ==========================================================================
+// BİLGİSAYARDAN SÜRÜKLE-BIRAK İLE DOSYA EKLEME
+// Windows Gezgini'nden şarkı/video sürükleyip uygulamaya bırakınca GEÇERLİ listeye eklenir.
+// Electron varsayılanı (dosyayı açıp uygulamayı değiştirme) engellenir.
+// ==========================================================================
+function _isFileDrag(e) { try { return e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files'); } catch (_) { return false; } }
+function _showDrop(on) {
+    const el = document.getElementById('dropOverlay'); if (!el) return;
+    if (on) { const lst = lists.find(l => l.id === curL); document.getElementById('dropMsg').textContent = t('drop_hint') + (lst ? ' → ' + lst.name : ''); }
+    el.classList.toggle('show', on);
+}
+window.addEventListener('dragover', function (e) { if (_isFileDrag(e)) { e.preventDefault(); e.stopPropagation(); if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy'; _showDrop(true); } }, true);
+window.addEventListener('dragleave', function (e) { if (e.clientX <= 0 || e.clientY <= 0 || e.clientX >= window.innerWidth || e.clientY >= window.innerHeight) _showDrop(false); }, true);
+window.addEventListener('drop', function (e) { if (_isFileDrag(e)) { e.preventDefault(); e.stopPropagation(); _showDrop(false); handleOSDrop(e); } }, true);
 
-document.addEventListener('mousedown', function(e) {
-    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.detail > 1) {
-        e.preventDefault(); 
+async function handleOSDrop(e) {
+    const files = Array.from((e.dataTransfer && e.dataTransfer.files) || []);
+    if (!files.length) return;
+    const isMedia = f => (f.type && (f.type.startsWith('audio') || f.type.startsWith('video'))) || /\.(mp3|m4a|aac|wav|ogg|opus|flac|mp4|webm|mkv|mov|avi|m4v|3gp)$/i.test(f.name || '');
+    const media = files.filter(isMedia);
+    if (!media.length) { showToast(t('drop_none')); return; }
+    const lst = lists.find(l => l.id === curL) || lists[0];
+    showToast(t('loading'));
+    for (const f of media) {
+        const id = 'f_' + Math.random().toString(36).substr(2, 9);
+        try { await storeFile(id, f); } catch (err) { console.error('drop store err', err); continue; }
+        const isVid = (f.type && f.type.includes('video')) || /\.(mp4|webm|mkv|mov|avi|m4v|3gp)$/i.test(f.name || '');
+        lst.songs.push({ id, title: f.name || 'Medya', isVid, isYt: false, isLink: false, status: 0 });
     }
-}, false);
+    save(); renderSongs(); renderSB();
+    showToast(t('drop_added').replace('%n', media.length));
+}
+
+// NOT: Eski "çift tıklama seçim engelleyici" işleyiciler kaldırıldı.
+// Bunlar hızlı art arda tıklamalarda (e.detail>1) preventDefault yaparak butonların/
+// menülerin yanıt vermemesine yol açıyordu (özellikle Gelişmiş Düzenleyici'de).
+// Kontrol düğmeleri zaten CSS'te user-select:none olduğundan mavi seçim kutusu oluşmaz.
 
 // --- SÜRÜKLE BIRAK (DRAG & DROP) MOTORU ---
 let dragSrcIdx = null;
